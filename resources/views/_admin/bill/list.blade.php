@@ -1,0 +1,71 @@
+@extends('_admin.layouts.app')
+
+@section('content')
+<div class="container-fluid mt--6">
+    <div class="card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
+            <h3 class="mb-0">Daftar Tagihan</h3>
+            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-sm btn-success">
+                <i class="fas fa-magic"></i> Generate Tagihan per Semester
+            </a>
+        </div>
+
+
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                    <tr>
+                        <th>No</th>
+                        <th>No. KK</th>
+                        <th>Tahun Ajaran</th>
+                        <th>Bulan</th>
+                        <th>Total Tagihan</th>
+                        <th>Status</th>
+                        <th>Jatuh Tempo</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($bills as $index => $bill)
+                    <tr>
+                        <td>{{ $bills->firstItem() + $index }}</td>
+                        <td><b>{{ $bill->family_card_number }}</b></td>
+                        <td>{{ $bill->academic_year_name }}</td>
+                        <td>{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}</td>
+                        <td><b>Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</b></td>
+                        <td>
+                            @if($bill->status === 'paid')
+                            <span class="badge badge-success">Lunas</span>
+                            @elseif($bill->status === 'partial')
+                            <span class="badge badge-warning">Sebagian</span>
+                            @else
+                            <span class="badge badge-danger">Belum Bayar</span>
+                            @endif
+                        </td>
+                        <td>{{ \Carbon\Carbon::parse($bill->due_date)->format('d/m/Y') }}</td>
+                        <td>
+                            <a href="{{ route('admin.bills.show', $bill->id) }}" class="btn btn-sm btn-info">Detail</a>
+                            @if($bill->status !== 'paid')
+                            <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="btn btn-sm btn-success">Bayar</a>
+                            @endif
+                            <form action="{{ route('admin.bills.destroy', $bill->id) }}" method="POST" class="d-inline delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Belum ada data tagihan. Klik "Generate Tagihan per Semester" untuk memulai.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer py-4">
+            {{ $bills->links() }}
+        </div>
+    </div>
+</div>
+@endsection
