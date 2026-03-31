@@ -140,9 +140,9 @@
                             </a>
                         </div>
                         <div class="col-6 mb-4">
-                            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-light text-warning btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
+                            <a href="{{ route('admin.spp.index') }}" class="btn btn-light text-warning btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
                                 <i class="fas fa-file-invoice fa-2x mb-2 d-block"></i>
-                                <span class="text-sm font-weight-bold">Buat Tagihan</span>
+                                <span class="text-sm font-weight-bold">Cek Tagihan SPP</span>
                             </a>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Histori Pembayaran SPP Terbaru</h3>
-                    <a href="{{ route('admin.bills.index') }}" class="btn btn-sm btn-primary px-3 rounded-pill text-uppercase">Lihat Semua</a>
+                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-primary px-3 rounded-pill text-uppercase">Lihat Semua</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush">

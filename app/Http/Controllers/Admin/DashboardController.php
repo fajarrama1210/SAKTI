@@ -66,7 +66,8 @@ class DashboardController extends Controller
         // Recent Payments (Last 5)
         $recentPayments = DB::table(DatabaseEntity::TBL_PAYMENTS . ' as p')
             ->join(DatabaseEntity::TBL_BILLS . ' as b', 'p.bill_id', '=', 'b.id')
-            ->select('p.*', 'b.family_card_number')
+            ->join(DatabaseEntity::TBL_STUDENTS . ' as s', 'b.student_id', '=', 's.id')
+            ->select('p.*', 's.family_card_number', 's.name as student_name')
             ->orderBy('p.payment_date', 'desc')
             ->limit(5)
             ->get();
