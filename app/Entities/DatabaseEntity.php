@@ -17,4 +17,5 @@ class DatabaseEntity
     const TBL_PAYMENTS = 'payments';
     const TBL_TRANSACTIONS = 'transactions';
     const TBL_SEMESTERS = 'semesters';
+    const TBL_STUDENT_ENROLLMENTS = 'student_enrollments';
 }

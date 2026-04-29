@@ -27,7 +27,9 @@
                         <th scope="col" class="text-center">NISN</th>
                         <th scope="col" class="text-center">Nama Lengkap</th>
                         <th scope="col" class="text-center">Kelas</th>
+                        <th scope="col" class="text-center">NIK</th>
                         <th scope="col" class="text-center">No. KK</th>
+                        <th scope="col" class="text-center">Status</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -38,7 +40,19 @@
                         <td scope="col" class="text-center"><b>{{ $student->nisn }}</b></td>
                         <td scope="col" class="text-center"><b>{{ $student->name }}</b></td>
                         <td scope="col" class="text-center">Kelas {{ $student->grade_level }} - {{ $student->major_name }}</td>
+                        <td scope="col" class="text-center"><code>{{ $student->id_number }}</code></td>
                         <td scope="col" class="text-center">{{ $student->family_card_number }}</td>
+                        <td scope="col" class="text-center">
+                            @if ($student->status == 'aktif')
+                                <span class="badge badge-sm bg-gradient-success">Aktif</span>
+                            @elseif($student->status == 'lulus')
+                                <span class="badge badge-sm bg-gradient-primary">Lulus</span>
+                            @elseif($student->status == 'keluar' || $student->status == 'do')
+                                <span class="badge badge-sm bg-gradient-danger">Keluar</span>
+                            @else
+                                <span class="badge badge-sm bg-gradient-secondary">{{ $student->status }}</span>
+                            @endif
+                        </td>
                         <td scope="col" class="text-center">
                             <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-sm btn-info">Edit</a>
 

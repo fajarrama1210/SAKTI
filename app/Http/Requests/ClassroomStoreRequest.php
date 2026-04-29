@@ -22,6 +22,7 @@ class ClassroomStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:60',
             'grade_level' => 'required|integer|in:10,11,12,13',
             'major_id' => 'required|integer|exists:majors,id',
         ];
