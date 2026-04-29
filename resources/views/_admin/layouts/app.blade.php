@@ -10,6 +10,21 @@
     <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css?v=2.1.0') }}" rel="stylesheet" />
+
+    {{-- Override Argon dropdown: kontrol manual via JS --}}
+    <style>
+        #navbarUserDropdown {
+            display: none !important;
+            opacity: 0 !important;
+            animation: none !important;
+        }
+        #navbarUserDropdown.open {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+    </style>
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -53,7 +68,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Success Toast
+            // ─── SweetAlert: Success Toast ───────────────────────────
             @if(session('success'))
                 const Toast = Swal.mixin({
                     toast: true,
@@ -72,7 +87,7 @@
                 });
             @endif
 
-            // Error Modal
+            // ─── SweetAlert: Error Modal ─────────────────────────────
             @if(session('error'))
                 Swal.fire({
                     icon: "error",
@@ -81,7 +96,7 @@
                 });
             @endif
 
-            // Delete Confirmation
+            // ─── Delete Confirmation ─────────────────────────────────
             const deleteForms = document.querySelectorAll('form.delete-form');
             deleteForms.forEach(form => {
                 form.addEventListener('submit', function(e) {
@@ -103,6 +118,26 @@
                     });
                 });
             });
+
+            // ─── Manual Dropdown (ringan, tanpa Bootstrap) ───────────
+            var trigger = document.getElementById('dropdownMenuButton');
+            var menu = document.getElementById('navbarUserDropdown');
+
+            if (trigger && menu) {
+                trigger.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    menu.classList.toggle('open');
+                    trigger.setAttribute('aria-expanded', menu.classList.contains('open'));
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                        menu.classList.remove('open');
+                        trigger.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
         });
     </script>
 

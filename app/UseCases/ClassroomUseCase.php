@@ -11,22 +11,24 @@ class ClassroomUseCase
 {
     public function getPaginated($perPage = 10)
     {
-        // Melakukan JOIN ke tabel majors agar mendapatkan nama jurusan
         return DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
             ->join(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
-            ->select('c.id', 'c.grade_level', 'c.major_id', 'm.name as major_name')
+            ->select('c.id', 'c.name', 'c.grade_level', 'c.major_id', 'm.name as major_name')
             ->orderBy('c.grade_level', 'asc')
+            ->orderBy('c.name', 'asc')
             ->paginate($perPage);
     }
+
     public function getAll()
     {
         return DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
             ->join(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
-            ->select('c.id', 'c.grade_level', 'm.name as major_name')
+            ->select('c.id', 'c.name', 'c.grade_level', 'm.name as major_name')
             ->orderBy('c.grade_level', 'asc')
-            ->orderBy('m.name', 'asc')
+            ->orderBy('c.name', 'asc')
             ->get();
     }
+
     public function getById($id)
     {
         return DB::table(DatabaseEntity::TBL_CLASSROOMS)->where('id', $id)->first();
@@ -37,6 +39,7 @@ class ClassroomUseCase
         DB::beginTransaction();
         try {
             DB::table(DatabaseEntity::TBL_CLASSROOMS)->insert([
+                'name' => $data['name'],
                 'grade_level' => $data['grade_level'],
                 'major_id' => $data['major_id'],
                 'created_at' => now(),
@@ -57,6 +60,7 @@ class ClassroomUseCase
         DB::beginTransaction();
         try {
             DB::table(DatabaseEntity::TBL_CLASSROOMS)->where('id', $id)->update([
+                'name' => $data['name'],
                 'grade_level' => $data['grade_level'],
                 'major_id' => $data['major_id'],
                 'updated_at' => now(),

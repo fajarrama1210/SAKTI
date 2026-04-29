@@ -12,8 +12,9 @@
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="text-center">No</th>
-                            <th scope="col" class="text-center">Tingkat Kelas</th>
+                            <th scope="col" class="text-center" style="width: 50px;">No</th>
+                            <th scope="col" class="text-center">Nama Kelas</th>
+                            <th scope="col" class="text-center">Tingkat</th>
                             <th scope="col" class="text-center">Jurusan</th>
                             <th scope="col" class="text-center">Aksi</th>
                         </tr>
@@ -22,6 +23,7 @@
                         @forelse($classrooms as $index => $classroom)
                             <tr>
                                 <td scope="col" class="text-center">{{ $classrooms->firstItem() + $index }}</td>
+                                <td scope="col" class="text-center"><b>{{ $classroom->name }}</b></td>
                                 <td scope="col" class="text-center">Kelas {{ $classroom->grade_level }}</td>
                                 {{-- major_name didapat dari hasil JOIN di UseCase --}}
                                 <td scope="col" class="text-center">{{ $classroom->major_name }}</td>

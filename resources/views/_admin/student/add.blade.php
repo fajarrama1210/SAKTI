@@ -19,13 +19,23 @@
                         });
                     </script>
                 @endif
-                <div class="alert alert-info">
+                {{-- <div class="alert alert-info">
                     <strong>Info:</strong> Akun login (User) akan digenerate otomatis.<br>
                     Email: <b>[NISN]@smkakbar.sch.id</b> | Password Default: <b>password123</b>
-                </div>
+                </div> --}}
 
                 <form action="{{ route('admin.students.store') }}" method="POST">
                     @csrf
+
+                    <div class="form-group">
+                        <label>NIK (16 Digit)</label>
+                        <input type="text" name="id_number"
+                            class="form-control @error('id_number') is-invalid @enderror"
+                            value="{{ old('id_number') }}" required maxlength="16">
+                        @error('id_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <div class="form-group">
                         <label>Nomor KK (16 Digit)</label>

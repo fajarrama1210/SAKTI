@@ -11,10 +11,12 @@ use Carbon\Carbon;
 class BillUseCase
 {
     protected $paymentRateUseCase;
+    protected $enrollmentUseCase;
 
-    public function __construct(PaymentRateUseCase $paymentRateUseCase)
+    public function __construct(PaymentRateUseCase $paymentRateUseCase, EnrollmentUseCase $enrollmentUseCase)
     {
         $this->paymentRateUseCase = $paymentRateUseCase;
+        $this->enrollmentUseCase = $enrollmentUseCase;
     }
 
     /**
@@ -142,8 +144,7 @@ class BillUseCase
     /**
      * Otomatis generate tagihan saat semester dibuat.
      * Dipanggil dari SemesterUseCase::store()
-     * Membuat tagihan PER SISWA PER BULAN dalam rentang semester tersebut.
-     * Due date = akhir tiap bulan (otomatis).
+     * Sekarang menggunakan ENROLLMENT untuk menentukan kelas siswa, bukan students.classroom_id langsung.
      */
     public function autoGenerateBillsForSemester($semesterId): array
     {
@@ -163,16 +164,12 @@ class BillUseCase
             // Hitung range bulan dan tahun
             $monthsWithYear = $this->getMonthsWithYear($semester);
 
-            // Ambil semua siswa aktif
-            $students = DB::table(DatabaseEntity::TBL_STUDENTS . ' as s')
-                ->join(DatabaseEntity::TBL_CLASSROOMS . ' as c', 's.classroom_id', '=', 'c.id')
-                ->select('s.id as student_id', 's.family_card_number', 'c.grade_level', 'c.major_id')
-                ->where('s.status', 'aktif')
-                ->get();
+            // Ambil siswa dari ENROLLMENT aktif di tahun ajaran ini (bukan dari students langsung)
+            $students = $this->enrollmentUseCase->getActiveStudentsForBilling($semester->academic_year_id);
 
             if ($students->isEmpty()) {
                 DB::rollBack();
-                return ['status' => false, 'message' => 'Belum ada siswa aktif.'];
+                return ['status' => false, 'message' => 'Belum ada siswa yang terdaftar (enrollment) di tahun ajaran ini.'];
             }
 
             // Ambil semua jenis pembayaran
@@ -182,22 +179,36 @@ class BillUseCase
                 return ['status' => false, 'message' => 'Belum ada Jenis Pembayaran.'];
             }
 
-            // Track KK yang sudah diproses agar hanya 1 tagihan per KK per bulan
-            $processedKKMonths = [];
+            // Pre-load semua tarif untuk menghindari N+1 query
+            $allRates = DB::table(DatabaseEntity::TBL_PAYMENT_RATES)
+                ->where('academic_year_id', $semester->academic_year_id)
+                ->get();
+
             $generatedCount = 0;
 
             foreach ($students as $student) {
-                // Hitung tarif untuk siswa ini
-                $totalAmount   = 0;
+                // Hitung tarif untuk siswa ini berdasarkan kelas dari enrollment
+                $totalAmount = 0;
                 $billItemsTemplate = [];
 
                 foreach ($paymentTypes as $pt) {
-                    $rate = $this->paymentRateUseCase->getRateForStudent(
-                        $semester->academic_year_id,
-                        $pt->id,
-                        $student->grade_level,
-                        $student->major_id
-                    );
+                    // Cari tarif spesifik per jurusan dulu
+                    $rate = $allRates->first(function ($r) use ($semester, $pt, $student) {
+                        return $r->academic_year_id == $semester->academic_year_id
+                            && $r->payment_type_id == $pt->id
+                            && $r->grade_level == $student->grade_level
+                            && $r->major_id == $student->major_id;
+                    });
+
+                    // Kalau tidak ada, cari tarif umum (major_id = null)
+                    if (!$rate) {
+                        $rate = $allRates->first(function ($r) use ($semester, $pt, $student) {
+                            return $r->academic_year_id == $semester->academic_year_id
+                                && $r->payment_type_id == $pt->id
+                                && $r->grade_level == $student->grade_level
+                                && $r->major_id === null;
+                        });
+                    }
 
                     if ($rate) {
                         $totalAmount += $rate->amount;
@@ -213,14 +224,6 @@ class BillUseCase
                 foreach ($monthsWithYear as $my) {
                     $m = $my['month'];
                     $y = $my['year'];
-                    $kkKey = $student->family_card_number . '-' . $m . '-' . $y;
-
-                    // Cek apakah KK ini sudah punya tagihan di bulan+tahun ini
-                    // Jika ya, skip — 1 KK cukup bayar 1 kali
-                    if (isset($processedKKMonths[$kkKey])) {
-                        // Tapi tetap buat bill record untuk siswa ini agar terlihat di kalender
-                        // dengan status mengikuti saudara (linked via KK)
-                    }
 
                     // Cek apakah bill untuk siswa ini di bulan ini sudah ada
                     $existing = DB::table(DatabaseEntity::TBL_BILLS)
@@ -261,7 +264,6 @@ class BillUseCase
                     }
                     DB::table(DatabaseEntity::TBL_BILL_ITEMS)->insert($items);
 
-                    $processedKKMonths[$kkKey] = true;
                     $generatedCount++;
                 }
             }

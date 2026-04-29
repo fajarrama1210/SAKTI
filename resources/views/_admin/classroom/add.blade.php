@@ -11,6 +11,16 @@
                     @csrf
 
                     <div class="form-group">
+                        <label class="form-control-label" for="name">Nama Kelas</label>
+                        <input type="text" name="name" id="name"
+                            class="form-control @error('name') is-invalid @enderror"
+                            placeholder="Contoh: X RPL 1" value="{{ old('name') }}" required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
                         <label class="form-control-label" for="grade_level">Tingkat Kelas</label>
                         <select name="grade_level" id="grade_level"
                             class="form-control @error('grade_level') is-invalid @enderror" required>

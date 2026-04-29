@@ -99,7 +99,15 @@
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
                         @include('icon.student')
                     </div>
-                    <span class="nav-link-text ms-1">Siswa</span>
+                    <span class="nav-link-text ms-1">Siswa (Master)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.enrollments.*') ? 'active-menu' : '' }}" href="{{ route('admin.enrollments.index') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.classroom')
+                    </div>
+                    <span class="nav-link-text ms-1">Penempatan Siswa</span>
                 </a>
             </li>
             <li class="nav-item mt-3">

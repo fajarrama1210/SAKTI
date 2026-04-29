@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
         Route::get('/import', [StudentController::class, 'import'])->name('import.view'); // New route for the page
         Route::post('/import', [StudentController::class, 'importExcel'])->name('import');
+    });
+
+    Route::prefix('enrollments')->name('enrollments.')->group(function () {
+        Route::get('/', [EnrollmentController::class, 'index'])->name('index');
+        Route::get('/add', [EnrollmentController::class, 'create'])->name('create');
+        Route::post('/add', [EnrollmentController::class, 'store'])->name('store');
+        Route::post('/{id}/dropout', [EnrollmentController::class, 'dropout'])->name('dropout');
+        Route::put('/{id}/change-classroom', [EnrollmentController::class, 'changeClassroom'])->name('change-classroom');
+        Route::get('/graduation', [EnrollmentController::class, 'graduationForm'])->name('graduation');
+        Route::post('/graduation', [EnrollmentController::class, 'processGraduation'])->name('graduation.process');
+        Route::delete('/{id}', [EnrollmentController::class, 'destroy'])->name('destroy');
     });
 
     // ====== MODUL KEUANGAN ======
