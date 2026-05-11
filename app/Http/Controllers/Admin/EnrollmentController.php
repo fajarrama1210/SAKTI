@@ -36,7 +36,7 @@ class EnrollmentController extends Controller
     {
         $academicYears = $this->academicYearUseCase->getAll();
         $activeAY = $this->academicYearUseCase->getActive();
-
+        
         // Fallback: Jika tidak ada yang aktif, ambil yang paling baru (pertama dari list karena order by start_date desc)
         $fallbackAYId = $activeAY->id ?? ($academicYears->first()->id ?? null);
         $selectedAY = $request->get('academic_year_id', $fallbackAYId);

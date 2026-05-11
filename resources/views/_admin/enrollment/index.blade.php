@@ -17,6 +17,7 @@
                         <div class="form-group">
                             <label>Pilih Tahun Ajaran</label>
                             <select name="academic_year_id" class="form-control" onchange="this.form.submit()">
+
                                 @if($academicYears->isEmpty())
                                     <option value="">-- Belum Ada Tahun Ajaran --</option>
                                 @else
@@ -115,7 +116,7 @@
                                             title="Pindah Kelas">
                                             <i class="fas fa-exchange-alt"></i> Pindah
                                         </button>
-                                
+
                                         {{-- Tombol Set DO --}}
                                         <button type="button" class="btn btn-sm btn-danger"
                                             data-bs-toggle="modal"
@@ -123,7 +124,7 @@
                                             <i class="fas fa-user-times"></i> Set DO
                                         </button>
                                     @endif
-                                
+
                                     <form action="{{ route('admin.enrollments.destroy', $row->id) }}" method="POST"
                                         class="d-inline delete-form">
                                         @csrf @method('DELETE')
@@ -134,8 +135,6 @@
                                     </form>
                                 </td>
                             </tr>
-                                
-                            {{-- Modal content remains here... --}}
                                 
                         @empty
                             <tr>
@@ -162,6 +161,7 @@
                                         <p>Tidak ada data penempatan siswa untuk kriteria ini.</p>
                                     @endif
                                 </td>
+
                             </tr>
                         @endforelse
                     </tbody>
