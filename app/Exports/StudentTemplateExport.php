@@ -11,8 +11,9 @@ class StudentTemplateExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            'Data Siswa' => new StudentDataSheet(),
+            'Data Siswa'      => new StudentDataSheet(),
             'Referensi Kelas' => new StudentReferenceSheet(),
+            '_Jurusan'        => new StudentMajorReferenceSheet(),
         ];
     }
 }

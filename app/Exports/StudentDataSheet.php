@@ -28,27 +28,28 @@ class StudentDataSheet implements FromArray, WithHeadings, WithTitle, WithStyles
     {
         return [
             'NOMOR KK (16 Digit)',
+            'NIK (16 Digit)',
             'NISN',
             'NAMA LENGKAP',
-            'TINGKAT (Pilih)',
-            'JURUSAN (Pilih)',
+            'KELAS',
+            'JURUSAN',
         ];
     }
 
     public function array(): array
     {
-        // Return empty array agar template bersih tanpa contoh data Budi/Siti
         return [];
     }
 
     public function columnWidths(): array
     {
         return [
-            'A' => 25,
-            'B' => 18,
-            'C' => 35,
-            'D' => 20,
-            'E' => 35,
+            'A' => 25, // No KK
+            'B' => 25, // NIK
+            'C' => 18, // NISN
+            'D' => 35, // Nama Lengkap
+            'E' => 15, // Kelas
+            'F' => 35, // Jurusan
         ];
     }
 
@@ -75,37 +76,39 @@ class StudentDataSheet implements FromArray, WithHeadings, WithTitle, WithStyles
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                // 1. Dropdown Tingkat (10, 11, 12)
+                // 1. Dropdown KELAS (Ambil dari master grade_level)
                 $grades = DB::table(DatabaseEntity::TBL_CLASSROOMS)->distinct()->orderBy('grade_level')->pluck('grade_level')->toArray();
                 $gradeFormula = '"' . implode(',', $grades) . '"';
 
-                // 2. Dropdown Jurusan
-                $majors = DB::table(DatabaseEntity::TBL_MAJORS)->orderBy('name')->pluck('name')->toArray();
-                $majorFormula = '"' . implode(',', $majors) . '"';
+                // 2. Dropdown JURUSAN (Hanya jurusan yang punya kelas di master data)
+                $majorCount = DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
+                    ->join(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
+                    ->distinct()
+                    ->count('m.name');
+                $majorFormula = "'_Jurusan'!\$A\$1:\$A\$" . $majorCount;
 
                 // Terapkan ke 100 baris
                 for ($row = 2; $row <= 101; $row++) {
-                    // Validation Kolom D (Tingkat)
-                    $valD = $sheet->getCell('D' . $row)->getDataValidation();
-                    $valD->setType(DataValidation::TYPE_LIST);
-                    $valD->setAllowBlank(true);
-                    $valD->setShowDropDown(true);
-                    $valD->setFormula1($gradeFormula);
-
-                    // Validation Kolom E (Jurusan)
+                    // Validasi Kolom E (KELAS)
                     $valE = $sheet->getCell('E' . $row)->getDataValidation();
                     $valE->setType(DataValidation::TYPE_LIST);
                     $valE->setAllowBlank(true);
                     $valE->setShowDropDown(true);
-                    $valE->setFormula1($majorFormula);
+                    $valE->setFormula1($gradeFormula);
+
+                    // Validasi Kolom F (JURUSAN)
+                    $valF = $sheet->getCell('F' . $row)->getDataValidation();
+                    $valF->setType(DataValidation::TYPE_LIST);
+                    $valF->setAllowBlank(true);
+                    $valF->setShowDropDown(true);
+                    $valF->setFormula1($majorFormula);
                 }
 
-                // Baris header lebih tinggi
                 $sheet->getRowDimension(1)->setRowHeight(30);
                 
-                // Set format kolom A sebagai Text agar No KK tidak jadi Scientific (1.23E+15)
                 $sheet->getStyle('A2:A101')->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
                 $sheet->getStyle('B2:B101')->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
+                $sheet->getStyle('C2:C101')->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
 
                 $sheet->freezePane('A2');
             },

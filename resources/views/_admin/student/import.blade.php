@@ -23,6 +23,19 @@
                         <p class="text-sm text-muted mb-0">Silakan unggah file Excel Anda. Pastikan format kolom telah sesuai dengan template yang diunduh agar sistem dapat mengekstrak dan mendaftarkan akun siswa secara otomatis.</p>
                     </div>
 
+                    @if (session('import_errors'))
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="alert-heading text-white"><i class="fas fa-exclamation-triangle mr-2"></i> Ada Kesalahan pada File Excel!</h4>
+                            <p class="text-white text-sm mb-2">Beberapa data di baris berikut tidak dapat diimport. Silakan perbaiki file Excel Anda dan coba lagi.</p>
+                            <hr class="my-2" style="border-color: rgba(255,255,255,.2)">
+                            <ul class="mb-0 text-white text-sm pl-4" style="max-height: 200px; overflow-y: auto;">
+                                @foreach (session('import_errors') as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.students.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         

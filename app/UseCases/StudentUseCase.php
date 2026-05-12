@@ -47,15 +47,15 @@ class StudentUseCase
             $qrCodeText = $data['nisn'].'-'.Str::random(8);
 
             DB::table(DatabaseEntity::TBL_STUDENTS)->insert([
-                'id_number' => $data['id_number'],
+                'id_number'          => $data['id_number'] ?? null,
                 'family_card_number' => $data['family_card_number'],
-                'nisn' => $data['nisn'],
-                'name' => $data['name'],
-                'classroom_id' => $data['classroom_id'],
-                'qr_code' => $qrCodeText,
-                'status' => 'aktif',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'nisn'               => $data['nisn'],
+                'name'               => $data['name'],
+                'classroom_id'       => $data['classroom_id'],
+                'qr_code'            => $qrCodeText,
+                'status'             => 'aktif',
+                'created_at'         => now(),
+                'updated_at'         => now(),
             ]);
 
             // Ambil ID siswa yang baru saja dibuat

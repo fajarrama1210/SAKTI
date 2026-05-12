@@ -46,7 +46,7 @@ class StudentReferenceSheet implements FromArray, WithHeadings, WithTitle, WithS
                 $c->id,
                 'Kelas ' . $c->grade_level,
                 $c->major_name,
-                'Kelas ' . $c->grade_level . ' - ' . $c->major_name . ' (ID:' . $c->id . ')',
+                'Tingkat ' . $c->grade_level . ' - ' . $c->major_name,
             ];
         }
 

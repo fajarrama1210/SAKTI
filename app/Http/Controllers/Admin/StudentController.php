@@ -97,7 +97,6 @@ class StudentController extends Controller
 
     public function importExcel(Request $request)
     {
-        // Validasi wajib upload file excel
         $request->validate([
             'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
         ], [
@@ -106,12 +105,20 @@ class StudentController extends Controller
         ]);
 
         try {
-            // Proses import
-            Excel::import(new StudentImport($this->studentUseCase), $request->file('file_excel'));
+            $import = new StudentImport($this->studentUseCase);
+            Excel::import($import, $request->file('file_excel'));
 
-            return redirect()->route('admin.students.index')->with('success', 'Data siswa dari Excel berhasil diimport & dibuatkan akun!');
+            $errors = $import->getErrors();
+
+            if (!empty($errors)) {
+                return redirect()->back()
+                    ->with('error', 'Beberapa data gagal diimport. Silakan cek detail di bawah.')
+                    ->with('import_errors', $errors);
+            }
+
+            return redirect()->route('admin.students.index')->with('success', 'Semua data siswa dari Excel berhasil diimport!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal Import: Cek kembali format Excel Anda. Detail: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal Import: Terjadi kesalahan fatal. Detail: ' . $e->getMessage());
         }
     }
 }
