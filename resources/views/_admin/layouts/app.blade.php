@@ -29,6 +29,11 @@
         .table-responsive {
             min-height: 300px;
         }
+
+        /* Fix dropdown flash/muncul saat page load */
+        .dropdown-menu:not(.show) {
+            display: none !important;
+        }
     </style>
 </head>
 
