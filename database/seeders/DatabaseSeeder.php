@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('asdasd'),
             'role' => 'admin',
         ]);
+        \App\Models\User::factory()->create([
+            'name' => 'mulyono',
+            'email' => 'E3125mulyono@ac.id',
+            'password' => bcrypt('mulyono'),
+            'role' => 'admin',
+        ]);
     }
 }
