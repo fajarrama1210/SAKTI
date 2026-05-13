@@ -389,34 +389,43 @@
             box-shadow: 0 4px 15px rgba(13, 148, 136, 0.25);
         }
 
-        /* System Status */
-        .system-status {
+        /* Back to Home */
+        .back-to-home {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
             margin-top: 2rem;
+        }
+
+        .back-to-home a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.6rem 1.25rem;
-            background: var(--teal-50);
-            border: 1px solid var(--teal-100);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 50px;
-            font-size: 0.8rem;
-            color: var(--teal-700);
+            font-size: 0.85rem;
+            color: #64748b;
             font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--teal-500);
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s ease-in-out infinite;
+        .back-to-home a:hover {
+            background: #f1f5f9;
+            color: var(--teal-600);
+            border-color: var(--teal-200);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(20, 184, 166, 0); }
+        .back-to-home a i {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-home a:hover i {
+            transform: translateX(-3px);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -552,10 +561,11 @@
                     </button>
                 </form>
 
-                <!-- System Status -->
-                <div class="system-status">
-                    <span class="status-dot"></span>
-                    System Status: Online
+                <!-- Back to Welcome -->
+                <div class="back-to-home">
+                    <a href="{{ url('/') }}">
+                        <i class="fas fa-chevron-left"></i> Kembali ke Halaman Utama
+                    </a>
                 </div>
             </div>
         </div>
