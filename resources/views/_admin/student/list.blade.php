@@ -54,18 +54,31 @@
                             @endif
                         </td>
                         <td scope="col" class="text-center">
-                            <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-sm btn-info">Edit</a>
-
-                            <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownAksi{{ $student->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAksi{{ $student->id }}">
+                                    <a href="{{ route('admin.students.edit', $student->id) }}" class="dropdown-item">
+                                        <i class="fas fa-edit text-info mr-2"></i> Edit
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fas fa-trash mr-2"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Belum ada data siswa.</td>
+                        <td colspan="8" class="text-center py-4">
+                            <span class="text-muted"><i class="fas fa-inbox mr-2"></i>Belum ada data siswa.</span>
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
