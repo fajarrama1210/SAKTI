@@ -25,8 +25,8 @@
                         aria-expanded="false">
                         <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-pill"
                             style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);">
-                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-semibold"
-                                style="width:34px; height:34px; font-size:13px;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-semibold"
+                                style="width:34px; height:34px; font-size:13px; background: linear-gradient(135deg, #1a8a5c, #2dce89);">
                                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                             </div>
                             <div class="d-none d-sm-block lh-sm">
@@ -45,15 +45,15 @@
 
                         {{-- Header --}}
                         <li class="d-flex align-items-center gap-3 px-3 py-3 border-bottom">
-                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-semibold flex-shrink-0"
-                                style="width:42px; height:42px; font-size:16px;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-semibold flex-shrink-0"
+                                style="width:42px; height:42px; font-size:16px; background: linear-gradient(135deg, #1a8a5c, #2dce89);">
                                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                             </div>
                             <div>
                                 <div class="fw-medium text-dark" style="font-size:14px;">{{ Auth::user()->name }}</div>
                                 <div class="text-secondary" style="font-size:11px;">{{ Auth::user()->email }}</div>
                                 <span class="badge rounded-pill mt-1"
-                                    style="font-size:10px; background:#EEEDFE; color:#3C3489;">
+                                    style="font-size:10px; background:#E6F9F0; color:#1a8a5c;">
                                     {{ ucfirst(Auth::user()->role) }}
                                 </span>
                             </div>
@@ -70,7 +70,7 @@
 
                             <a href="#" class="dropdown-item d-flex align-items-center gap-2 rounded-3 py-2 px-2">
                                 <div class="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0"
-                                    style="width:30px; height:30px; background:#EEEDFE; color:#534AB7;">
+                                    style="width:30px; height:30px; background:#E6F9F0; color:#1a8a5c;">
                                     <i class="fas fa-cog" style="font-size:12px;"></i>
                                 </div>
                                 <span style="font-size:13px;">Pengaturan</span>

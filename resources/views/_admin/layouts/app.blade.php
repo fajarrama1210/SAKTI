@@ -28,7 +28,7 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
-    <div class="min-height-300 bg-dark position-absolute w-100"></div>
+    <div class="min-height-300 position-absolute w-100" style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);"></div>
 
     @include('_admin.layouts.sidebar')
 

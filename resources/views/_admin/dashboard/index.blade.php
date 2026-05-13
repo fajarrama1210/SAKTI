@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Header -->
-<div class="header bg-primary pb-6">
+<div class="header pb-6" style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);">
     <div class="container-fluid">
         <div class="header-body">
             <div class="row align-items-center py-4">
@@ -28,7 +28,7 @@
                                     <span class="h3 font-weight-bold mb-0 text-dark">{{ $totalStudents }}</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-light text-primary rounded-circle shadow-sm">
+                                    <div class="icon icon-shape bg-light text-success rounded-circle shadow-sm">
                                         <i class="fas fa-user-graduate"></i>
                                     </div>
                                 </div>
@@ -157,7 +157,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Histori Pembayaran SPP Terbaru</h3>
-                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-primary px-3 rounded-pill text-uppercase">Lihat Semua</a>
+                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-success px-3 rounded-pill text-uppercase">Lihat Semua</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush">
@@ -174,7 +174,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm bg-primary text-white rounded-circle shadow-sm mr-3">
+                                        <div class="icon icon-shape icon-sm text-white rounded-circle shadow-sm mr-3" style="background: linear-gradient(135deg, #1a8a5c, #2dce89);">
                                             <i class="fas fa-calendar-alt fa-xs"></i>
                                         </div>
                                         <span class="font-weight-bold">{{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}</span>

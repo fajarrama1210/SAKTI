@@ -3,39 +3,43 @@
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0" href="{{ url('/') }}">
-            <img src="../assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-1 font-weight-bold">Creative Tim</span>
+        <a class="navbar-brand m-0 d-flex align-items-center" href="{{ url('/') }}">
+            <img src="{{ asset('assets/img/SAKTI.png') }}" class="navbar-brand-img" alt="SAKTI Logo" style="max-height: 36px;">
+            <span class="ms-2 font-weight-bold" style="font-size: 1.1rem; color: #1a8a5c;">SAKTI</span>
         </a>
     </div>
     <hr class="horizontal dark mt-0">
     <style>
         .navbar-nav .nav-item .nav-link {
-            transition: all 0.3s ease;
-            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
             margin: 2px 15px;
             padding: 10px 15px;
             color: #67748e;
         }
 
-        /* Hover Effect */
+        /* Hover Effect - Green */
         .navbar-nav .nav-item .nav-link:hover {
-            background-color: rgba(94, 114, 228, 0.1);
-            color: #5e72e4 !important;
+            background-color: rgba(45, 206, 137, 0.1);
+            color: #1a8a5c !important;
             transform: translateX(5px);
         }
 
         .navbar-nav .nav-item .nav-link:hover .icon i,
         .navbar-nav .nav-item .nav-link:hover .icon svg {
-            color: #5e72e4 !important;
-            fill: #5e72e4 !important;
+            color: #2dce89 !important;
+            fill: #2dce89 !important;
         }
 
-        /* Active State */
+        .navbar-nav .nav-item .nav-link:hover .nav-link-text {
+            color: #1a8a5c !important;
+        }
+
+        /* Active State - Green */
         .navbar-nav .nav-item .nav-link.active-menu {
-            background-color: #5e72e4;
+            background: linear-gradient(135deg, #1a8a5c, #2dce89);
             color: #fff !important;
-            box-shadow: 0 4px 15px rgba(94, 114, 228, 0.3);
+            box-shadow: 0 4px 15px rgba(45, 206, 137, 0.35);
         }
 
         .navbar-nav .nav-item .nav-link.active-menu .icon i,
@@ -44,9 +48,19 @@
             fill: #fff !important;
         }
 
+        .navbar-nav .nav-item .nav-link.active-menu .nav-link-text {
+            color: #fff !important;
+        }
+
         .navbar-nav .nav-item .nav-link.active-menu:hover {
             transform: none;
-            background-color: #5e72e4;
+            background: linear-gradient(135deg, #1a8a5c, #2dce89);
+        }
+
+        /* Section headers */
+        .navbar-nav .nav-item h6 {
+            color: #1a8a5c !important;
+            letter-spacing: 0.08em;
         }
     </style>
     <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main" style="height: calc(100vh - 120px) !important;">
