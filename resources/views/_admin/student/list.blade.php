@@ -55,22 +55,28 @@
                         </td>
                         <td scope="col" class="text-center">
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownAksi{{ $student->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $student->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAksi{{ $student->id }}">
-                                    <a href="{{ route('admin.students.edit', $student->id) }}" class="dropdown-item">
-                                        <i class="fas fa-edit text-info mr-2"></i> Edit
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fas fa-trash mr-2"></i> Hapus
-                                        </button>
-                                    </form>
-                                </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $student->id }}">
+                                    <li>
+                                        <a href="{{ route('admin.students.edit', $student->id) }}" class="dropdown-item border-radius-md">
+                                            <i class="fas fa-edit text-info me-2"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="delete-form m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
+                                                <i class="fas fa-trash me-2"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </div>
                         </td>
                     </tr>

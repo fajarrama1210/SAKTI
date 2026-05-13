@@ -44,15 +44,37 @@
                         </td>
                         <td>{{ \Carbon\Carbon::parse($bill->due_date)->format('d/m/Y') }}</td>
                         <td>
-                            <a href="{{ route('admin.bills.show', $bill->id) }}" class="btn btn-sm btn-info">Detail</a>
-                            @if($bill->status !== 'paid')
-                            <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="btn btn-sm btn-success">Bayar</a>
-                            @endif
-                            <form action="{{ route('admin.bills.destroy', $bill->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
+                            <div class="dropdown">
+                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $bill->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $bill->id }}">
+                                    <li>
+                                        <a href="{{ route('admin.bills.show', $bill->id) }}" class="dropdown-item border-radius-md">
+                                            <i class="fas fa-eye text-info me-2"></i> Detail
+                                        </a>
+                                    </li>
+                                    @if($bill->status !== 'paid')
+                                    <li>
+                                        <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="dropdown-item border-radius-md">
+                                            <i class="fas fa-money-bill-wave text-success me-2"></i> Bayar
+                                        </a>
+                                    </li>
+                                    @endif
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('admin.bills.destroy', $bill->id) }}" method="POST" class="delete-form m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
+                                                <i class="fas fa-trash me-2"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     @empty

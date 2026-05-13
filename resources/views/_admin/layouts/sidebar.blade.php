@@ -113,7 +113,7 @@
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
                         @include('icon.student')
                     </div>
-                    <span class="nav-link-text ms-1">Siswa (Master)</span>
+                    <span class="nav-link-text ms-1">Siswa</span>
                 </a>
             </li>
             <li class="nav-item">

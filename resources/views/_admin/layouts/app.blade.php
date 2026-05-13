@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css?v=2.1.0') }}" rel="stylesheet" />
 
-    {{-- Override Argon dropdown: kontrol manual via JS --}}
     <style>
+        /* Override Argon dropdown: kontrol manual via JS */
         #navbarUserDropdown {
             display: none !important;
             opacity: 0 !important;
@@ -23,6 +23,11 @@
             opacity: 1 !important;
             visibility: visible !important;
             pointer-events: auto !important;
+        }
+
+        /* Fix dropdown terpotong di dalam table-responsive saat data sedikit */
+        .table-responsive {
+            min-height: 300px;
         }
     </style>
 </head>

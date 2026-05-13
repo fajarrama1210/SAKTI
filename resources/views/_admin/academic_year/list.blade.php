@@ -36,12 +36,30 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('admin.academic-years.edit', $ay->id) }}" class="btn btn-sm btn-info">Edit</a>
-                            <form action="{{ route('admin.academic-years.destroy', $ay->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
+                            <div class="dropdown">
+                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $ay->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $ay->id }}">
+                                    <li>
+                                        <a href="{{ route('admin.academic-years.edit', $ay->id) }}" class="dropdown-item border-radius-md">
+                                            <i class="fas fa-edit text-info me-2"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('admin.academic-years.destroy', $ay->id) }}" method="POST" class="delete-form m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
+                                                <i class="fas fa-trash me-2"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     @empty
