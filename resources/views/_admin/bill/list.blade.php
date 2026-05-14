@@ -78,9 +78,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center">Belum ada data tagihan. Klik "Generate Tagihan per Semester" untuk memulai.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

@@ -166,9 +166,7 @@
                         <td>{{ $trx->recorded_by_name ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center">Tidak ada data ditemukan untuk filter yang dipilih.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

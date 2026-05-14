@@ -52,9 +52,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center">Belum ada data transaksi.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

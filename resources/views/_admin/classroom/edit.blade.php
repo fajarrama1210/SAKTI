@@ -23,7 +23,6 @@
                         <option value="10" {{ old('grade_level', $classroom->grade_level) == '10' ? 'selected' : '' }}>Kelas 10</option>
                         <option value="11" {{ old('grade_level', $classroom->grade_level) == '11' ? 'selected' : '' }}>Kelas 11</option>
                         <option value="12" {{ old('grade_level', $classroom->grade_level) == '12' ? 'selected' : '' }}>Kelas 12</option>
-                        <option value="13" {{ old('grade_level', $classroom->grade_level) == '13' ? 'selected' : '' }}>Kelas 13</option>
                     </select>
                     @error('grade_level') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>

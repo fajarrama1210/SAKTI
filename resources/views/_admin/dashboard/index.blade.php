@@ -194,9 +194,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">Belum ada transaksi pembayaran SPP terbaru.</td>
-                            </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>

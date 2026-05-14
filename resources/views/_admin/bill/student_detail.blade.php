@@ -119,12 +119,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-5">
-                                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800532.png" style="width: 150px; opacity: 0.5;">
-                                    <h6 class="text-muted mt-3">Belum ada tagihan untuk siswa ini.</h6>
-                                </td>
-                            </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>

@@ -51,9 +51,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="3" class="text-center">Belum ada data jurusan.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

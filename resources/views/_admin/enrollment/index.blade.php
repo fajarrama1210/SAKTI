@@ -137,32 +137,7 @@
                             </tr>
                                 
                         @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    @if($academicYears->isEmpty())
-                                        <div class="mb-3">
-                                            <i class="fas fa-calendar-times fa-3x text-warning"></i>
-                                        </div>
-                                        <h4 class="text-warning">Tahun Ajaran Belum Tersedia</h4>
-                                        <p>Silakan buat data Tahun Ajaran terlebih dahulu untuk mengelola penempatan siswa.</p>
-                                        <a href="{{ route('admin.academic-years.index') }}" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-plus"></i> Kelola Tahun Ajaran
-                                        </a>
-                                    @elseif(!$selectedAY)
-                                        <div class="mb-3">
-                                            <i class="fas fa-search fa-3x text-muted"></i>
-                                        </div>
-                                        <h4>Pilih Tahun Ajaran</h4>
-                                        <p>Silakan pilih tahun ajaran dari menu dropdown di atas.</p>
-                                    @else
-                                        <div class="mb-3">
-                                            <i class="fas fa-users-slash fa-3x text-muted"></i>
-                                        </div>
-                                        <p>Tidak ada data penempatan siswa untuk kriteria ini.</p>
-                                    @endif
-                                </td>
-
-                            </tr>
+                            <x-empty-state />
                         @endforelse
                     </tbody>
                 </table>

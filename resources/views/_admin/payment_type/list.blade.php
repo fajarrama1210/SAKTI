@@ -59,9 +59,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="4" class="text-center">Belum ada data jenis pembayaran.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

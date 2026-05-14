@@ -81,11 +81,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center py-4">
-                            <span class="text-muted"><i class="fas fa-inbox mr-2"></i>Belum ada data siswa.</span>
-                        </td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

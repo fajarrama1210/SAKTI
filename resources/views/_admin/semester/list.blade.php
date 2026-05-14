@@ -60,9 +60,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Belum ada data semester.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

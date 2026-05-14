@@ -131,9 +131,7 @@
                         <td>Rp {{ number_format($item->amount, 0, ',', '.') }}</td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="text-center">Tidak ada rincian tagihan.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>
@@ -176,9 +174,7 @@
                         <td>{{ $payment->notes ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" class="text-center">Belum ada pembayaran.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

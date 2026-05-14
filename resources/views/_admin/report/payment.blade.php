@@ -129,9 +129,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="13" class="text-center">Tidak ada data ditemukan untuk filter yang dipilih.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

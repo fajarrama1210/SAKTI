@@ -115,9 +115,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">Tidak ada data tagihan untuk filter ini.</td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>
