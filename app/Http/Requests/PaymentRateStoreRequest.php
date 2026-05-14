@@ -11,6 +11,15 @@ class PaymentRateStoreRequest extends FormRequest
         return auth()->check() && auth()->user()->role === 'admin';
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('amount')) {
+            $this->merge([
+                'amount' => preg_replace('/[^0-9]/', '', $this->amount),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [

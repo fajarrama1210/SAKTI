@@ -13,25 +13,25 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Tipe</th>
-                        <th>Aksi</th>
+                        <th class="text-center" style="width: 50px;">No</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Tipe</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($paymentTypes as $index => $pt)
                     <tr>
-                        <td>{{ $paymentTypes->firstItem() + $index }}</td>
-                        <td><b>{{ $pt->name }}</b></td>
-                        <td>
+                        <td class="text-center">{{ $paymentTypes->firstItem() + $index }}</td>
+                        <td class="text-center"><b>{{ $pt->name }}</b></td>
+                        <td class="text-center">
                             @if($pt->is_monthly)
                             <span class="badge badge-info">Bulanan</span>
                             @else
                             <span class="badge badge-warning">Sekali Bayar</span>
                             @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             <div class="dropdown">
                                 <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $pt->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>

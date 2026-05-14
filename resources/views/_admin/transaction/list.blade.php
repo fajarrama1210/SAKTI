@@ -13,39 +13,58 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Tipe</th>
-                        <th>Kategori</th>
-                        <th>Keterangan</th>
-                        <th>Jumlah</th>
-                        <th>Dicatat Oleh</th>
-                        <th>Aksi</th>
+                        <th class="text-center">No</th>
+                        <th class="text-center">Tanggal</th>
+                        <th class="text-center">Tipe</th>
+                        <th class="text-center">Kategori</th>
+                        <th class="text-center">Keterangan</th>
+                        <th class="text-center">Jumlah</th>
+                        <th class="text-center">Dicatat Oleh</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($transactions as $index => $trx)
                     <tr>
-                        <td>{{ $transactions->firstItem() + $index }}</td>
-                        <td>{{ \Carbon\Carbon::parse($trx->date)->format('d/m/Y') }}</td>
-                        <td>
+                        <td class="text-center">{{ $transactions->firstItem() + $index }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($trx->date)->format('d/m/Y') }}</td>
+                        <td class="text-center">
                             @if($trx->type === 'income')
                             <span class="badge badge-success">Masuk</span>
                             @else
                             <span class="badge badge-danger">Keluar</span>
                             @endif
                         </td>
-                        <td>{{ $trx->category ?? '-' }}</td>
-                        <td>{{ \Illuminate\Support\Str::limit($trx->description, 50) }}</td>
-                        <td><b>Rp {{ number_format($trx->amount, 0, ',', '.') }}</b></td>
-                        <td>{{ $trx->recorded_by_name ?? '-' }}</td>
-                        <td>
+                        <td class="text-center">{{ $trx->category ?? '-' }}</td>
+                        <td class="text-center">{{ \Illuminate\Support\Str::limit($trx->description, 50) }}</td>
+                        <td class="text-center"><b>Rp {{ number_format($trx->amount, 0, ',', '.') }}</b></td>
+                        <td class="text-center">{{ $trx->recorded_by_name ?? '-' }}</td>
+                        <td class="text-center">
                             @if(!$trx->payment_id)
-                            <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
+                            <div class="dropdown">
+                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $trx->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $trx->id }}">
+                                    <li>
+                                        <a href="{{ route('admin.transactions.edit', $trx->id) }}" class="dropdown-item border-radius-md">
+                                            <i class="fas fa-edit text-info me-2"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" class="delete-form m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
+                                                <i class="fas fa-trash me-2"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                             @else
                             <span class="badge badge-info">Otomatis SPP</span>
                             @endif

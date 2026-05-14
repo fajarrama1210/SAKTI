@@ -52,6 +52,34 @@ class TransactionUseCase
         }
     }
 
+    public function update($id, array $data): array
+    {
+        DB::beginTransaction();
+        try {
+            $trx = DB::table(DatabaseEntity::TBL_TRANSACTIONS)->where('id', $id)->first();
+            if ($trx && $trx->payment_id) {
+                DB::rollBack();
+                return ['status' => false, 'message' => 'Transaksi otomatis dari pembayaran SPP tidak bisa diedit manual.'];
+            }
+
+            DB::table(DatabaseEntity::TBL_TRANSACTIONS)->where('id', $id)->update([
+                'date' => $data['date'],
+                'type' => $data['type'],
+                'category' => $data['category'] ?? null,
+                'description' => $data['description'],
+                'amount' => $data['amount'],
+                'updated_at' => now(),
+            ]);
+
+            DB::commit();
+            return ['status' => true];
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error("TransactionUpdate Error: " . $e->getMessage());
+            return ['status' => false, 'message' => $e->getMessage()];
+        }
+    }
+
     public function delete($id): array
     {
         DB::beginTransaction();

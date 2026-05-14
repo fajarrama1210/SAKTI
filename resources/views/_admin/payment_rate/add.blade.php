@@ -52,7 +52,7 @@
                             <label class="form-control-label">Kelas</label>
                             <select name="grade_level" class="form-control @error('grade_level') is-invalid @enderror" required>
                                 <option value="">-- Pilih Kelas --</option>
-                                @foreach([10, 11, 12, 13] as $grade)
+                                @foreach([10, 11, 12] as $grade)
                                 <option value="{{ $grade }}" {{ old('grade_level') == $grade ? 'selected' : '' }}>Kelas {{ $grade }}</option>
                                 @endforeach
                             </select>
@@ -74,7 +74,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Tarif (Rp)</label>
-                            <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}" min="0" placeholder="20000" required>
+                            <input type="text" name="amount" id="input-rupiah" class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}" placeholder="20.000" required>
                             @error('amount') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
@@ -86,4 +86,36 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var inputTarif = document.getElementById('input-rupiah');
+        if (inputTarif) {
+            inputTarif.value = formatRupiah(inputTarif.value);
+            inputTarif.addEventListener('keyup', function(e) {
+                this.value = formatRupiah(this.value);
+            });
+        }
+
+        function formatRupiah(angka, prefix) {
+            if (!angka) return '';
+            var number_string = angka.toString().replace(/[^,\d]/g, ''),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                var separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+    });
+</script>
+@endpush
+
 @endsection

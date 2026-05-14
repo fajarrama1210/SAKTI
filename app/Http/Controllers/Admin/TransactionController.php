@@ -39,6 +39,27 @@ class TransactionController extends Controller
         return redirect()->route('admin.transactions.index')->with('success', ResponseEntity::MSG_SUCCESS_CREATE);
     }
 
+    public function edit($id)
+    {
+        $transaction = $this->transactionUseCase->getById($id);
+        if (!$transaction) abort(404);
+        if ($transaction->payment_id) abort(403, 'Transaksi otomatis tidak dapat diedit manual.');
+
+        return view('_admin.transaction.edit', compact('transaction'));
+    }
+
+    public function update(TransactionStoreRequest $request, $id)
+    {
+        $result = $this->transactionUseCase->update($id, $request->validated());
+
+        if (!$result['status']) {
+            $msg = $result['message'] ?? ResponseEntity::MSG_ERROR_SERVER;
+            return redirect()->back()->withInput()->with('error', $msg);
+        }
+
+        return redirect()->route('admin.transactions.index')->with('success', ResponseEntity::MSG_SUCCESS_UPDATE);
+    }
+
     public function destroy($id)
     {
         $result = $this->transactionUseCase->delete($id);

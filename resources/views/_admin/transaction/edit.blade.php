@@ -4,7 +4,7 @@
 <div class="container-fluid mt--6">
     <div class="card">
         <div class="card-header border-0">
-            <h3 class="mb-0">Catat Transaksi Manual</h3>
+            <h3 class="mb-0">Edit Transaksi Manual</h3>
         </div>
         <div class="card-body">
             @if(session('error'))
@@ -16,28 +16,29 @@
             </div>
             @endif
 
-            <form action="{{ route('admin.transactions.store') }}" method="POST">
+            <form action="{{ route('admin.transactions.update', $transaction->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Tanggal</label>
-                            <input type="date" name="date" class="form-control" value="{{ old('date', now()->toDateString()) }}" required>
+                            <input type="date" name="date" class="form-control" value="{{ old('date', $transaction->date) }}" required>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Tipe Transaksi</label>
                             <select name="type" class="form-control" required>
-                                <option value="income" {{ old('type') === 'income' ? 'selected' : '' }}>Uang Masuk</option>
-                                <option value="expense" {{ old('type') === 'expense' ? 'selected' : '' }}>Uang Keluar</option>
+                                <option value="income" {{ old('type', $transaction->type) === 'income' ? 'selected' : '' }}>Uang Masuk</option>
+                                <option value="expense" {{ old('type', $transaction->type) === 'expense' ? 'selected' : '' }}>Uang Keluar</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Kategori</label>
-                            <input type="text" name="category" class="form-control" value="{{ old('category') }}" placeholder="Contoh: ATK, Gaji, Donasi" list="category-list">
+                            <input type="text" name="category" class="form-control" value="{{ old('category', $transaction->category) }}" placeholder="Contoh: ATK, Gaji, Donasi" list="category-list">
                             <datalist id="category-list">
                                 <option value="SPP">
                                 <option value="Uang Gedung">
@@ -58,18 +59,18 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Jumlah (Rp)</label>
-                            <input type="text" name="amount" id="input-rupiah" class="form-control" value="{{ old('amount') }}" placeholder="50.000" required>
+                            <input type="text" name="amount" id="input-rupiah" class="form-control" value="{{ old('amount', $transaction->amount) }}" required>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
                             <label class="form-control-label">Keterangan / Deskripsi</label>
-                            <input type="text" name="description" class="form-control" value="{{ old('description') }}" placeholder="Contoh: Pembelian kertas HVS 5 rim" required>
+                            <input type="text" name="description" class="form-control" value="{{ old('description', $transaction->description) }}" required>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Simpan Transaksi</button>
+                <button type="submit" class="btn btn-primary mt-3">Update Transaksi</button>
                 <a href="{{ route('admin.transactions.index') }}" class="btn btn-secondary mt-3">Batal</a>
             </form>
         </div>
