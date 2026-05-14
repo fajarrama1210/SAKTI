@@ -12,6 +12,36 @@
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css?v=2.1.0') }}" rel="stylesheet" />
 
     <style>
+        /* Minimalist Modern Green Pagination */
+        .pagination {
+            gap: 6px;
+        }
+        .page-item .page-link {
+            border: none !important;
+            border-radius: 8px !important;
+            color: #67748e;
+            font-weight: 600;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+        .page-item .page-link:hover {
+            background-color: #1a8a5c;
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(26, 138, 92, 0.2);
+            transform: translateY(-1px);
+        }
+        .page-item.active .page-link {
+            background-color: #1a8a5c;
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(26, 138, 92, 0.3);
+        }
+        .page-item.disabled .page-link {
+            color: #ced4da;
+            background-color: transparent;
+            pointer-events: none;
+        }
+        
         /* Override Argon dropdown: kontrol manual via JS */
         #navbarUserDropdown {
             display: none !important;
@@ -25,12 +55,10 @@
             pointer-events: auto !important;
         }
 
-        /* Fix dropdown terpotong di dalam table-responsive saat data sedikit */
         .table-responsive {
             min-height: 300px;
         }
 
-        /* Fix dropdown flash/muncul saat page load */
         .dropdown-menu:not(.show) {
             display: none !important;
         }
