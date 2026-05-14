@@ -19,10 +19,6 @@
                         });
                     </script>
                 @endif
-                {{-- <div class="alert alert-info">
-                    <strong>Info:</strong> Akun login (User) akan digenerate otomatis.<br>
-                    Email: <b>[NISN]@smkakbar.sch.id</b> | Password Default: <b>password123</b>
-                </div> --}}
 
                 <form action="{{ route('admin.students.store') }}" method="POST">
                     @csrf
@@ -50,7 +46,7 @@
                     <div class="form-group">
                         <label>NISN</label>
                         <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror"
-                            value="{{ old('nisn') }}" required>
+                            value="{{ old('nisn') }}" required maxlength="10">
                         @error('nisn')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -73,7 +69,7 @@
                             @foreach ($classrooms as $room)
                                 <option value="{{ $room->id }}"
                                     {{ old('classroom_id') == $room->id ? 'selected' : '' }}>
-                                    Kelas {{ $room->grade_level }} - {{ $room->major_name }}
+                                    {{ $room->name }} - {{ $room->major_name }}
                                 </option>
                             @endforeach
                         </select>

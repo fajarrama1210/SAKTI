@@ -23,49 +23,64 @@ class StudentImport implements ToCollection, WithHeadingRow
     {
         $rowNumber = 1; // Baris 1 adalah header
 
-        foreach ($rows as $row) {
-            $rowNumber++;
+        DB::beginTransaction();
 
-            // Cek apakah baris kosong (abaikan jika NISN dan Nama kosong)
-            if (empty($row['nisn']) && empty($row['nama_lengkap'])) {
-                continue;
+        try {
+            foreach ($rows as $row) {
+                $rowNumber++;
+
+                // Cek apakah baris kosong (abaikan jika NISN dan Nama kosong)
+                if (empty($row['nisn']) && empty($row['nama_lengkap'])) {
+                    continue;
+                }
+
+                // Validasi kolom wajib
+                if (empty($row['nisn'])) {
+                    $this->addError($rowNumber, "NISN tidak boleh kosong");
+                    continue;
+                }
+                if (empty($row['nama_lengkap'])) {
+                    $this->addError($rowNumber, "Nama Lengkap tidak boleh kosong");
+                    continue;
+                }
+
+                // Cari classroom_id berdasarkan KELAS dan JURUSAN
+                $classGrade = $row['kelas'] ?? null;
+                $majorName  = $row['jurusan'] ?? null;
+                $classroomId = $this->findClassroomId($classGrade, $majorName);
+
+                if (!$classroomId) {
+                    $msg = "Kelas '" . ($classGrade ?? '-') . "' dengan Jurusan '" . ($majorName ?? '-') . "' tidak ditemukan di master data.";
+                    $this->addError($rowNumber, $msg);
+                    continue;
+                }
+
+                $data = [
+                    'id_number'          => !empty($row['nik_16_digit']) ? (string) $row['nik_16_digit'] : null,
+                    'family_card_number' => (string) ($row['nomor_kk_16_digit'] ?? ''),
+                    'nisn'               => (string) $row['nisn'],
+                    'name'               => $row['nama_lengkap'],
+                    'classroom_id'       => $classroomId,
+                ];
+
+                $result = $this->studentUseCase->store($data);
+
+                if (!$result['status']) {
+                    $friendlyMessage = $this->translateErrorMessage($result['message'] ?? 'Gagal disimpan');
+                    $this->addError($rowNumber, $friendlyMessage . " (NISN: {$data['nisn']})");
+                }
             }
 
-            // Validasi kolom wajib
-            if (empty($row['nisn'])) {
-                $this->addError($rowNumber, "NISN tidak boleh kosong");
-                continue;
-            }
-            if (empty($row['nama_lengkap'])) {
-                $this->addError($rowNumber, "Nama Lengkap tidak boleh kosong");
-                continue;
+            // Evaluasi akhir transaksi: Jika ada error sedikitpun, batalkan semua insert!
+            if (!empty($this->importErrors)) {
+                DB::rollBack();
+            } else {
+                DB::commit();
             }
 
-            // Cari classroom_id berdasarkan KELAS dan JURUSAN
-            $classGrade = $row['kelas'] ?? null;
-            $majorName  = $row['jurusan'] ?? null;
-            $classroomId = $this->findClassroomId($classGrade, $majorName);
-
-            if (!$classroomId) {
-                $msg = "Kelas '" . ($classGrade ?? '-') . "' dengan Jurusan '" . ($majorName ?? '-') . "' tidak ditemukan di master data.";
-                $this->addError($rowNumber, $msg);
-                continue;
-            }
-
-            $data = [
-                'id_number'          => !empty($row['nik_16_digit']) ? (string) $row['nik_16_digit'] : null,
-                'family_card_number' => (string) ($row['nomor_kk_16_digit'] ?? ''),
-                'nisn'               => (string) $row['nisn'],
-                'name'               => $row['nama_lengkap'],
-                'classroom_id'       => $classroomId,
-            ];
-
-            $result = $this->studentUseCase->store($data);
-
-            if (!$result['status']) {
-                $friendlyMessage = $this->translateErrorMessage($result['message'] ?? 'Gagal disimpan');
-                $this->addError($rowNumber, $friendlyMessage . " (NISN: {$data['nisn']})");
-            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->addError("Sistem", "Terjadi kesalahan fatal: " . $e->getMessage());
         }
     }
 

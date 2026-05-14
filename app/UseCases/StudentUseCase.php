@@ -15,7 +15,7 @@ class StudentUseCase
         return DB::table(DatabaseEntity::TBL_STUDENTS.' as s')
             ->join(DatabaseEntity::TBL_CLASSROOMS.' as c', 's.classroom_id', '=', 'c.id')
             ->join(DatabaseEntity::TBL_MAJORS.' as m', 'c.major_id', '=', 'm.id')
-            ->select('s.id', 's.nisn', 's.id_number', 's.name', 's.family_card_number', 's.status', 'c.grade_level', 'm.name as major_name')
+            ->select('s.id', 's.nisn', 's.id_number', 's.name', 's.family_card_number', 's.status', 'c.grade_level', 'c.name as classroom_name', 'm.name as major_name')
             ->orderBy('s.id', 'desc')
             ->paginate($perPage);
     }
@@ -28,7 +28,7 @@ class StudentUseCase
         return DB::table(DatabaseEntity::TBL_STUDENTS.' as s')
             ->join(DatabaseEntity::TBL_CLASSROOMS.' as c', 's.classroom_id', '=', 'c.id')
             ->join(DatabaseEntity::TBL_MAJORS.' as m', 'c.major_id', '=', 'm.id')
-            ->select('s.id', 's.nisn', 's.name', 's.family_card_number', 's.status', 'c.grade_level', 'm.name as major_name')
+            ->select('s.id', 's.nisn', 's.name', 's.family_card_number', 's.status', 'c.grade_level', 'c.name as classroom_name', 'm.name as major_name')
             ->where(function ($q) use ($keyword) {
                 $q->where('s.name', 'LIKE', "%{$keyword}%")
                     ->orWhere('s.nisn', 'LIKE', "%{$keyword}%")

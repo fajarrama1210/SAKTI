@@ -39,7 +39,7 @@
                         <td scope="col" class="text-center">{{ $students->firstItem() + $index }}</td>
                         <td scope="col" class="text-center"><b>{{ $student->nisn }}</b></td>
                         <td scope="col" class="text-center"><b>{{ $student->name }}</b></td>
-                        <td scope="col" class="text-center">Kelas {{ $student->grade_level }} - {{ $student->major_name }}</td>
+                        <td scope="col" class="text-center">{{ $student->classroom_name }}</td>
                         <td scope="col" class="text-center"><code>{{ $student->id_number }}</code></td>
                         <td scope="col" class="text-center">{{ $student->family_card_number }}</td>
                         <td scope="col" class="text-center">

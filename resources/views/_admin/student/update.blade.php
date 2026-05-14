@@ -58,7 +58,7 @@
                     <select name="classroom_id" class="form-control @error('classroom_id') is-invalid @enderror" required>
                         @foreach($classrooms as $room)
                             <option value="{{ $room->id }}" {{ old('classroom_id', $student->classroom_id) == $room->id ? 'selected' : '' }}>
-                                Kelas {{ $room->grade_level }} - {{ $room->major_name }}
+                                {{ $room->name }} - {{ $room->major_name }}
                             </option>
                         @endforeach
                     </select>

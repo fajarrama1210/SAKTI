@@ -1,5 +1,5 @@
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4"
-    id="sidenav-main">
+    id="sidenav-main" style="overflow: hidden !important;">
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
@@ -61,6 +61,31 @@
         .navbar-nav .nav-item h6 {
             color: #1a8a5c !important;
             letter-spacing: 0.08em;
+        }
+
+        /* Custom Minimalist Scrollbar for Sidebar */
+        #sidenav-collapse-main {
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(26, 138, 92, 0.3) transparent;
+        }
+
+        #sidenav-collapse-main::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #sidenav-collapse-main::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidenav-collapse-main::-webkit-scrollbar-thumb {
+            background-color: rgba(26, 138, 92, 0.3);
+            border-radius: 10px;
+        }
+
+        #sidenav-collapse-main::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(26, 138, 92, 0.7);
         }
     </style>
     <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main" style="height: calc(100vh - 120px) !important;">
