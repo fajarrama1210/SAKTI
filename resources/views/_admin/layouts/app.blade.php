@@ -42,7 +42,6 @@
             pointer-events: none;
         }
         
-        /* Override Argon dropdown: kontrol manual via JS */
         #navbarUserDropdown {
             display: none !important;
             opacity: 0 !important;
@@ -174,6 +173,17 @@
                         menu.classList.remove('open');
                         trigger.setAttribute('aria-expanded', 'false');
                     }
+                });
+            }
+            // ─── Sidebar Scroll Persistence ─────────────────────────
+            var sidebar = document.getElementById('sidenav-collapse-main');
+            if (sidebar) {
+                var savedScroll = sessionStorage.getItem('sidebarScrollTop');
+                if (savedScroll !== null) {
+                    sidebar.scrollTop = parseInt(savedScroll, 10);
+                }
+                window.addEventListener('beforeunload', function() {
+                    sessionStorage.setItem('sidebarScrollTop', sidebar.scrollTop);
                 });
             }
         });
