@@ -1,23 +1,31 @@
 @extends('_admin.layouts.app')
 
+
 @section('content')
 <div class="container-fluid mt--6">
     <div class="row">
         {{-- Profil Siswa --}}
         <div class="col-xl-4 mb-4">
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-sm h-100">
                 <div class="card-body text-center pt-5 pb-4">
-                    <div class="rounded-circle bg-gradient-primary d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width:80px;height:80px;">
-                        <i class="fas fa-user-graduate text-white fa-2x"></i>
+                    <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-4 text-white" style="width: 100px; height: 100px;">
+                        <i class="fas fa-user-graduate fa-3x"></i>
                     </div>
-                    <h4 class="mb-1">{{ $student->name }}</h4>
-                    <p class="text-sm text-muted mb-2">NISN: <code>{{ $student->nisn }}</code></p>
-                    <p class="text-sm text-muted mb-0">No. KK: <code>{{ $student->family_card_number }}</code></p>
-                    
-                    <div class="mt-4">
-                        <span class="badge badge-lg bg-{{ $student->status === 'aktif' ? 'success' : 'secondary' }} text-white px-4">
-                            Siswa {{ ucfirst($student->status) }}
-                        </span>
+                    <h4 class="mb-1 text-dark">{{ $student->name }}</h4>
+                    <p class="text-sm text-muted mb-3">
+                        <span class="badge bg-secondary">NISN: {{ $student->nisn }}</span>
+                    </p>
+                    <div class="d-flex flex-column gap-2 mb-4 text-start">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block mb-1">Nomor Kartu Keluarga</small>
+                            <span class="text-dark font-weight-bold">{{ $student->family_card_number }}</span>
+                        </div>
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block mb-1">Status Akademik</small>
+                            <span class="badge bg-{{ $student->status === 'aktif' ? 'success' : 'secondary' }}">
+                                Siswa {{ ucfirst($student->status) }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,72 +65,84 @@
 
         {{-- Kalender SPP --}}
         <div class="col-xl-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 text-primary"><i class="fas fa-calendar-alt"></i> Kalender SPP</h4>
-                    <span class="text-xs text-muted">Tahun Ajaran: {{ $bills->first()->academic_year_name ?? '-' }}</span>
+            <div class="card shadow-sm h-100">
+                <div class="card-header pb-0 border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-dark"><i class="fas fa-calendar-alt me-2"></i> Kalender SPP</h5>
+                    <span class="badge bg-primary">Tahun Ajaran: {{ $bills->first()->academic_year_name ?? '-' }}</span>
                 </div>
-                <div class="table-responsive">
-                    <table class="table align-items-center table-flush mb-0">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Periode</th>
-                                <th class="text-center">Nominal</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $currentMonth = now()->month;
-                                $currentYear  = now()->year;
-                            @endphp
-                            @forelse($bills as $bill)
-                            @php
-                                $isCurrentMonth = ($bill->month == $currentMonth && $bill->year == $currentYear);
-                                $isPastDue = ($bill->status !== 'paid' && \Carbon\Carbon::parse($bill->due_date)->isPast());
-                                $periodName = \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('X'); if ($periodName == 'X') $periodName = \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y');
-                            @endphp
-                            <tr class="{{ $isCurrentMonth ? 'bg-light' : '' }}">
-                                <td>
-                                    <span class="text-sm font-weight-bold text-dark">
-                                        {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
-                                    </span>
-                                    @if($isCurrentMonth)
-                                        <span class="badge badge-pill badge-primary ml-1" style="font-size:0.6rem">BULAN INI</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <span class="text-sm text-dark font-weight-600">Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</span>
-                                </td>
-                                <td class="text-center">
-                                    @if($bill->status === 'paid')
-                                        <span class="badge badge-pill badge-success"><i class="fas fa-check"></i> Lunas</span>
-                                    @elseif($isPastDue)
-                                        <span class="badge badge-pill badge-danger"><i class="fas fa-exclamation-triangle"></i> Terlambat</span>
-                                    @else
-                                        <span class="badge badge-pill badge-warning text-white"><i class="fas fa-clock"></i> Belum Bayar</span>
-                                    @endif
-                                </td>
-                                <td class="text-right">
-                                    @if($bill->status !== 'paid')
-                                    <button type="button" 
-                                            class="btn btn-sm btn-success btn-pay shadow-none" 
-                                            data-id="{{ $bill->id }}" 
-                                            data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
-                                            data-amount="{{ number_format($bill->total_amount, 0, ',', '.') }}">
-                                        <i class="fas fa-money-bill-wave"></i> Bayar
-                                    </button>
-                                    @else
-                                        <span class="text-success text-sm font-weight-bold"><i class="fas fa-check-double"></i> Verified</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @empty
-                                <x-empty-state />
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Periode Bulan</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nominal Tagihan</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $currentMonth = now()->month;
+                                    $currentYear  = now()->year;
+                                @endphp
+                                @forelse($bills as $bill)
+                                @php
+                                    $isCurrentMonth = ($bill->month == $currentMonth && $bill->year == $currentYear);
+                                    $isPastDue = ($bill->status !== 'paid' && \Carbon\Carbon::parse($bill->due_date)->isPast());
+                                @endphp
+                                <tr class="{{ $isCurrentMonth ? 'bg-light' : '' }}">
+                                    <td>
+                                        <div class="d-flex px-3 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">
+                                                    {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
+                                                    @if($isCurrentMonth)
+                                                        <span class="badge bg-primary ms-2">Bulan Ini</span>
+                                                    @endif
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-dark font-weight-bold">Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        @if($bill->status === 'paid')
+                                            <span class="badge bg-success"><i class="fas fa-check"></i> Lunas</span>
+                                        @elseif($isPastDue)
+                                            <span class="badge bg-warning"><i class="fas fa-exclamation-triangle"></i> Terlambat</span>
+                                        @else
+                                            <span class="badge bg-danger"><i class="fas fa-times"></i> Belum Bayar</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @if($bill->status !== 'paid')
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success mb-0" 
+                                                data-id="{{ $bill->id }}" 
+                                                data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
+                                                data-amount="{{ number_format($bill->total_amount, 0, ',', '.') }}">
+                                            <i class="fas fa-money-bill-wave me-1"></i> Bayar
+                                        </button>
+                                        @else
+                                            <span class="text-success text-sm font-weight-bold"><i class="fas fa-check-double me-1"></i> Verified</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="alert alert-light text-center border m-3" role="alert">
+                                                <i class="fas fa-info-circle text-muted mb-2 fa-lg"></i>
+                                                <p class="text-sm text-muted mb-0">Belum ada tagihan untuk siswa ini.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

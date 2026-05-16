@@ -1,5 +1,6 @@
 @extends('_admin.layouts.app')
 
+
 @section('content')
 <div class="container-fluid mt--6">
     {{-- Sarch Box --}}
@@ -24,19 +25,15 @@
         </div>
         <div class="card-body pt-0">
             <form method="GET" action="{{ route('admin.spp.index') }}">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-                    </div>
-                    <input type="text" name="search" class="form-control" value="{{ $search }}"
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0 {{ $search ? 'border-end-0' : '' }}" value="{{ $search }}"
                            placeholder="Ketik nama siswa, NISN, atau No. KK lalu tekan Enter..."
-                           autofocus>
+                           autofocus autocomplete="off">
                     @if($search)
-                    <div class="input-group-append">
-                        <a href="{{ route('admin.spp.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.spp.index') }}" class="input-group-text bg-white text-danger border-start-0 text-decoration-none" title="Bersihkan Pencarian" style="cursor: pointer;">
                             <i class="fas fa-times"></i>
                         </a>
-                    </div>
                     @endif
                 </div>
             </form>
@@ -57,53 +54,58 @@
             <div class="row">
                 @foreach($students as $student)
                 <div class="col-xl-6 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-white border-0 pb-0">
+                    <div class="card shadow h-100">
+                        <div class="card-header pb-0 border-0">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <h4 class="mb-0">{{ $student->name }}</h4>
+                                    <h5 class="mb-1 text-dark">{{ $student->name }}</h5>
                                     <p class="text-sm text-muted mb-0">
-                                        NISN: <code>{{ $student->nisn }}</code> &bull;
-                                        Kelas {{ $student->grade_level }} – {{ $student->major_name }}
+                                        <span class="badge bg-secondary">NISN: {{ $student->nisn }}</span>
+                                        <span class="mx-1">&bull;</span>
+                                        <span class="text-dark font-weight-bold">Kelas {{ $student->grade_level }} – {{ $student->major_name }}</span>
                                     </p>
                                 </div>
                                 @if($student->sibling_count > 1)
-                                <span class="badge badge-warning" title="Ada {{ $student->sibling_count }} siswa dengan Nomor KK yang sama">
-                                    <i class="fas fa-users"></i> {{ $student->sibling_count }} SeKK
+                                <span class="badge bg-warning" title="Ada {{ $student->sibling_count }} siswa dengan Nomor KK yang sama">
+                                    <i class="fas fa-users"></i> {{ $student->sibling_count }} Se-KK
                                 </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="card-body pt-2">
+                        <div class="card-body pt-3">
                             @if($student->bills && $student->bills->count() > 0)
                                 @php
                                     $currentMonth = now()->month;
                                     $currentYear  = now()->year;
                                 @endphp
                                 <div class="table-responsive">
-                                    <table class="table table-sm align-items-center mb-0">
-                                        <thead>
+                                    <table class="table align-items-center mb-0">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <th class="text-xs text-muted">Bulan</th>
-                                                <th class="text-xs text-muted text-center">Status</th>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bulan Tagihan</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($student->bills->take(6) as $bill)
-                                            <tr class="{{ ($bill->month == $currentMonth && $bill->year == $currentYear) ? 'table-active' : '' }}">
+                                            <tr class="{{ ($bill->month == $currentMonth && $bill->year == $currentYear) ? 'bg-light' : '' }}">
                                                 <td>
-                                                    <span class="text-sm font-weight-bold">
-                                                        {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
-                                                    </span>
-                                                    @if($bill->month == $currentMonth && $bill->year == $currentYear)
-                                                        <span class="badge badge-primary ml-1" style="font-size:0.6rem;">BULAN INI</span>
-                                                    @endif
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">
+                                                                {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
+                                                                @if($bill->month == $currentMonth && $bill->year == $currentYear)
+                                                                    <span class="badge bg-primary ms-2">Bulan Ini</span>
+                                                                @endif
+                                                            </h6>
+                                                        </div>
+                                                    </div>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="align-middle text-center text-sm">
                                                     @if($bill->status === 'paid')
-                                                        <span class="badge badge-success"><i class="fas fa-check"></i> Lunas</span>
+                                                        <span class="badge bg-success"><i class="fas fa-check"></i> Lunas</span>
                                                     @else
-                                                        <span class="badge badge-danger"><i class="fas fa-times"></i> Belum</span>
+                                                        <span class="badge bg-danger"><i class="fas fa-times"></i> Belum Bayar</span>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -112,17 +114,22 @@
                                     </table>
                                 </div>
                                 @if($student->bills->count() > 6)
-                                    <p class="text-xs text-muted mt-2 mb-0">...dan {{ $student->bills->count() - 6 }} bulan lainnya</p>
+                                    <div class="text-center mt-3">
+                                        <span class="text-xs text-muted">
+                                            <i class="fas fa-ellipsis-h"></i> Dan {{ $student->bills->count() - 6 }} bulan lainnya dapat dilihat di detail
+                                        </span>
+                                    </div>
                                 @endif
                             @else
-                                <p class="text-sm text-muted text-center py-3 mb-0">
-                                    <i class="fas fa-info-circle"></i> Belum ada tagihan. Semester mungkin belum dibuat.
-                                </p>
+                                <div class="alert alert-light text-center border" role="alert">
+                                    <i class="fas fa-info-circle text-muted mb-2 fa-lg"></i>
+                                    <p class="text-sm text-muted mb-0">Belum ada tagihan untuk siswa ini.</p>
+                                </div>
                             @endif
                         </div>
-                        <div class="card-footer bg-white pt-0">
-                            <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-primary btn-sm w-100">
-                                <i class="fas fa-eye"></i> Lihat Detail & Bayar
+                        <div class="card-footer pt-0">
+                            <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-primary w-100">
+                                <i class="fas fa-arrow-right me-2"></i> Lihat Detail & Kelola Pembayaran
                             </a>
                         </div>
                     </div>
