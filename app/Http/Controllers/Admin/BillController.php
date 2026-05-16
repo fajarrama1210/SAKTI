@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\UseCases\BillUseCase;
 use App\UseCases\StudentUseCase;
+use App\UseCases\SemesterUseCase;
+use App\UseCases\ClassroomUseCase;
 use App\Entities\ResponseEntity;
 use Illuminate\Http\Request;
 
@@ -12,11 +14,19 @@ class BillController extends Controller
 {
     protected $billUseCase;
     protected $studentUseCase;
+    protected $semesterUseCase;
+    protected $classroomUseCase;
 
-    public function __construct(BillUseCase $billUseCase, StudentUseCase $studentUseCase)
-    {
+    public function __construct(
+        BillUseCase $billUseCase, 
+        StudentUseCase $studentUseCase,
+        SemesterUseCase $semesterUseCase,
+        ClassroomUseCase $classroomUseCase
+    ) {
         $this->billUseCase    = $billUseCase;
         $this->studentUseCase = $studentUseCase;
+        $this->semesterUseCase = $semesterUseCase;
+        $this->classroomUseCase = $classroomUseCase;
     }
 
     /**
@@ -81,9 +91,11 @@ class BillController extends Controller
     {
         $request->validate([
             'payment_method' => 'required|in:cash,transfer,other',
+            'amount'         => 'nullable|numeric|min:1',
         ]);
 
         $data = [
+            'amount'           => $request->amount,
             'payment_method'   => $request->payment_method,
             'payment_date'     => now()->toDateString(),
             'reference_number' => $request->reference_number,
@@ -131,5 +143,54 @@ class BillController extends Controller
         }
 
         return redirect()->back()->with('success', ResponseEntity::MSG_SUCCESS_DELETE);
+    }
+
+    /**
+     * Tampilan Matrix Pembayaran (Grid)
+     */
+    public function matrix(Request $request)
+    {
+        $filters = $request->only(['classroom_id', 'semester_id']);
+        
+        $classrooms = $this->classroomUseCase->getAll();
+        $semesters  = $this->semesterUseCase->getAll();
+        
+        $data = $this->billUseCase->getPaymentMatrix($filters);
+
+        return view('_admin.bill.matrix', compact('classrooms', 'semesters', 'filters', 'data'));
+    }
+
+    /**
+     * Sinkronisasi Tagihan (Mencegah Bug: Siswa/Tarif Baru belum ada tagihan)
+     */
+    public function sync(Request $request)
+    {
+        // Cari tahun ajaran yang sedang aktif
+        $activeAY = \Illuminate\Support\Facades\DB::table(\App\Entities\DatabaseEntity::TBL_ACADEMIC_YEARS)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$activeAY) {
+            return redirect()->back()->with('error', 'Gagal Sinkronisasi: Belum ada Tahun Ajaran yang aktif.');
+        }
+
+        // Cari semua semester untuk tahun ajaran aktif tersebut
+        $semesters = \Illuminate\Support\Facades\DB::table(\App\Entities\DatabaseEntity::TBL_SEMESTERS)
+            ->where('academic_year_id', $activeAY->id)
+            ->get();
+
+        if ($semesters->isEmpty()) {
+            return redirect()->back()->with('error', 'Gagal Sinkronisasi: Belum ada data Semester untuk Tahun Ajaran yang aktif.');
+        }
+
+        $totalGenerated = 0;
+        foreach ($semesters as $semester) {
+            $result = $this->billUseCase->autoGenerateBillsForSemester($semester->id);
+            if ($result['status']) {
+                $totalGenerated += $result['count'];
+            }
+        }
+
+        return redirect()->back()->with('success', 'Sinkronisasi berhasil! ' . $totalGenerated . ' tagihan baru telah ditambahkan.');
     }
 }

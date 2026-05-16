@@ -169,7 +169,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.spp.*') ? 'active-menu' : '' }}" href="{{ route('admin.spp.index') }}">
+                <a class="nav-link {{ request()->routeIs('admin.spp.*') && !request()->routeIs('admin.spp.matrix') ? 'active-menu' : '' }}" href="{{ route('admin.spp.index') }}">
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
                         @include('icon.invoice')
                     </div>
@@ -186,6 +186,14 @@
             </li>
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Laporan</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.spp.matrix') ? 'active-menu' : '' }}" href="{{ route('admin.spp.matrix') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-th text-info text-sm"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Matrix Pembayaran</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->url() == route('admin.reports.payment') ? 'active-menu' : '' }}" href="{{ route('admin.reports.payment') }}">

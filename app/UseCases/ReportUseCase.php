@@ -20,6 +20,7 @@ class ReportUseCase
             ->leftJoin(DatabaseEntity::TBL_CLASSROOMS . ' as c', 's.classroom_id', '=', 'c.id')
             ->leftJoin(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
             ->select(
+                'bi.id as bill_item_id',
                 'ay.name as academic_year_name',
                 's.nisn',
                 's.name as student_name',
@@ -60,27 +61,29 @@ class ReportUseCase
             ->orderBy('b.month', 'asc')
             ->get();
 
-        // Hitung total dibayar per bill
-        $billIds = $results->pluck('bill_id')->unique();
-        $payments = DB::table(DatabaseEntity::TBL_PAYMENTS)
-            ->whereIn('bill_id', $billIds)
-            ->selectRaw('bill_id, SUM(amount) as total_paid')
-            ->groupBy('bill_id')
-            ->pluck('total_paid', 'bill_id');
+        // 1. Ambil semua Bill Item ID
+        $billItemIds = $results->pluck('bill_item_id')->toArray();
 
-        // Hitung proporsi bayar per anak
+        // 2. Ambil total alokasi pembayaran per item dari tabel payment_allocations
+        $allocations = DB::table(DatabaseEntity::TBL_PAYMENT_ALLOCATIONS)
+            ->whereIn('bill_item_id', $billItemIds)
+            ->selectRaw('bill_item_id, SUM(amount) as total_allocated')
+            ->groupBy('bill_item_id')
+            ->pluck('total_allocated', 'bill_item_id');
+
+        // 3. Mapping data ke hasil akhir
         foreach ($results as $row) {
-            $billTotalPaid = $payments[$row->bill_id] ?? 0;
-            // Proporsi: jika bill punya 2 anak (40rb total), anak 20rb bayar,
-            // maka proporsi bayar anak ini = (20000/40000) * totalPaid
-            if ($row->total_amount > 0) {
-                $proportion = $row->tagihan / $row->total_amount;
-                $row->dibayar = round($billTotalPaid * $proportion);
-            } else {
-                $row->dibayar = 0;
-            }
+            $row->dibayar = (int) ($allocations[$row->bill_item_id] ?? 0);
             $row->sisa = $row->tagihan - $row->dibayar;
-            $row->status_text = $row->sisa <= 0 ? 'Lunas' : ($row->dibayar > 0 ? 'Sebagian' : 'Belum Bayar');
+            
+            // Tentukan status teks yang akurat per item
+            if ($row->sisa <= 0) {
+                $row->status_text = 'Lunas';
+            } elseif ($row->dibayar > 0) {
+                $row->status_text = 'Sebagian';
+            } else {
+                $row->status_text = 'Belum Bayar';
+            }
         }
 
         return $results;

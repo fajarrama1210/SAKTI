@@ -22,9 +22,31 @@ class ClassroomStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:60',
+            'name' => 'required|string|max:60|unique:classrooms,name',
             'grade_level' => 'required|integer|in:10,11,12,13',
             'major_id' => 'required|integer|exists:majors,id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'integer' => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'in' => \App\Entities\ResponseEntity::MSG_VAL_IN,
+            'exists' => \App\Entities\ResponseEntity::MSG_VAL_EXISTS,
+            'unique' => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Kelas',
+            'grade_level' => 'Tingkat Kelas',
+            'major_id' => 'Jurusan',
         ];
     }
 }

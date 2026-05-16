@@ -21,4 +21,28 @@ class RecordPaymentRequest extends FormRequest
             'notes' => 'nullable|string|max:500',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'integer' => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'min' => \App\Entities\ResponseEntity::MSG_VAL_MIN,
+            'in' => \App\Entities\ResponseEntity::MSG_VAL_IN,
+            'date' => \App\Entities\ResponseEntity::MSG_VAL_DATE,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'amount' => 'Nominal Pembayaran',
+            'payment_method' => 'Metode Pembayaran',
+            'payment_date' => 'Tanggal Pembayaran',
+            'reference_number' => 'Nomor Referensi',
+            'notes' => 'Catatan',
+        ];
+    }
 }

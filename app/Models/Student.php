@@ -21,10 +21,6 @@ class Student extends Model
         return $this->hasOne(User::class);
     }
 
-    public function paymentsDetail() : HasMany
-    {
-        return $this->hasMany(PaymentsDetail::class);
-    }
 
     public function letter() : HasMany
     {

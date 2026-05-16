@@ -46,4 +46,22 @@ class SemesterStoreRequest extends FormRequest
             'end_month'        => 'Bulan Akhir',
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string'   => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max'      => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'exists'   => \App\Entities\ResponseEntity::MSG_VAL_EXISTS,
+            'integer'  => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'between'  => \App\Entities\ResponseEntity::MSG_VAL_BETWEEN,
+            'boolean'  => \App\Entities\ResponseEntity::MSG_VAL_BOOLEAN,
+        ];
+    }
 }

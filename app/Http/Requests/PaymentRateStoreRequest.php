@@ -30,4 +30,26 @@ class PaymentRateStoreRequest extends FormRequest
             'amount' => 'required|integer|min:0',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'integer' => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'exists' => \App\Entities\ResponseEntity::MSG_VAL_EXISTS,
+            'in' => \App\Entities\ResponseEntity::MSG_VAL_IN,
+            'min' => \App\Entities\ResponseEntity::MSG_VAL_MIN,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'academic_year_id' => 'Tahun Ajaran',
+            'payment_type_id' => 'Jenis Pembayaran',
+            'grade_level' => 'Tingkat Kelas',
+            'major_id' => 'Jurusan',
+            'amount' => 'Nominal Tarif',
+        ];
+    }
 }

@@ -27,4 +27,24 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'unique' => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
+            'lowercase' => ':attribute harus menggunakan huruf kecil.',
+            'email' => ':attribute harus berupa alamat email yang valid.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Profil',
+            'email' => 'Alamat Email',
+        ];
+    }
 }

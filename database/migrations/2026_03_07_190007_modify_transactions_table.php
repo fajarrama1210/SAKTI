@@ -13,9 +13,6 @@ return new class extends Migration
             $table->foreignId('payment_id')->nullable()->after('amount')->constrained()->nullOnDelete();
             $table->foreignId('recorded_by')->nullable()->after('payment_id')->constrained('users')->nullOnDelete();
 
-            // Hapus kolom lama
-            $table->dropForeign(['spp_payment_id']);
-            $table->dropColumn('spp_payment_id');
         });
     }
 
@@ -28,7 +25,6 @@ return new class extends Migration
             $table->dropColumn('recorded_by');
             $table->dropColumn('category');
 
-            $table->foreignId('spp_payment_id')->nullable()->constrained()->nullOnDelete();
         });
     }
 };

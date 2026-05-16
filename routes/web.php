@@ -115,10 +115,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::prefix('spp')->name('spp.')->group(function () {
         Route::get('/', [BillController::class, 'index'])->name('index');
         Route::get('/rekap', [BillController::class, 'recap'])->name('recap');
+        Route::get('/matrix', [BillController::class, 'matrix'])->name('matrix');
         Route::get('/siswa/{studentId}', [BillController::class, 'studentDetail'])->name('student');
         Route::post('/{billId}/bayar', [BillController::class, 'pay'])->name('pay');
         Route::put('/{billId}/due-date', [BillController::class, 'updateDueDate'])->name('due-date');
         Route::delete('/{id}', [BillController::class, 'destroy'])->name('destroy');
+        Route::post('/sync', [BillController::class, 'sync'])->name('sync');
     });
 
     Route::prefix('transactions')->name('transactions.')->group(function () {

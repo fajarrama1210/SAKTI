@@ -14,7 +14,6 @@ return new class extends Migration
             $table->enum('type', ['income', 'expense']);
             $table->string('description', 255);
             $table->integer('amount');
-            $table->foreignId('spp_payment_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

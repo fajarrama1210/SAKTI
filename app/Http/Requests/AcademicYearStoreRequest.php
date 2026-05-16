@@ -20,4 +20,26 @@ class AcademicYearStoreRequest extends FormRequest
             'is_active' => 'nullable|boolean',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'date' => \App\Entities\ResponseEntity::MSG_VAL_DATE,
+            'after' => \App\Entities\ResponseEntity::MSG_VAL_AFTER,
+            'boolean' => \App\Entities\ResponseEntity::MSG_VAL_BOOLEAN,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Tahun Ajaran',
+            'start_date' => 'Tanggal Mulai',
+            'end_date' => 'Tanggal Akhir',
+            'is_active' => 'Status Aktif',
+        ];
+    }
 }

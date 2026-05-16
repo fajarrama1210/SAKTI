@@ -30,4 +30,28 @@ class TransactionStoreRequest extends FormRequest
             'amount' => 'required|integer|min:1',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'date' => \App\Entities\ResponseEntity::MSG_VAL_DATE,
+            'in' => \App\Entities\ResponseEntity::MSG_VAL_IN,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'integer' => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'min' => \App\Entities\ResponseEntity::MSG_VAL_MIN,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'date' => 'Tanggal Transaksi',
+            'type' => 'Tipe Transaksi',
+            'category' => 'Kategori',
+            'description' => 'Keterangan',
+            'amount' => 'Nominal',
+        ];
+    }
 }

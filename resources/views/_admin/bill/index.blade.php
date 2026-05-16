@@ -9,8 +9,14 @@
                 <div class="col">
                     <h3 class="mb-0"><i class="fas fa-money-bill-wave text-success"></i> Pembayaran SPP</h3>
                 </div>
-                <div class="col-auto">
-                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-outline-primary">
+                <div class="col-auto d-flex gap-2">
+                    <form action="{{ route('admin.spp.sync') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Gunakan ini jika ada siswa atau tarif baru yang tagihannya belum muncul">
+                            <i class="fas fa-sync"></i> Sinkronisasi Tagihan
+                        </button>
+                    </form>
+                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-outline-primary ml-2">
                         <i class="fas fa-list-alt"></i> Rekap Tagihan
                     </a>
                 </div>

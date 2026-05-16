@@ -22,7 +22,24 @@ class MajorStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50 |unique:majors,name',
+            'name' => 'required|string|max:50|unique:majors,name',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'unique' => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Jurusan',
         ];
     }
 }

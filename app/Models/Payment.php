@@ -22,4 +22,8 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class, 'verified_by');
     }
+    public function allocations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PaymentAllocation::class);
+    }
 }

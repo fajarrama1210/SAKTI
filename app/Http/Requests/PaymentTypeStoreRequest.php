@@ -18,4 +18,22 @@ class PaymentTypeStoreRequest extends FormRequest
             'is_monthly' => 'nullable|boolean',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'boolean' => \App\Entities\ResponseEntity::MSG_VAL_BOOLEAN,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Jenis Pembayaran',
+            'is_monthly' => 'Bulanan (Ya/Tidak)',
+        ];
+    }
 }

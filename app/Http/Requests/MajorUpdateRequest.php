@@ -23,7 +23,24 @@ class MajorUpdateRequest extends FormRequest
     {
         $id = $this->route('id');
         return [
-            'name' => 'required|string|max:50 |unique:majors,name,' . $id,
+            'name' => 'required|string|max:50|unique:majors,name,' . $id,
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
+            'string' => \App\Entities\ResponseEntity::MSG_VAL_STRING,
+            'max' => \App\Entities\ResponseEntity::MSG_VAL_MAX,
+            'unique' => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama Jurusan',
         ];
     }
 }

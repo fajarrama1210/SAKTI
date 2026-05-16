@@ -13,8 +13,4 @@ class Transaction extends Model
         'date' => 'date',
     ];
 
-    public function sppPayment() :BelongsTo
-    {
-        return $this->belongsTo(    SppPayment::class);
-    }
 }

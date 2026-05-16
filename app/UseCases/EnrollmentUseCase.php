@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class EnrollmentUseCase
 {
+    protected $billUseCase;
+
+    public function __construct(BillUseCase $billUseCase)
+    {
+        $this->billUseCase = $billUseCase;
+    }
     /**
      * Ambil semua enrollment per tahun ajaran (dengan info siswa + kelas + jurusan)
      */
@@ -151,6 +157,9 @@ class EnrollmentUseCase
                     'status' => 'aktif',
                     'updated_at' => now(),
                 ]);
+
+            // [NEW] Trigger sync tagihan agar siswa baru langsung punya tagihan di semester berjalan
+            $this->billUseCase->syncBillsForStudent($data['student_id'], $data['academic_year_id']);
 
             DB::commit();
             return ['status' => true];

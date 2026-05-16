@@ -73,6 +73,10 @@ class StudentUseCase
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+
+                // GENERATE BILLS UNTUK SISWA BARU DI TAHUN AJARAN AKTIF
+                $billUseCase = app(\App\UseCases\BillUseCase::class);
+                $billUseCase->syncBillsForStudent($studentId, $activeAY->id);
             }
 
             DB::commit();
