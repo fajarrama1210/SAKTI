@@ -129,6 +129,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/add', [TransactionController::class, 'create'])->name('create');
         Route::post('/add', [TransactionController::class, 'store'])->name('store');
+        Route::get('/{id}', [TransactionController::class, 'show'])->name('show')->where('id', '[0-9]+');
         Route::get('/{id}/edit', [TransactionController::class, 'edit'])->name('edit');
         Route::put('/{id}', [TransactionController::class, 'update'])->name('update');
         Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('destroy');

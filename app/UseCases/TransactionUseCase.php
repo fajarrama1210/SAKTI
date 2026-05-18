@@ -21,7 +21,11 @@ class TransactionUseCase
 
     public function getById($id)
     {
-        return DB::table(DatabaseEntity::TBL_TRANSACTIONS)->where('id', $id)->first();
+        return DB::table(DatabaseEntity::TBL_TRANSACTIONS . ' as t')
+            ->leftJoin(DatabaseEntity::TBL_USERS . ' as u', 't.recorded_by', '=', 'u.id')
+            ->select('t.*', 'u.name as recorded_by_name')
+            ->where('t.id', $id)
+            ->first();
     }
 
     /**

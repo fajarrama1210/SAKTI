@@ -40,34 +40,9 @@
                         <td class="text-center"><b>Rp {{ number_format($trx->amount, 0, ',', '.') }}</b></td>
                         <td class="text-center">{{ $trx->recorded_by_name ?? '-' }}</td>
                         <td class="text-center">
-                            @if(!$trx->payment_id)
-                            <div class="dropdown">
-                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $trx->id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $trx->id }}">
-                                    <li>
-                                        <a href="{{ route('admin.transactions.edit', $trx->id) }}" class="dropdown-item border-radius-md">
-                                            <i class="fas fa-edit text-info me-2"></i> Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider my-1">
-                                    </li>
-                                    <li>
-                                        <form action="{{ route('admin.transactions.destroy', $trx->id) }}" method="POST" class="delete-form m-0">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
-                                                <i class="fas fa-trash me-2"></i> Hapus
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                            @else
-                            <span class="badge badge-sm bg-gradient-info">Otomatis SPP</span>
-                            @endif
+                            <a href="{{ route('admin.transactions.show', $trx->id) }}" class="btn btn-sm btn-info mb-0" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 4px;">
+                                <i class="fas fa-eye me-1"></i> Detail
+                            </a>
                         </td>
                     </tr>
                     @empty

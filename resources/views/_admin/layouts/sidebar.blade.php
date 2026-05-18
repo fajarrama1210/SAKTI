@@ -190,7 +190,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.spp.matrix') ? 'active-menu' : '' }}" href="{{ route('admin.spp.matrix') }}">
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-th text-info text-sm"></i>
+                        @include('icon.matrix')
                     </div>
                     <span class="nav-link-text ms-1">Matrix Pembayaran</span>
                 </a>

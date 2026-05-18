@@ -85,8 +85,8 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center">No</th>
-                            <th>NISN</th>
-                            <th>Nama Siswa</th>
+                            <th class="text-center">NISN</th>
+                            <th class="text-center">Nama Siswa</th>
                             <th class="text-center">Kelas</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Aksi</th>
@@ -96,8 +96,8 @@
                         @forelse($enrollments as $index => $row)
                             <tr>
                                 <td class="text-center">{{ $enrollments->firstItem() + $index }}</td>
-                                <td>{{ $row->nisn }}</td>
-                                <td><b>{{ $row->student_name }}</b></td>
+                                <td class="text-center">{{ $row->nisn }}</td>
+                                <td class="text-center" ><b>{{ $row->student_name }}</b></td>
                                 <td class="text-center">{{ $row->classroom_name }}</td>
                                 <td class="text-center">
                                     @if ($row->status == 'aktif')

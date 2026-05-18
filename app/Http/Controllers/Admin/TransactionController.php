@@ -39,6 +39,14 @@ class TransactionController extends Controller
         return redirect()->route('admin.transactions.index')->with('success', ResponseEntity::MSG_SUCCESS_CREATE);
     }
 
+    public function show($id)
+    {
+        $transaction = $this->transactionUseCase->getById($id);
+        if (!$transaction) abort(404);
+
+        return view('_admin.transaction.show', compact('transaction'));
+    }
+
     public function edit($id)
     {
         $transaction = $this->transactionUseCase->getById($id);
