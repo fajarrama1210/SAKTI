@@ -47,6 +47,8 @@
                                 <span class="badge badge-sm bg-gradient-success">Lunas</span>
                                 @elseif($bill->status === 'partial')
                                 <span class="badge badge-sm bg-gradient-warning">Sebagian</span>
+                                @elseif($bill->status === 'cancelled')
+                                <span class="badge badge-sm bg-gradient-secondary">Dibatalkan</span>
                                 @else
                                 <span class="badge badge-sm bg-gradient-danger">Belum Bayar</span>
                                 @endif
@@ -55,7 +57,7 @@
                     </table>
                 </div>
             </div>
-            @if($bill->status !== 'paid')
+            @if($bill->status !== 'paid' && $bill->status !== 'cancelled')
             <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="btn btn-success">
                 <i class="fas fa-money-bill-wave"></i> Catat Pembayaran
             </a>

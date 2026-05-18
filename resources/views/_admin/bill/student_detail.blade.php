@@ -107,6 +107,8 @@
                                     <td class="align-middle text-center text-sm">
                                         @if($bill->status === 'paid')
                                             <span class="badge bg-success"><i class="fas fa-check"></i> Lunas</span>
+                                        @elseif($bill->status === 'cancelled')
+                                            <span class="badge bg-secondary"><i class="fas fa-ban"></i> Dibatalkan</span>
                                         @elseif($isPastDue)
                                             <span class="badge bg-warning"><i class="fas fa-exclamation-triangle"></i> Terlambat</span>
                                         @else
@@ -114,7 +116,11 @@
                                         @endif
                                     </td>
                                     <td class="align-middle text-center">
-                                        @if($bill->status !== 'paid')
+                                        @if($bill->status === 'paid')
+                                            <span class="text-success text-sm font-weight-bold"><i class="fas fa-check-double me-1"></i> Verified</span>
+                                        @elseif($bill->status === 'cancelled')
+                                            <span class="text-secondary text-sm font-weight-bold"><i class="fas fa-minus-circle me-1"></i> Cancelled</span>
+                                        @else
                                         <button type="button" 
                                                 class="btn btn-sm btn-success btn-pay mb-0" 
                                                 data-id="{{ $bill->id }}" 
@@ -122,8 +128,6 @@
                                                 data-amount="{{ number_format($bill->total_amount, 0, ',', '.') }}">
                                             <i class="fas fa-money-bill-wave me-1"></i> Bayar
                                         </button>
-                                        @else
-                                            <span class="text-success text-sm font-weight-bold"><i class="fas fa-check-double me-1"></i> Verified</span>
                                         @endif
                                     </td>
                                 </tr>

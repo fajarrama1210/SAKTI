@@ -79,8 +79,12 @@
                                         <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-sm btn-icon-only btn-warning rounded-circle" title="Sebagian">
                                             <i class="fas fa-adjust"></i>
                                         </a>
+                                    @elseif($bill->status === 'cancelled')
+                                        <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-sm btn-icon-only btn-secondary rounded-circle" title="Dibatalkan">
+                                            <i class="fas fa-ban"></i>
+                                        </a>
                                     @else
-                                        @php $isPast = \Carbon\Carbon::parse($bill->due_date)->isPast(); @endphp
+                                        @php $isPast = ($bill->status !== 'cancelled' && \Carbon\Carbon::parse($bill->due_date)->isPast()); @endphp
                                         <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-sm btn-icon-only {{ $isPast ? 'btn-danger' : 'btn-outline-secondary' }} rounded-circle" title="{{ $isPast ? 'Menunggak' : 'Belum Bayar' }}">
                                             <i class="fas fa-times"></i>
                                         </a>
@@ -104,6 +108,7 @@
                         <div class="mr-3"><span class="btn btn-sm btn-icon-only btn-warning rounded-circle mr-1"><i class="fas fa-adjust text-white"></i></span> Sebagian</div>
                         <div class="mr-3"><span class="btn btn-sm btn-icon-only btn-danger rounded-circle mr-1"><i class="fas fa-times text-white"></i></span> Menunggak</div>
                         <div class="mr-3"><span class="btn btn-sm btn-icon-only btn-outline-secondary rounded-circle mr-1"><i class="fas fa-times"></i></span> Belum Bayar</div>
+                        <div class="mr-3"><span class="btn btn-sm btn-icon-only btn-secondary rounded-circle mr-1"><i class="fas fa-ban text-white"></i></span> Dibatalkan</div>
                     </div>
                 </div>
                 <div class="col-md-4 text-right">

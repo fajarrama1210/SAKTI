@@ -38,6 +38,8 @@
                             <span class="badge badge-sm bg-gradient-success">Lunas</span>
                             @elseif($bill->status === 'partial')
                             <span class="badge badge-sm bg-gradient-warning">Sebagian</span>
+                            @elseif($bill->status === 'cancelled')
+                            <span class="badge badge-sm bg-gradient-secondary">Dibatalkan</span>
                             @else
                             <span class="badge badge-sm bg-gradient-danger">Belum Bayar</span>
                             @endif

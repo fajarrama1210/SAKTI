@@ -343,33 +343,48 @@ class EnrollmentUseCase
         DB::beginTransaction();
         try {
             $promotedCount = 0;
+            $isSameYear = ($fromAcademicYearId == $toAcademicYearId);
 
             // promotionMap = [['student_id' => 1, 'new_classroom_id' => 5], ...]
             foreach ($promotionMap as $item) {
-                // Tandai enrollment lama sebagai 'naik_kelas'
-                DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)
-                    ->where('student_id', $item['student_id'])
-                    ->where('academic_year_id', $fromAcademicYearId)
-                    ->where('status', 'aktif')
-                    ->update([
-                        'status' => 'naik_kelas',
-                        'exited_at' => now()->toDateString(),
-                        'exit_reason' => 'Naik kelas ke TA baru',
+                if ($isSameYear) {
+                    // Skenario 1: Tahun Ajaran Sama (Pindah Kelas Massal)
+                    // Cukup update kelas pada enrollment aktif saat ini
+                    DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)
+                        ->where('student_id', $item['student_id'])
+                        ->where('academic_year_id', $fromAcademicYearId)
+                        ->where('status', 'aktif')
+                        ->update([
+                            'classroom_id' => $item['new_classroom_id'],
+                            'updated_at' => now(),
+                        ]);
+                } else {
+                    // Skenario 2: Tahun Ajaran Berbeda (Kenaikan Kelas Tradisional)
+                    // Tandai enrollment lama sebagai 'naik_kelas'
+                    DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)
+                        ->where('student_id', $item['student_id'])
+                        ->where('academic_year_id', $fromAcademicYearId)
+                        ->where('status', 'aktif')
+                        ->update([
+                            'status' => 'naik_kelas',
+                            'exited_at' => now()->toDateString(),
+                            'exit_reason' => 'Naik kelas ke TA baru',
+                            'updated_at' => now(),
+                        ]);
+
+                    // Buat enrollment baru di TA baru
+                    DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)->insert([
+                        'student_id' => $item['student_id'],
+                        'classroom_id' => $item['new_classroom_id'],
+                        'academic_year_id' => $toAcademicYearId,
+                        'status' => 'aktif',
+                        'enrolled_at' => now()->toDateString(),
+                        'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+                }
 
-                // Buat enrollment baru di TA baru
-                DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)->insert([
-                    'student_id' => $item['student_id'],
-                    'classroom_id' => $item['new_classroom_id'],
-                    'academic_year_id' => $toAcademicYearId,
-                    'status' => 'aktif',
-                    'enrolled_at' => now()->toDateString(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                // Update students.classroom_id
+                // Update students.classroom_id (selalu disinkronkan)
                 DB::table(DatabaseEntity::TBL_STUDENTS)
                     ->where('id', $item['student_id'])
                     ->update(['classroom_id' => $item['new_classroom_id'], 'updated_at' => now()]);

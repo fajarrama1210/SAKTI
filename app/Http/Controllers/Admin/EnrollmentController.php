@@ -204,4 +204,94 @@ class EnrollmentController extends Controller
 
         return redirect()->back()->with('success', 'Penempatan berhasil dihapus.');
     }
+
+    /**
+     * Halaman kenaikan kelas massal (Mass Promotion Form)
+     */
+    public function promotionForm(Request $request)
+    {
+        $academicYears = $this->academicYearUseCase->getAll();
+        $activeAY = $this->academicYearUseCase->getActive();
+        
+        $fromAY = $request->get('from_academic_year_id', $activeAY->id ?? null);
+        $toAY = $request->get('to_academic_year_id');
+        $classroomId = $request->get('classroom_id');
+        
+        $classrooms = $this->classroomUseCase->getAll();
+
+        $students = collect();
+        if ($fromAY && $classroomId) {
+            // Ambil siswa aktif di kelas terpilih dan TA terpilih
+            $students = \Illuminate\Support\Facades\DB::table(\App\Entities\DatabaseEntity::TBL_STUDENT_ENROLLMENTS . ' as e')
+                ->join(\App\Entities\DatabaseEntity::TBL_STUDENTS . ' as s', 'e.student_id', '=', 's.id')
+                ->join(\App\Entities\DatabaseEntity::TBL_CLASSROOMS . ' as c', 'e.classroom_id', '=', 'c.id')
+                ->join(\App\Entities\DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
+                ->select('e.*', 's.name as student_name', 's.nisn', 'c.name as classroom_name', 'c.grade_level', 'm.name as major_name')
+                ->where('e.academic_year_id', $fromAY)
+                ->where('e.classroom_id', $classroomId)
+                ->where('e.status', 'aktif')
+                ->orderBy('s.name', 'asc')
+                ->get();
+        }
+
+        return view('_admin.enrollment.promotion', compact(
+            'academicYears', 'fromAY', 'toAY', 'students', 'classrooms', 'classroomId'
+        ));
+    }
+
+    /**
+     * Proses kenaikan kelas massal
+     */
+    public function processPromotion(Request $request)
+    {
+        $request->validate([
+            'from_academic_year_id' => 'required|exists:academic_years,id',
+            'to_academic_year_id' => 'required|exists:academic_years,id',
+            'promotions' => 'required|array|min:1',
+            'promotions.*.student_id' => 'required|exists:students,id',
+            'promotions.*.new_classroom_id' => 'nullable',
+        ]);
+
+        $promotionMap = [];
+        foreach ($request->promotions as $studentId => $promo) {
+            // Hanya proses jika checkbox terpilih
+            if (isset($promo['selected']) && $promo['selected'] == '1') {
+                if (empty($promo['new_classroom_id'])) {
+                    return redirect()->back()->with('error', 'Silakan pilih kelas baru untuk semua siswa yang dicentang.');
+                }
+
+                $classExists = \Illuminate\Support\Facades\DB::table('classrooms')->where('id', $promo['new_classroom_id'])->exists();
+                if (!$classExists) {
+                    return redirect()->back()->with('error', 'Kelas tujuan yang dipilih tidak valid.');
+                }
+
+                $promotionMap[] = [
+                    'student_id' => $studentId,
+                    'new_classroom_id' => $promo['new_classroom_id'],
+                ];
+            }
+        }
+
+        if (empty($promotionMap)) {
+            return redirect()->back()->with('error', 'Silakan pilih minimal 1 siswa untuk dinaikkan kelas.');
+        }
+
+        $result = $this->enrollmentUseCase->promoteStudents(
+            $request->from_academic_year_id,
+            $request->to_academic_year_id,
+            $promotionMap
+        );
+
+        if (!$result['status']) {
+            return redirect()->back()->with('error', $result['message'] ?? ResponseEntity::MSG_ERROR_SERVER);
+        }
+
+        $isSameYear = ($request->from_academic_year_id == $request->to_academic_year_id);
+        $msg = $isSameYear
+            ? "{$result['promoted_count']} siswa berhasil dipindahkan kelas secara massal!"
+            : "{$result['promoted_count']} siswa berhasil dinaikkan kelas ke tahun ajaran baru!";
+
+        return redirect()->route('admin.enrollments.index', ['academic_year_id' => $request->to_academic_year_id])
+            ->with('success', $msg);
+    }
 }

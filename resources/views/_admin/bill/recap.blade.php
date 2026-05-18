@@ -39,6 +39,7 @@
                         <option value="">Semua</option>
                         <option value="unpaid" {{ ($filters['status'] ?? '') === 'unpaid' ? 'selected' : '' }}>Belum Bayar</option>
                         <option value="paid" {{ ($filters['status'] ?? '') === 'paid' ? 'selected' : '' }}>Lunas</option>
+                        <option value="cancelled" {{ ($filters['status'] ?? '') === 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -70,7 +71,7 @@
                 <tbody>
                     @forelse($bills as $index => $bill)
                     @php
-                        $isPastDue = ($bill->status !== 'paid' && \Carbon\Carbon::parse($bill->due_date)->isPast());
+                        $isPastDue = ($bill->status !== 'paid' && $bill->status !== 'cancelled' && \Carbon\Carbon::parse($bill->due_date)->isPast());
                     @endphp
                     <tr>
                         <td>{{ $bills->firstItem() + $index }}</td>
@@ -83,6 +84,8 @@
                         <td class="text-center">
                             @if($bill->status === 'paid')
                                 <span class="badge badge-sm bg-gradient-success">Lunas</span>
+                            @elseif($bill->status === 'cancelled')
+                                <span class="badge badge-sm bg-gradient-secondary">Dibatalkan</span>
                             @elseif($isPastDue)
                                 <span class="badge badge-sm bg-gradient-danger">Terlambat</span>
                             @else

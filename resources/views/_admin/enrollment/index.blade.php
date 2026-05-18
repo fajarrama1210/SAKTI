@@ -3,11 +3,16 @@
 @section('content')
     <div class="container-fluid mt--6">
         <div class="card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <h3 class="mb-0">Penempatan Siswa (Per Tahun Ajaran)</h3>
-                <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-success">
-                    <i class="fas fa-graduation-cap"></i> Kelulusan Massal
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm btn-info me-2">
+                        <i class="fas fa-angle-double-up text-xs me-1"></i> Kenaikan Kelas Massal
+                    </a>
+                    <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-success">
+                        <i class="fas fa-graduation-cap text-xs me-1"></i> Kelulusan Massal
+                    </a>
+                </div>
             </div>
 
             <div class="card-body border-bottom">

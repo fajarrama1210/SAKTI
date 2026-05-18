@@ -301,11 +301,11 @@ class StressTest extends TestCase
             'exit_reason' => 'Stress test DO',
         ]);
 
-        // BUG TERKONFIRMASI: processDropout GAGAL karena status 'cancelled'
-        // tidak ada di ENUM bills.status
-        $this->assertFalse($result['status'],
-            'processDropout seharusnya gagal karena cancelled tidak ada di ENUM');
-        $this->assertStringContainsString('CHECK constraint', $result['message'] ?? '');
+        // BUG TERSELESAIKAN: processDropout BERHASIL karena status 'cancelled'
+        // kini sudah ada di ENUM bills.status
+        $this->assertTrue($result['status'],
+            'processDropout seharusnya berhasil setelah cancelled ditambahkan ke ENUM');
+        $this->assertGreaterThan(0, $result['cancelled_bills']);
     }
 
     // =================================================================

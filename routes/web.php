@@ -69,6 +69,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::put('/{id}/change-classroom', [EnrollmentController::class, 'changeClassroom'])->name('change-classroom');
         Route::get('/graduation', [EnrollmentController::class, 'graduationForm'])->name('graduation');
         Route::post('/graduation', [EnrollmentController::class, 'processGraduation'])->name('graduation.process');
+        Route::get('/promotion', [EnrollmentController::class, 'promotionForm'])->name('promotion');
+        Route::post('/promotion', [EnrollmentController::class, 'processPromotion'])->name('promotion.process');
         Route::delete('/{id}', [EnrollmentController::class, 'destroy'])->name('destroy');
     });
 
