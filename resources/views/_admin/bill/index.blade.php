@@ -82,24 +82,20 @@
                                     <table class="table align-items-center mb-0">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bulan Tagihan</th>
+                                                <th class="ps-4 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bulan Tagihan</th>
                                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($student->bills->take(6) as $bill)
                                             <tr class="{{ ($bill->month == $currentMonth && $bill->year == $currentYear) ? 'bg-light' : '' }}">
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">
-                                                                {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
-                                                                @if($bill->month == $currentMonth && $bill->year == $currentYear)
-                                                                    <span class="badge bg-primary ms-2">Bulan Ini</span>
-                                                                @endif
-                                                            </h6>
-                                                        </div>
-                                                    </div>
+                                                <td class="ps-4 align-middle">
+                                                    <span class="text-sm font-weight-bold text-dark">
+                                                        {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
+                                                    </span>
+                                                    @if($bill->month == $currentMonth && $bill->year == $currentYear)
+                                                        <span class="badge bg-primary ms-2">Bulan Ini</span>
+                                                    @endif
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
                                                     @if($bill->status === 'paid')

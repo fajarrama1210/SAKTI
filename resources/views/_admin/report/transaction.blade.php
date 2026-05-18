@@ -154,9 +154,9 @@
                         <td>{{ \Carbon\Carbon::parse($trx->date)->format('d/m/Y') }}</td>
                         <td>
                             @if($trx->type === 'income')
-                            <span class="badge badge-success">Masuk</span>
+                            <span class="badge badge-sm bg-gradient-success">Masuk</span>
                             @else
-                            <span class="badge badge-danger">Keluar</span>
+                            <span class="badge badge-sm bg-gradient-danger">Keluar</span>
                             @endif
                         </td>
                         <td>{{ $trx->category ?? '-' }}</td>

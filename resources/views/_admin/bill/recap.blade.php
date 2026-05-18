@@ -82,11 +82,11 @@
                         </td>
                         <td class="text-center">
                             @if($bill->status === 'paid')
-                                <span class="badge badge-success">Lunas</span>
+                                <span class="badge badge-sm bg-gradient-success">Lunas</span>
                             @elseif($isPastDue)
-                                <span class="badge badge-danger">Terlambat</span>
+                                <span class="badge badge-sm bg-gradient-danger">Terlambat</span>
                             @else
-                                <span class="badge badge-warning">Belum Bayar</span>
+                                <span class="badge badge-sm bg-gradient-warning">Belum Bayar</span>
                             @endif
                         </td>
                         <td class="text-center">

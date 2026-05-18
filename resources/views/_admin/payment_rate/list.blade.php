@@ -13,25 +13,25 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Tahun Ajaran</th>
-                        <th>Jenis</th>
-                        <th>Kelas</th>
-                        <th>Jurusan</th>
-                        <th>Tarif</th>
-                        <th>Aksi</th>
+                        <th class="text-center">No</th>
+                        <th class="text-center">Tahun Ajaran</th>
+                        <th class="text-center">Jenis</th>
+                        <th class="text-center">Kelas</th>
+                        <th class="text-center">Jurusan</th>
+                        <th class="text-center">Tarif</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($paymentRates as $index => $pr)
                     <tr>
-                        <td>{{ $paymentRates->firstItem() + $index }}</td>
-                        <td>{{ $pr->academic_year_name }}</td>
-                        <td><b>{{ $pr->payment_type_name }}</b></td>
-                        <td>Kelas {{ $pr->grade_level }}</td>
-                        <td>{{ $pr->major_name ?? 'Semua Jurusan' }}</td>
-                        <td><b>Rp {{ number_format($pr->amount, 0, ',', '.') }}</b></td>
-                        <td>
+                        <td class="text-center">{{ $paymentRates->firstItem() + $index }}</td>
+                        <td class="text-center">{{ $pr->academic_year_name }}</td>
+                        <td class="text-center"><b>{{ $pr->payment_type_name }}</b></td>
+                        <td class="text-center">Kelas {{ $pr->grade_level }}</td>
+                        <td class="text-center">{{ $pr->major_name ?? 'Semua Jurusan' }}</td>
+                        <td class="text-center"><b>Rp {{ number_format($pr->amount, 0, ',', '.') }}</b></td>
+                        <td class="text-center">
                             <div class="dropdown">
                                 <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $pr->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>

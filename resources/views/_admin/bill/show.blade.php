@@ -44,11 +44,11 @@
                             <td class="text-muted">Status</td>
                             <td>
                                 @if($bill->status === 'paid')
-                                <span class="badge badge-success">Lunas</span>
+                                <span class="badge badge-sm bg-gradient-success">Lunas</span>
                                 @elseif($bill->status === 'partial')
-                                <span class="badge badge-warning">Sebagian</span>
+                                <span class="badge badge-sm bg-gradient-warning">Sebagian</span>
                                 @else
-                                <span class="badge badge-danger">Belum Bayar</span>
+                                <span class="badge badge-sm bg-gradient-danger">Belum Bayar</span>
                                 @endif
                             </td>
                         </tr>
@@ -89,12 +89,12 @@
                         <td><code>{{ $sib->nisn }}</code></td>
                         <td>Kelas {{ $sib->grade_level }} – {{ $sib->major_name }}</td>
                         <td>
-                            @if($sib->status === 'aktif')
-                                <span class="badge badge-success">Aktif</span>
+                             @if($sib->status === 'aktif')
+                                <span class="badge badge-sm bg-gradient-success">Aktif</span>
                             @elseif($sib->status === 'lulus')
-                                <span class="badge badge-info">Lulus</span>
+                                <span class="badge badge-sm bg-gradient-primary">Lulus</span>
                             @else
-                                <span class="badge badge-secondary">Keluar</span>
+                                <span class="badge badge-sm bg-gradient-danger">Keluar</span>
                             @endif
                         </td>
                     </tr>
@@ -163,10 +163,10 @@
                         <td>{{ \Carbon\Carbon::parse($payment->payment_date)->format('d/m/Y H:i') }}</td>
                         <td><b>Rp {{ number_format($payment->amount, 0, ',', '.') }}</b></td>
                         <td>
-                            @if($payment->payment_method === 'cash')
-                            <span class="badge badge-info">Tunai</span>
+                             @if($payment->payment_method === 'cash')
+                            <span class="badge badge-sm bg-gradient-success">Tunai</span>
                             @else
-                            <span class="badge badge-primary">QRIS</span>
+                            <span class="badge badge-sm bg-gradient-info">QRIS</span>
                             @endif
                         </td>
                         <td>{{ $payment->reference_number ?? '-' }}</td>

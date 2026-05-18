@@ -119,12 +119,12 @@
                         <td>Rp {{ number_format($row->dibayar, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($row->sisa, 0, ',', '.') }}</td>
                         <td>
-                            @if($row->status_text === 'Lunas')
-                            <span class="badge badge-success">Lunas</span>
+                             @if($row->status_text === 'Lunas')
+                            <span class="badge badge-sm bg-gradient-success">Lunas</span>
                             @elseif($row->status_text === 'Sebagian')
-                            <span class="badge badge-warning">Sebagian</span>
+                            <span class="badge badge-sm bg-gradient-warning">Sebagian</span>
                             @else
-                            <span class="badge badge-danger">Belum Bayar</span>
+                            <span class="badge badge-sm bg-gradient-danger">Belum Bayar</span>
                             @endif
                         </td>
                     </tr>

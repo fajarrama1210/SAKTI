@@ -35,11 +35,11 @@
                         <td><b>Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</b></td>
                         <td>
                             @if($bill->status === 'paid')
-                            <span class="badge badge-success">Lunas</span>
+                            <span class="badge badge-sm bg-gradient-success">Lunas</span>
                             @elseif($bill->status === 'partial')
-                            <span class="badge badge-warning">Sebagian</span>
+                            <span class="badge badge-sm bg-gradient-warning">Sebagian</span>
                             @else
-                            <span class="badge badge-danger">Belum Bayar</span>
+                            <span class="badge badge-sm bg-gradient-danger">Belum Bayar</span>
                             @endif
                         </td>
                         <td>{{ \Carbon\Carbon::parse($bill->due_date)->format('d/m/Y') }}</td>

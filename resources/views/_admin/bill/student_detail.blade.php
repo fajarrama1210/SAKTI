@@ -76,7 +76,7 @@
                         <table class="table align-items-center mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Periode Bulan</th>
+                                    <th class="ps-4 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Periode Bulan</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nominal Tagihan</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
@@ -93,17 +93,13 @@
                                     $isPastDue = ($bill->status !== 'paid' && \Carbon\Carbon::parse($bill->due_date)->isPast());
                                 @endphp
                                 <tr class="{{ $isCurrentMonth ? 'bg-light' : '' }}">
-                                    <td>
-                                        <div class="d-flex px-3 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">
-                                                    {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
-                                                    @if($isCurrentMonth)
-                                                        <span class="badge bg-primary ms-2">Bulan Ini</span>
-                                                    @endif
-                                                </h6>
-                                            </div>
-                                        </div>
+                                    <td class="ps-4 align-middle">
+                                        <span class="text-sm font-weight-bold text-dark">
+                                            {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
+                                        </span>
+                                        @if($isCurrentMonth)
+                                            <span class="badge bg-primary ms-2">Bulan Ini</span>
+                                        @endif
                                     </td>
                                     <td class="align-middle text-center text-sm">
                                         <span class="text-dark font-weight-bold">Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</span>

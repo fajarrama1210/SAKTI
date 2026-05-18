@@ -30,9 +30,9 @@
                         <td class="text-center">{{ \Carbon\Carbon::parse($trx->date)->format('d/m/Y') }}</td>
                         <td class="text-center">
                             @if($trx->type === 'income')
-                            <span class="badge badge-success">Masuk</span>
+                            <span class="badge badge-sm bg-gradient-success">Masuk</span>
                             @else
-                            <span class="badge badge-danger">Keluar</span>
+                            <span class="badge badge-sm bg-gradient-danger">Keluar</span>
                             @endif
                         </td>
                         <td class="text-center">{{ $trx->category ?? '-' }}</td>
@@ -66,7 +66,7 @@
                                 </ul>
                             </div>
                             @else
-                            <span class="badge badge-info">Otomatis SPP</span>
+                            <span class="badge badge-sm bg-gradient-info">Otomatis SPP</span>
                             @endif
                         </td>
                     </tr>

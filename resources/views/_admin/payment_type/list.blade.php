@@ -26,9 +26,9 @@
                         <td class="text-center"><b>{{ $pt->name }}</b></td>
                         <td class="text-center">
                             @if($pt->is_monthly)
-                            <span class="badge badge-info">Bulanan</span>
+                            <span class="badge badge-sm bg-gradient-info">Bulanan</span>
                             @else
-                            <span class="badge badge-warning">Sekali Bayar</span>
+                            <span class="badge badge-sm bg-gradient-warning">Sekali Bayar</span>
                             @endif
                         </td>
                         <td class="text-center">
