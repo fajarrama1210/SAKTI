@@ -3,6 +3,11 @@
 
 @section('content')
 <div class="container-fluid mt--6">
+    <div class="d-flex mb-3">
+        <a href="{{ route('admin.spp.index') }}" class="btn btn-sm btn-outline-white text-white border-white">
+            <i class="fas fa-arrow-left me-1"></i> Kembali ke Pencarian
+        </a>
+    </div>
     <div class="row">
         {{-- Profil Siswa --}}
         <div class="col-xl-4 mb-4">
@@ -57,10 +62,6 @@
                 </div>
             </div>
             @endif
-
-            <a href="{{ route('admin.spp.index') }}" class="btn btn-outline-secondary btn-block mt-4 shadow-none">
-                <i class="fas fa-arrow-left"></i> Kembali ke Pencarian
-            </a>
         </div>
 
         {{-- Kalender SPP --}}
@@ -119,7 +120,7 @@
                                     <td class="align-middle text-center">
                                         @if($bill->status !== 'paid')
                                         <button type="button" 
-                                                class="btn btn-sm btn-success mb-0" 
+                                                class="btn btn-sm btn-success btn-pay mb-0" 
                                                 data-id="{{ $bill->id }}" 
                                                 data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
                                                 data-amount="{{ number_format($bill->total_amount, 0, ',', '.') }}">
