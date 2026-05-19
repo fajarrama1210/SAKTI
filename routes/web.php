@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/{id}/edit', [ClassroomController::class, 'edit'])->name('edit');
         Route::put('/{id}', [ClassroomController::class, 'update'])->name('update');
         Route::delete('/{id}', [ClassroomController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('schedules')->name('schedules.')->group(function () {
+        Route::get('/', [ScheduleController::class, 'index'])->name('index');
+        Route::get('/add', [ScheduleController::class, 'create'])->name('create');
+        Route::post('/add', [ScheduleController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ScheduleController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ScheduleController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ScheduleController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('students')->name('students.')->group(function () {

@@ -149,6 +149,14 @@
                     <span class="nav-link-text ms-1">Penempatan Siswa</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.schedules.*') ? 'active-menu' : '' }}" href="{{ route('admin.schedules.index') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.schedule')
+                    </div>
+                    <span class="nav-link-text ms-1">Jadwal</span>
+                </a>
+            </li>
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Keuangan</h6>
             </li>
