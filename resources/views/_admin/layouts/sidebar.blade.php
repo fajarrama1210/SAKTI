@@ -69,6 +69,7 @@
             overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: rgba(26, 138, 92, 0.3) transparent;
+            -webkit-overflow-scrolling: touch;
         }
 
         #sidenav-collapse-main::-webkit-scrollbar {

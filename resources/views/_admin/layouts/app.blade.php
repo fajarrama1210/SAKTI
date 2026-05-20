@@ -105,6 +105,26 @@
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script>
+        // Prevent Perfect Scrollbar from initializing on sidebar components
+        // to avoid duplicate scrollbars and scrolling locks on Windows.
+        if (typeof PerfectScrollbar !== 'undefined') {
+            const OriginalPS = window.PerfectScrollbar;
+            window.PerfectScrollbar = function(element, options) {
+                if (element && (
+                    element.classList.contains('sidenav') || 
+                    element.classList.contains('navbar-collapse') || 
+                    element.id === 'sidenav-collapse-main'
+                )) {
+                    return {
+                        update: function() {},
+                        destroy: function() {}
+                    };
+                }
+                return new OriginalPS(element, options);
+            };
+        }
+    </script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
     <script src="{{ asset('assets/js/argon-dashboard.min.js') }}?v=2.1.0"></script>
