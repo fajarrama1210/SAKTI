@@ -54,10 +54,9 @@
                             <input type="number" name="year" class="form-control" value="{{ $filters['year'] ?? now()->year }}" min="2024" max="2030">
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <div class="form-group w-100">
-                            <button type="submit" class="btn btn-primary w-100">Filter</button>
-                        </div>
+                    <div class="col-md-2">
+                        <label class="d-none d-md-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100 mt-1">Filter</button>
                     </div>
                 </div>
             </form>

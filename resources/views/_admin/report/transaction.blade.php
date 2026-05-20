@@ -10,7 +10,7 @@
         <div class="card-body">
             <form method="GET" action="{{ route('admin.reports.transaction') }}">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="form-control-label">Tahun Ajaran</label>
                             <select name="academic_year_id" class="form-control" id="academic_year_select">
@@ -48,7 +48,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="form-control-label">Tahun</label>
                             <input type="number" name="year" class="form-control" value="{{ $filters['year'] ?? now()->year }}" min="2024" max="2030">
@@ -64,9 +64,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <div class="form-group w-100">
-                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    <div class="col-md-2">
+                        <label class="d-none d-md-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100" style="height: 44px;">Filter</button>
                         </div>
                     </div>
                 </div>
