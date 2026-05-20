@@ -10,7 +10,7 @@
         <div class="card-body">
             <form method="GET" action="{{ route('admin.reports.payment') }}">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-control-label">Tahun Ajaran</label>
                             <select name="academic_year_id" class="form-control" id="academic_year_select" required>
@@ -36,7 +36,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="form-control-label">Bulan</label>
                             @php $bulan = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',7=>'Jul',8=>'Ags',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des']; @endphp
@@ -46,12 +46,6 @@
                                 <option value="{{ $num }}" {{ ($filters['month'] ?? '') == $num ? 'selected' : '' }}>{{ $nama }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Tahun</label>
-                            <input type="number" name="year" class="form-control" value="{{ $filters['year'] ?? now()->year }}" min="2024" max="2030">
                         </div>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
@@ -85,19 +79,19 @@
             <table class="table align-items-center table-flush table-sm">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Tahun Ajaran</th>
-                        <th>NISN</th>
-                        <th>Nama Siswa</th>
-                        <th>Kelas</th>
-                        <th>Jurusan</th>
-                        <th>No. KK</th>
-                        <th>Bulan</th>
-                        <th>Jenis</th>
-                        <th>Tagihan</th>
-                        <th>Dibayar</th>
-                        <th>Sisa</th>
-                        <th>Status</th>
+                        <th class="text-center">No</th>
+                        <th class="text-center">Tahun Ajaran</th>
+                        <th class="text-center">NISN</th>
+                        <th class="text-center">Nama Siswa</th>
+                        <th class="text-center">Kelas</th>
+                        <th class="text-center">Jurusan</th>
+                        <th class="text-center">No. KK</th>
+                        <th class="text-center">Bulan</th>
+                        <th class="text-center">Jenis</th>
+                        <th class="text-center">Tagihan</th>
+                        <th class="text-center">Dibayar</th>
+                        <th class="text-center">Sisa</th>
+                        <th class="text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,19 +100,19 @@
                     @endphp
                     @forelse($data as $index => $row)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $row->academic_year_name }}</td>
-                        <td>{{ $row->nisn }}</td>
-                        <td><b>{{ $row->student_name }}</b></td>
-                        <td>{{ $row->grade_level ? 'Kelas ' . $row->grade_level : '-' }}</td>
-                        <td>{{ $row->major_name ?? '-' }}</td>
-                        <td>{{ $row->family_card_number }}</td>
-                        <td>{{ $bulanFull[$row->month] ?? $row->month }} {{ $row->year }}</td>
-                        <td>{{ $row->payment_type_name }}</td>
-                        <td>Rp {{ number_format($row->tagihan, 0, ',', '.') }}</td>
-                        <td>Rp {{ number_format($row->dibayar, 0, ',', '.') }}</td>
-                        <td>Rp {{ number_format($row->sisa, 0, ',', '.') }}</td>
-                        <td>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td class="text-center">{{ $row->academic_year_name }}</td>
+                        <td class="text-center">{{ $row->nisn }}</td>
+                        <td class="text-center"><b>{{ $row->student_name }}</b></td>
+                        <td class="text-center">{{ $row->grade_level ? 'Kelas ' . $row->grade_level : '-' }}</td>
+                        <td class="text-center">{{ $row->major_name ?? '-' }}</td>
+                        <td class="text-center">{{ $row->family_card_number }}</td>
+                        <td class="text-center">{{ $bulanFull[$row->month] ?? $row->month }} {{ $row->year }}</td>
+                        <td class="text-center">{{ $row->payment_type_name }}</td>
+                        <td class="text-center">Rp {{ number_format($row->tagihan, 0, ',', '.') }}</td>
+                        <td class="text-center">Rp {{ number_format($row->dibayar, 0, ',', '.') }}</td>
+                        <td class="text-center">Rp {{ number_format($row->sisa, 0, ',', '.') }}</td>
+                        <td class="text-center">
                              @if($row->status_text === 'Lunas')
                             <span class="badge badge-sm bg-gradient-success">Lunas</span>
                             @elseif($row->status_text === 'Sebagian')
@@ -130,7 +124,7 @@
                     </tr>
                     @empty
                         <x-empty-state />
-                    @endforelse
+                    @endforelse 
                 </tbody>
             </table>
         </div>

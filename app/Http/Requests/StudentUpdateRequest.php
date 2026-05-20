@@ -28,6 +28,7 @@ class StudentUpdateRequest extends FormRequest
             'nisn' => 'required|string|max:10|unique:students,nisn,' . $studentId,
             'name' => 'required|string|max:100',
             'classroom_id' => 'required|integer|exists:classrooms,id',
+            'password' => 'nullable|string|min:8',
         ];
     }
 
@@ -47,6 +48,7 @@ class StudentUpdateRequest extends FormRequest
             'nisn.required' => 'NISN wajib diisi.',
             'name.required' => 'Nama lengkap wajib diisi.',
             'classroom_id.required' => 'Kelas wajib dipilih.',
+            'password.min' => 'Password baru minimal harus 8 karakter.',
         ];
     }
 }

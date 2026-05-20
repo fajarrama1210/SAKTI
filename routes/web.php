@@ -163,4 +163,5 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/bills', [App\Http\Controllers\Student\StudentController::class, 'bills'])->name('bills');
     Route::get('/schedules', [App\Http\Controllers\Student\StudentController::class, 'schedules'])->name('schedules');
     Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
+    Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
 });
