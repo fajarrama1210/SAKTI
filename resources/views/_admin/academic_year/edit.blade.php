@@ -7,8 +7,16 @@
             <h3 class="mb-0">Edit Tahun Ajaran</h3>
         </div>
         <div class="card-body">
-            @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+            @if ($errors->any())
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: "Silakan periksa kembali isian form yang ditandai merah."
+                        });
+                    });
+                </script>
             @endif
 
             <form action="{{ route('admin.academic-years.update', $academicYear->id) }}" method="POST">
