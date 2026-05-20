@@ -505,15 +505,15 @@
 
                     <!-- Username / Email -->
                     <div class="form-group">
-                        <label for="email">Username</label>
+                        <label for="email">Email atau NISN</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user input-icon"></i>
                             <input
                                 id="email"
-                                type="email"
+                                type="text"
                                 name="email"
                                 value="{{ old('email') }}"
-                                placeholder="contoh@email.com"
+                                placeholder="Email atau NISN"
                                 required
                                 autofocus
                                 autocomplete="username"

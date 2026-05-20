@@ -90,6 +90,7 @@
     </style>
     <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main" style="height: calc(100vh - 120px) !important;">
         <ul class="navbar-nav">
+            @if(auth()->user()->role === 'admin')
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active-menu' : '' }}" href="{{ route('dashboard') }}">
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
@@ -219,6 +220,43 @@
                     <span class="nav-link-text ms-1">Laporan Transaksi</span>
                 </a>
             </li>
+            @elseif(auth()->user()->role === 'student')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('student.dashboard') ? 'active-menu' : '' }}" href="{{ route('student.dashboard') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.dashboard')
+                    </div>
+                    <span class="nav-link-text ms-1">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Menu Siswa</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('student.bills') ? 'active-menu' : '' }}" href="{{ route('student.bills') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.invoice')
+                    </div>
+                    <span class="nav-link-text ms-1">Tagihan & Pembayaran</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('student.schedules') ? 'active-menu' : '' }}" href="{{ route('student.schedules') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.schedule')
+                    </div>
+                    <span class="nav-link-text ms-1">Jadwal Pelajaran</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('student.profile') ? 'active-menu' : '' }}" href="{{ route('student.profile') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.student')
+                    </div>
+                    <span class="nav-link-text ms-1">Profil Saya</span>
+                </a>
+            </li>
+            @endif
         </ul>
     </div>
 </aside>

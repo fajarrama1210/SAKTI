@@ -1,7 +1,7 @@
 @php
     $routeName = request()->route() ? request()->route()->getName() : '';
     $routeParts = explode('.', $routeName);
-    $routeBase = ($routeParts[0] === 'admin' && isset($routeParts[1])) ? $routeParts[1] : $routeParts[0];
+    $routeBase = in_array($routeParts[0], ['admin', 'student']) && isset($routeParts[1]) ? $routeParts[1] : $routeParts[0];
     
     $pageTitle = match($routeBase) {
         'dashboard' => 'Dashboard',
@@ -16,6 +16,9 @@
         'academic-years' => 'Tahun Ajaran',
         'semesters' => 'Data Semester',
         'spp' => 'SPP / Tagihan',
+        'bills' => 'Tagihan SPP',
+        'schedules' => 'Jadwal Pelajaran',
+        'profile' => 'Profil Saya',
         'reports' => 'Laporan',
         default => 'Dashboard',
     };
@@ -285,7 +288,7 @@
                         </li>
 
                         <li class="px-2 pb-2">
-                            <a href="#" class="dropdown-item modern-dropdown-item">
+                            <a href="{{ auth()->user()->role === 'student' ? route('student.profile') : '#' }}" class="dropdown-item modern-dropdown-item">
                                 <div class="icon-container">
                                     <i class="fas fa-user" style="font-size:13px;"></i>
                                 </div>

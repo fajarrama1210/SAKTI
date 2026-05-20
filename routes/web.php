@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::prefix('majors')->name('majors.')->group(function () {
         Route::get('/', [MajorController::class, 'index'])->name('index');
@@ -156,4 +156,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/transaction/excel', [ReportController::class, 'transactionExportExcel'])->name('transaction.excel');
         Route::get('/transaction/pdf', [ReportController::class, 'transactionExportPdf'])->name('transaction.pdf');
     });
+});
+
+Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Student\StudentController::class, 'dashboard'])->name('dashboard');
+    Route::get('/bills', [App\Http\Controllers\Student\StudentController::class, 'bills'])->name('bills');
+    Route::get('/schedules', [App\Http\Controllers\Student\StudentController::class, 'schedules'])->name('schedules');
+    Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
 });

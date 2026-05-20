@@ -79,6 +79,23 @@ class StudentUseCase
                 $billUseCase->syncBillsForStudent($studentId, $activeAY->id);
             }
 
+            // BUAT AKUN USER UNTUK SISWA SECARA OTOMATIS
+            $email = $data['nisn'] . '@sakti.sch.id';
+            $emailExists = DB::table('users')->where('email', $email)->exists();
+            if ($emailExists) {
+                $email = $data['nisn'] . '_' . time() . '@sakti.sch.id';
+            }
+
+            DB::table('users')->insert([
+                'name' => $data['name'],
+                'email' => $email,
+                'password' => bcrypt($data['nisn']), // Password default adalah NISN
+                'role' => 'student',
+                'student_id' => $studentId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             DB::commit();
 
             return ['status' => true];
@@ -108,6 +125,38 @@ class StudentUseCase
                 'updated_at' => now(),
             ]);
 
+            // UPDATE AKUN USER TERKAIT
+            $user = DB::table('users')->where('student_id', $id)->first();
+            $email = $data['nisn'] . '@sakti.sch.id';
+
+            if ($user) {
+                if ($user->email !== $email) {
+                    $emailExists = DB::table('users')->where('email', $email)->where('student_id', '!=', $id)->exists();
+                    if ($emailExists) {
+                        $email = $data['nisn'] . '_' . time() . '@sakti.sch.id';
+                    }
+                }
+                DB::table('users')->where('student_id', $id)->update([
+                    'name' => $data['name'],
+                    'email' => $email,
+                    'updated_at' => now(),
+                ]);
+            } else {
+                $emailExists = DB::table('users')->where('email', $email)->exists();
+                if ($emailExists) {
+                    $email = $data['nisn'] . '_' . time() . '@sakti.sch.id';
+                }
+                DB::table('users')->insert([
+                    'name' => $data['name'],
+                    'email' => $email,
+                    'password' => bcrypt($data['nisn']),
+                    'role' => 'student',
+                    'student_id' => $id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
             DB::commit();
 
             return ['status' => true];
@@ -123,6 +172,9 @@ class StudentUseCase
     {
         DB::beginTransaction();
         try {
+            // HAPUS AKUN USER TERKAIT TERLEBIH DAHULU
+            DB::table('users')->where('student_id', $id)->delete();
+
             DB::table(DatabaseEntity::TBL_STUDENTS)->where('id', $id)->delete();
 
             DB::commit();
