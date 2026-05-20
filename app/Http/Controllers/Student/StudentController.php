@@ -157,4 +157,27 @@ class StudentController extends Controller
 
         return view('student.profile', compact('student', 'user'));
     }
+
+    public function updatePassword(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'current_password.current_password' => 'Password saat ini salah.',
+            'password.required' => 'Password baru wajib diisi.',
+            'password.min' => 'Password baru minimal harus 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+        ]);
+
+        DB::table('users')
+            ->where('id', Auth::id())
+            ->update([
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+                'updated_at' => now(),
+            ]);
+
+        return redirect()->route('student.profile')->with('success', 'Password Anda berhasil diperbarui!');
+    }
 }

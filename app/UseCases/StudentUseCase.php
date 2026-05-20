@@ -136,20 +136,25 @@ class StudentUseCase
                         $email = $data['nisn'] . '_' . time() . '@sakti.sch.id';
                     }
                 }
-                DB::table('users')->where('student_id', $id)->update([
+                $userUpdateData = [
                     'name' => $data['name'],
                     'email' => $email,
                     'updated_at' => now(),
-                ]);
+                ];
+                if (!empty($data['password'])) {
+                    $userUpdateData['password'] = bcrypt($data['password']);
+                }
+                DB::table('users')->where('student_id', $id)->update($userUpdateData);
             } else {
                 $emailExists = DB::table('users')->where('email', $email)->exists();
                 if ($emailExists) {
                     $email = $data['nisn'] . '_' . time() . '@sakti.sch.id';
                 }
+                $password = !empty($data['password']) ? bcrypt($data['password']) : bcrypt($data['nisn']);
                 DB::table('users')->insert([
                     'name' => $data['name'],
                     'email' => $email,
-                    'password' => bcrypt($data['nisn']),
+                    'password' => $password,
                     'role' => 'student',
                     'student_id' => $id,
                     'created_at' => now(),

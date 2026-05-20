@@ -29,7 +29,7 @@
 
         <!-- Detailed Profile Information -->
         <div class="col-lg-8 mb-4">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header pb-0 bg-transparent border-0">
                     <h6 class="font-weight-bold text-dark mb-0">Informasi Profil & Akun</h6>
                 </div>
@@ -99,7 +99,100 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Update Password Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header pb-0 bg-transparent border-0">
+                    <h6 class="font-weight-bold text-dark mb-0">Ganti Password</h6>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ route('student.profile.password') }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="text-xs text-muted font-weight-bold d-block mb-1">Password Saat Ini</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-muted"></i></span>
+                                    <input type="password" name="current_password" id="current_password" class="form-control bg-light border-0 @error('current_password') is-invalid @enderror" placeholder="Masukkan password saat ini" required>
+                                    <button class="btn bg-light border-0 text-muted px-3 my-0 toggle-password-btn" type="button" data-target="current_password" style="box-shadow: none; z-index: 4;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    @error('current_password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-xs text-muted font-weight-bold d-block mb-1">Password Baru</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-key text-muted"></i></span>
+                                    <input type="password" name="password" id="password" class="form-control bg-light border-0 @error('password') is-invalid @enderror" placeholder="Minimal 8 karakter" required>
+                                    <button class="btn bg-light border-0 text-muted px-3 my-0 toggle-password-btn" type="button" data-target="password" style="box-shadow: none; z-index: 4;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-xs text-muted font-weight-bold d-block mb-1">Konfirmasi Password Baru</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-key text-muted"></i></span>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control bg-light border-0" placeholder="Ulangi password baru" required>
+                                    <button class="btn bg-light border-0 text-muted px-3 my-0 toggle-password-btn" type="button" data-target="password_confirmation" style="box-shadow: none; z-index: 4;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-2">
+                            <button type="submit" class="btn text-white" style="background-color: #1a8a5c;">
+                                <i class="fas fa-save me-2"></i> Perbarui Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButtons = document.querySelectorAll('.toggle-password-btn');
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const targetInput = document.getElementById(targetId);
+                if (targetInput) {
+                    const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    targetInput.setAttribute('type', type);
+                    
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('fa-eye');
+                        icon.classList.toggle('fa-eye-slash');
+                    }
+                }
+            });
+        });
+    });
+</script>
+@if ($errors->any())
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            icon: "error",
+            title: "Gagal Memperbarui Password",
+            text: "{{ $errors->first() }}"
+        });
+    });
+</script>
+@endif
+@endpush
 @endsection
