@@ -1,281 +1,744 @@
 @extends('_admin.layouts.app')
 
 @section('content')
-<!-- Header -->
-<div class="header pb-6" style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);">
-    <div class="container-fluid">
-        <div class="header-body">
-            <div class="row align-items-center py-4">
-                <div class="col-lg-6 col-7">
-                    <h6 class="h2 text-white d-inline-block mb-0">Dashboard SAKTI</h6>
-                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark mb-0">
-                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
+    <style>
+        :root {
+            --primary-green: #1a8a5c;
+            --secondary-green: #2dce89;
+            --soft-green: #e9fff5;
+            --dark-text: #344767;
+            --muted-text: #8392ab;
+            --danger-color: #f5365c;
+            --warning-color: #fb6340;
+            --card-radius: 22px;
+        }
 
-            <!-- Card stats (Minimalist & Modern) -->
-            <div class="row">
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card card-stats shadow-sm border-0">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h6 class="text-uppercase text-muted mb-1 font-weight-bold">Total Siswa</h6>
-                                    <span class="h3 font-weight-bold mb-0 text-dark">{{ $totalStudents }}</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-light text-success rounded-circle shadow-sm">
+        body {
+            background: #f8fafc;
+        }
+
+        /* ======================================================
+        HEADER
+    ====================================================== */
+
+        .dashboard-header {
+            background: linear-gradient(135deg,
+                    #07814e 45%,
+                    #1e905f 100%);
+
+            position: relative;
+            overflow: hidden;
+
+            /* LENGKUNG */
+            border-radius: 25px;
+
+            /* JARAK */
+            margin: 18px;
+            padding: 45px 20px 140px;
+
+            /* BAYANGAN */
+            box-shadow:
+                0 20px 45px rgb(73, 106, 77),
+                0 10px 25px rgba(45, 206, 137, .18),
+                inset 0 1px 1px rgba(255, 255, 255, .08);
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            background: rgba(244, 7, 7, 0.08);
+            border-radius: 50%;
+            top: -120px;
+            right: -90px;
+        }
+
+        .dashboard-header::after {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            background: rgba(255, 255, 255, .06);
+            border-radius: 50%;
+            bottom: -110px;
+            left: -60px;
+        }
+
+        /* ======================================================
+        CARD GLOBAL
+    ====================================================== */
+
+        .dashboard-card {
+            border: none;
+            border-radius: var(--card-radius);
+
+            transition: .3s ease;
+            overflow: hidden;
+
+            background: #ffffff;
+
+            /* BAYANGAN */
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, .06),
+                0 3px 10px rgba(0, 0, 0, .04);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 18px 40px rgba(0, 0, 0, .12),
+                0 8px 18px rgba(0, 0, 0, .08) !important;
+        }
+
+        /* ======================================================
+        STATS CARD
+    ====================================================== */
+
+        .stats-card {
+            position: relative;
+            background: #fff;
+
+            border-radius: 24px;
+
+            /* BAYANGAN */
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, .07),
+                0 4px 10px rgba(0, 0, 0, .04);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-7px);
+
+            box-shadow:
+                0 22px 45px rgba(0, 0, 0, .12),
+                0 10px 20px rgba(45, 206, 137, .10);
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+
+            background: linear-gradient(to bottom,
+                    var(--primary-green),
+                    var(--secondary-green));
+        }
+
+        /* ======================================================
+        ICON
+    ====================================================== */
+
+        .stats-icon {
+            width: 58px;
+            height: 58px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+            font-size: 1.3rem;
+
+            /* BAYANGAN ICON */
+            box-shadow:
+                0 10px 20px rgba(0, 0, 0, .10),
+                inset 0 1px 1px rgba(255, 255, 255, .12);
+        }
+
+        .stats-title {
+            font-size: .78rem;
+            font-weight: 700;
+
+            color: var(--muted-text);
+        }
+
+        .stats-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--dark-text);
+        }
+
+        /* ======================================================
+        ACTION BUTTON
+    ====================================================== */
+
+        .quick-action {
+            border-radius: 22px;
+            transition: .3s ease;
+
+            background: #fff;
+            border: 1px solid #edf2f7;
+
+            /* BAYANGAN */
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, .05),
+                0 3px 8px rgba(0, 0, 0, .03);
+        }
+
+        .quick-action:hover {
+            transform: translateY(-5px) scale(1.02);
+
+            background: linear-gradient(135deg,
+                    var(--primary-green),
+                    var(--secondary-green));
+
+            color: #fff !important;
+
+            box-shadow:
+                0 20px 35px rgba(45, 206, 137, .22),
+                0 8px 18px rgba(0, 0, 0, .08);
+        }
+
+        .quick-action:hover i,
+        .quick-action:hover span {
+            color: #fff !important;
+        }
+
+        /* ======================================================
+        TABLE
+    ====================================================== */
+
+        .custom-table thead {
+            background: #f9fafb;
+        }
+
+        .custom-table th {
+            border-top: none !important;
+            font-size: .75rem;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            font-weight: 700;
+        }
+
+        .custom-table td {
+            vertical-align: middle;
+            border-color: #f1f5f9;
+        }
+
+        /* ======================================================
+        PAYMENT ICON
+    ====================================================== */
+
+        .payment-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(135deg,
+                    var(--primary-green),
+                    var(--secondary-green));
+
+            color: #fff;
+
+            /* BAYANGAN */
+            box-shadow:
+                0 8px 18px rgba(45, 206, 137, .22);
+        }
+
+        /* ======================================================
+        CHART
+    ====================================================== */
+
+        .chart-container {
+            position: relative;
+            height: 380px;
+        }
+
+        /* ======================================================
+        SECTION TITLE
+    ====================================================== */
+
+        .section-title {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        /* ======================================================
+        BUTTON
+    ====================================================== */
+
+        .view-btn {
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: .72rem;
+            letter-spacing: .5px;
+
+            box-shadow:
+                0 8px 18px rgba(45, 206, 137, .18);
+        }
+
+        .stats-nominal{
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+        /* ======================================================
+        RESPONSIVE
+    ====================================================== */
+
+        @media(max-width:768px) {
+
+            .stats-value {
+                font-size: 1.3rem;
+            }
+
+            .dashboard-header {
+                border-radius: 28px;
+
+                margin: 10px;
+
+                padding:
+                    35px 15px 120px;
+            }
+        }
+    </style>
+
+    <!-- HEADER -->
+    <div class="header py-6 mb-2 dashboard-header">
+        <div class="container-fluid">
+            <div class="header-body">
+
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <h2 class="text-white font-weight-bold mb-1">
+                            Dashboard SAKTI
+                        </h2>
+
+                        <p class="text-white mb-0 opacity-8">
+                            Monitoring data sekolah & keuangan realtime
+                        </p>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="row mt-4">
+
+                    <!-- TOTAL SISWA -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card dashboard-card stats-card shadow-sm">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <div class="stats-title mb-2">
+                                            TOTAL SISWA
+                                        </div>
+
+                                        <div class="stats-value">
+                                            {{ $totalStudents }}
+                                        </div>
+                                    </div>
+
+                                    <div class="stats-icon bg-success text-white">
                                         <i class="fas fa-user-graduate"></i>
                                     </div>
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card card-stats shadow-sm border-0">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h6 class="text-uppercase text-muted mb-1 font-weight-bold">Kelas & Jurusan</h6>
-                                    <span class="h3 font-weight-bold mb-0 text-dark">{{ $totalClassrooms }} <small class="text-sm text-muted">/ {{ $totalMajors }}</small></span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-light text-warning rounded-circle shadow-sm">
-                                        <i class="fas fa-chalkboard"></i>
+                    <!-- KELAS -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card dashboard-card stats-card shadow-sm">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <div class="stats-title mb-2">
+                                            KELAS & JURUSAN
+                                        </div>
+
+                                        <div class="stats-value">
+                                            {{ $totalClassrooms }}
+
+                                            <span class="text-muted" style="font-size:1rem;">
+                                                / {{ $totalMajors }}
+                                            </span>
+                                        </div>
                                     </div>
+
+                                    <div class="stats-icon bg-warning text-white">
+                                        <i class="fas fa-school"></i>
+                                    </div>
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card card-stats shadow-sm border-0">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h6 class="text-uppercase text-muted mb-1 font-weight-bold">Pemasukan Bulan Ini</h6>
-                                    <span class="h4 font-weight-bold mb-0 text-success">Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-light text-success rounded-circle shadow-sm">
+                    <!-- PEMASUKAN -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+
+                        <div class="card dashboard-card stats-card">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <div class="stats-title mb-2">
+                                            PEMASUKAN
+                                        </div>
+
+                                        <div class="stats-nominal text-success">
+                                            Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stats-icon text-success" style="background: var(--soft-green);">
                                         <i class="fas fa-arrow-down"></i>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card card-stats shadow-sm border-0">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h6 class="text-uppercase text-muted mb-1 font-weight-bold">Pengeluaran Bulan Ini</h6>
-                                    <span class="h4 font-weight-bold mb-0 text-danger">Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}</span>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-light text-danger rounded-circle shadow-sm">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- PENGELUARAN -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+
+                        <div class="card dashboard-card stats-card">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <div class="stats-title mb-2">
+                                            PENGELUARAN
+                                        </div>
+
+                                        <div class="stats-nominal text-danger">
+                                            Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stats-icon bg-danger text-white">
                                         <i class="fas fa-arrow-up"></i>
                                     </div>
+
                                 </div>
+
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Page content -->
-<div class="container-fluid mt--6">
-    <div class="row">
-        <!-- Chart Section -->
-        <div class="col-xl-8 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-transparent border-0">
-                    <h3 class="mb-0">Statistik Keuangan (6 Bulan Terakhir)</h3>
-                </div>
-                <div class="card-body">
-                    <!-- Chart wrapper -->
-                    <div class="chart">
-                        <canvas id="financeChart" class="chart-canvas"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </div>
 
-        <!-- Quick Actions Section -->
-        <div class="col-xl-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-transparent border-0">
-                    <h3 class="mb-0">Aksi Cepat</h3>
-                </div>
-                <div class="card-body pb-0">
-                    <div class="row text-center mb-0">
-                        <div class="col-6 mb-4">
-                            <a href="{{ route('admin.students.create') }}" class="btn btn-light text-primary btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
-                                <i class="fas fa-user-plus fa-2x mb-2 d-block"></i>
-                                <span class="text-sm font-weight-bold">Siswa Baru</span>
-                            </a>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <a href="{{ route('admin.transactions.create') }}" class="btn btn-light text-success btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
-                                <i class="fas fa-money-bill-wave fa-2x mb-2 d-block"></i>
-                                <span class="text-sm font-weight-bold">Catat Transaksi</span>
-                            </a>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <a href="{{ route('admin.reports.payment') }}" class="btn btn-light text-info btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
-                                <i class="fas fa-chart-line fa-2x mb-2 d-block"></i>
-                                <span class="text-sm font-weight-bold">Laporan Kas</span>
-                            </a>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <a href="{{ route('admin.spp.index') }}" class="btn btn-light text-warning btn-block p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center border-0" style="border-radius: 15px;">
-                                <i class="fas fa-file-invoice fa-2x mb-2 d-block"></i>
-                                <span class="text-sm font-weight-bold">Cek Tagihan SPP</span>
-                            </a>
-                        </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Recent Payments Table -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0">Histori Pembayaran SPP Terbaru</h3>
-                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-success px-3 rounded-pill text-uppercase">Lihat Semua</a>
+    <!-- CONTENT -->
+    <div class="container-fluid mt--6">
+
+        <div class="row">
+
+            <!-- CHART -->
+            <div class="col-xl-8 mb-4">
+                <div class="card dashboard-card shadow-sm h-100">
+
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h3 class="section-title mb-0">
+                            Statistik Keuangan 6 Bulan Terakhir
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="financeChart"></canvas>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>No. KK / Keluarga</th>
-                                <th>Metode Bayar</th>
-                                <th>Jumlah Dibayar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($recentPayments as $pay)
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon icon-shape icon-sm text-white rounded-circle shadow-sm mr-3" style="background: linear-gradient(135deg, #1a8a5c, #2dce89);">
-                                            <i class="fas fa-calendar-alt fa-xs"></i>
-                                        </div>
-                                        <span class="font-weight-bold">{{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted">{{ $pay->family_card_number }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-dot mr-4">
-                                        <i class="bg-success"></i>
-                                        <span class="status">{{ $pay->payment_method }}</span>
+            </div>
+
+            <!-- QUICK ACTION -->
+            <div class="col-xl-4 mb-4">
+                <div class="card dashboard-card shadow-sm h-100">
+
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h3 class="section-title mb-0">
+                            Aksi Cepat
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-6 mb-4">
+                                <a href="{{ route('admin.students.create') }}"
+                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-primary text-decoration-none h-100">
+
+                                    <i class="fas fa-user-plus fa-2x mb-3"></i>
+
+                                    <span class="font-weight-bold text-center">
+                                        Siswa Baru
                                     </span>
-                                </td>
-                                <td>
-                                    <span class="font-weight-bold text-success">+ Rp {{ number_format($pay->amount, 0, ',', '.') }}</span>
-                                </td>
-                            </tr>
-                            @empty
-                                <x-empty-state />
-                            @endforelse
-                        </tbody>
-                    </table>
+
+                                </a>
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <a href="{{ route('admin.transactions.create') }}"
+                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-success text-decoration-none h-100">
+
+                                    <i class="fas fa-wallet fa-2x mb-3"></i>
+
+                                    <span class="font-weight-bold text-center">
+                                        Transaksi
+                                    </span>
+
+                                </a>
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <a href="{{ route('admin.reports.payment') }}"
+                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-info text-decoration-none h-100">
+
+                                    <i class="fas fa-chart-line fa-2x mb-3"></i>
+
+                                    <span class="font-weight-bold text-center">
+                                        Laporan
+                                    </span>
+
+                                </a>
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <a href="{{ route('admin.spp.index') }}"
+                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-warning text-decoration-none h-100">
+
+                                    <i class="fas fa-file-invoice-dollar fa-2x mb-3"></i>
+
+                                    <span class="font-weight-bold text-center">
+                                        Tagihan SPP
+                                    </span>
+
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
+
         </div>
+
+        <!-- TABLE -->
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card dashboard-card shadow-sm">
+
+                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+
+                        <h3 class="section-title mb-0">
+                            Histori Pembayaran Terbaru
+                        </h3>
+
+                        <a href="{{ route('admin.spp.recap') }}" class="btn btn-success view-btn">
+                            Lihat Semua
+                        </a>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table custom-table align-items-center">
+
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>No KK</th>
+                                    <th>Metode</th>
+                                    <th>Nominal</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($recentPayments as $pay)
+                                    <tr>
+
+                                        <td>
+                                            <div class="d-flex align-items-center">
+
+                                                <div class="payment-icon mr-3">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+
+                                                <div class="font-weight-bold">
+                                                    {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
+                                                </div>
+
+                                            </div>
+                                        </td>
+
+                                        <td class="text-muted font-weight-bold">
+                                            {{ $pay->family_card_number }}
+                                        </td>
+
+                                        <td>
+                                            <span class="badge badge-success px-3 py-2">
+                                                {{ $pay->payment_method }}
+                                            </span>
+                                        </td>
+
+                                        <td class="font-weight-bold text-success">
+                                            + Rp {{ number_format($pay->amount, 0, ',', '.') }}
+                                        </td>
+
+                                    </tr>
+
+                                @empty
+                                    <x-empty-state />
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
     </div>
-</div>
 
-<!-- Include Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CHART -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var ctx = document.getElementById('financeChart').getContext('2d');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-        var chartLabels = @js($chartLabels);
-        var chartIncome = @js($chartIncome);
-        var chartExpense = @js($chartExpense);
+            const ctx = document.getElementById('financeChart');
 
-        var financeChart = new Chart(ctx, {
-            type: 'bar', // Anda juga bisa mengubah ke 'line' jika lebih suka *line chart*
-            data: {
-                labels: chartLabels,
-                datasets: [{
-                        label: 'Pemasukan',
-                        data: chartIncome,
-                        backgroundColor: 'rgba(45, 206, 137, 0.8)', // Success green
-                        borderColor: 'rgba(45, 206, 137, 1)',
-                        borderWidth: 1,
-                        borderRadius: 4
+            const financeChart = new Chart(ctx, {
+
+                type: 'bar',
+
+                data: {
+                    labels: @js($chartLabels),
+
+                    datasets: [{
+                            label: 'Pemasukan',
+                            data: @js($chartIncome),
+                            backgroundColor: 'rgba(45, 206, 137, .8)',
+                            borderRadius: 12,
+                            borderSkipped: false,
+                        },
+
+                        {
+                            label: 'Pengeluaran',
+                            data: @js($chartExpense),
+                            backgroundColor: 'rgba(245, 54, 92, .8)',
+                            borderRadius: 12,
+                            borderSkipped: false,
+                        }
+                    ]
+                },
+
+                options: {
+
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
                     },
-                    {
-                        label: 'Pengeluaran',
-                        data: chartExpense,
-                        backgroundColor: 'rgba(245, 54, 92, 0.8)', // Danger red
-                        borderColor: 'rgba(245, 54, 92, 1)',
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
+
+                    plugins: {
+
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+
+                        tooltip: {
+                            backgroundColor: '#111827',
+                            padding: 14,
+                            cornerRadius: 12,
+
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': Rp ' +
+                                        context.parsed.y.toLocaleString('id-ID');
                                 }
-                                if (context.parsed.y !== null) {
-                                    label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
-                                }
-                                return label;
                             }
                         }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value, index, values) {
-                                if (value >= 1000000) {
-                                    return 'Rp ' + (value / 1000000) + ' Jt';
-                                } else if (value >= 1000) {
-                                    return 'Rp ' + (value / 1000) + ' Rb';
+                    },
+
+                    scales: {
+
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                callback: function(value) {
+
+                                    if (value >= 1000000) {
+                                        return 'Rp ' + (value / 1000000) + ' Jt';
+                                    }
+
+                                    if (value >= 1000) {
+                                        return 'Rp ' + (value / 1000) + ' Rb';
+                                    }
+
+                                    return 'Rp ' + value;
                                 }
-                                return 'Rp ' + value;
+                            },
+
+                            grid: {
+                                borderDash: [5, 5]
                             }
                         }
                     }
                 }
-            }
+            });
+
         });
-    });
-</script>
+    </script>
 @endsection
