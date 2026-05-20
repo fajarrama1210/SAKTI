@@ -300,6 +300,7 @@ class BillUseCase
             $dueDate = Carbon::createFromDate($y, $m, 1)->endOfMonth()->toDateString();
             $billId = DB::table(DatabaseEntity::TBL_BILLS)->insertGetId([
                 'student_id'         => $student->student_id,
+                'family_card_number' => $student->family_card_number,
                 'academic_year_id'   => $semester->academic_year_id,
                 'semester_id'        => $semester->id,
                 'month'              => $m,

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PaymentAllocation extends Model
 {
     protected $guarded = ['id'];
+  
 
     public function payment(): BelongsTo
     {

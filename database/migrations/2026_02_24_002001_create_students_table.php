@@ -15,6 +15,7 @@ return new class extends Migration
             $table->char('nisn', 10)->unique()->index();
             $table->foreignId('classroom_id')->constrained()->onDelete('restrict');
             $table->string('qr_code')->nullable();
+            $table->string('status', 20)->default('aktif');
             $table->timestamps();
         });
     }
