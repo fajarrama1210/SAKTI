@@ -28,4 +28,14 @@ class Bill extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class);
+    }
 }

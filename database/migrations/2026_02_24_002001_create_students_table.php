@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->char('family_card_number', 16)->unique()->index();
+            $table->char('family_card_number', 16)->index();
             $table->string('name', 100);
             $table->char('nisn', 10)->unique()->index();
             $table->foreignId('classroom_id')->constrained()->onDelete('restrict');

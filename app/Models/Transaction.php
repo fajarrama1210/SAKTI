@@ -13,4 +13,13 @@ class Transaction extends Model
         'date' => 'date',
     ];
 
+    public function payment(): BelongsTo
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
+    public function recordedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'recorded_by');
+    }
 }

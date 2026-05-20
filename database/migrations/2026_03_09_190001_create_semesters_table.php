@@ -16,10 +16,20 @@ return new class extends Migration
             $table->tinyInteger('end_month');   // 1-12
             $table->timestamps();
         });
+
+        // Link bills to semesters after semesters table is created
+        Schema::table('bills', function (Blueprint $table) {
+            $table->foreignId('semester_id')->nullable()->after('academic_year_id')->constrained()->onDelete('cascade');
+        });
     }
 
     public function down(): void
     {
+        Schema::table('bills', function (Blueprint $table) {
+            $table->dropForeign(['semester_id']);
+            $table->dropColumn('semester_id');
+        });
+
         Schema::dropIfExists('semesters');
     }
 };

@@ -10,16 +10,17 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->char('family_card_number', 16)->index();
             $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
             $table->tinyInteger('month');
             $table->year('year');
             $table->unsignedInteger('total_amount');
-            $table->enum('status', ['unpaid', 'partial', 'paid'])->default('unpaid');
+            $table->enum('status', ['unpaid', 'partial', 'paid', 'cancelled'])->default('unpaid');
             $table->date('due_date');
             $table->timestamps();
 
-            $table->unique(['family_card_number', 'academic_year_id', 'month', 'year'], 'bills_unique');
+            $table->unique(['student_id', 'academic_year_id', 'month', 'year'], 'bills_unique');
         });
     }
 

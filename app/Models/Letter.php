@@ -10,7 +10,7 @@ class Letter extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'dsubmission_date' => 'date',
+        'submission_date' => 'date',
     ];
 
     public function student() : BelongsTo

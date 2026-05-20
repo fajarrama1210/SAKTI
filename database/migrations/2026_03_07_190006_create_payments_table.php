@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bill_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('amount');
-            $table->enum('payment_method', ['cash', 'qris']);
+            $table->enum('payment_method', ['cash', 'qris', 'transfer', 'other']);
             $table->dateTime('payment_date');
             $table->string('snap_token')->nullable();
             $table->string('reference_number', 100)->nullable()->unique();

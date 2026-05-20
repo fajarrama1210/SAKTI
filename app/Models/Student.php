@@ -26,4 +26,14 @@ class Student extends Model
     {
         return $this->hasMany(Letter::class);
     }
+
+    public function bills() : HasMany
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function enrollments() : HasMany
+    {
+        return $this->hasMany(StudentEnrollment::class);
+    }
 }
