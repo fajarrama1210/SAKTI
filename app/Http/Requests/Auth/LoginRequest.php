@@ -33,6 +33,19 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Data tidak boleh kosong',
+            'password.required' => 'Data tidak boleh kosong',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -47,30 +60,43 @@ class LoginRequest extends FormRequest
         $credentials = ['password' => $this->input('password')];
 
         if ($fieldType === 'email') {
+            $user = \App\Models\User::where('email', $login)->first();
+            if (!$user) {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'email' => 'Akun belum terdaftar',
+                ]);
+            }
             $credentials['email'] = $login;
             $authenticated = Auth::attempt($credentials, $this->boolean('remember'));
         } else {
             // Cari siswa berdasarkan NISN
             $student = \Illuminate\Support\Facades\DB::table('students')->where('nisn', $login)->first();
-            if ($student) {
-                // Cari user berdasarkan student_id
-                $user = \App\Models\User::where('student_id', $student->id)->first();
-                if ($user) {
-                    $credentials['email'] = $user->email;
-                    $authenticated = Auth::attempt($credentials, $this->boolean('remember'));
-                } else {
-                    $authenticated = false;
-                }
-            } else {
-                $authenticated = false;
+            if (!$student) {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'email' => 'Akun belum terdaftar',
+                ]);
             }
+
+            // Cari user berdasarkan student_id
+            $user = \App\Models\User::where('student_id', $student->id)->first();
+            if (!$user) {
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'email' => 'Akun belum terdaftar',
+                ]);
+            }
+
+            $credentials['email'] = $user->email;
+            $authenticated = Auth::attempt($credentials, $this->boolean('remember'));
         }
 
         if (! $authenticated) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Email atau Password salah',
             ]);
         }
 

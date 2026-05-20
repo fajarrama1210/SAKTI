@@ -505,7 +505,7 @@
 
                     <!-- Username / Email -->
                     <div class="form-group">
-                        <label for="email">Email atau NISN</label>
+                        <label for="email">Email </label>
                         <div class="input-wrapper">
                             <i class="fas fa-user input-icon"></i>
                             <input
@@ -513,8 +513,7 @@
                                 type="text"
                                 name="email"
                                 value="{{ old('email') }}"
-                                placeholder="Email atau NISN"
-                                required
+                                placeholder="Email "
                                 autofocus
                                 autocomplete="username"
                             >
@@ -542,7 +541,6 @@
                                 type="password"
                                 name="password"
                                 placeholder="••••••••"
-                                required
                                 autocomplete="current-password"
                             >
                             <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
@@ -579,6 +577,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Toggle Password Visibility
         const togglePassword = document.getElementById('togglePassword');
@@ -589,6 +588,38 @@
             passwordInput.setAttribute('type', type);
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // SweetAlert2 Notifications for Server-side errors
+        @if ($errors->any())
+            let errorMsg = '{{ $errors->first() }}';
+            @if ($errors->has('email') && $errors->has('password') && $errors->first('email') == 'Data tidak boleh kosong')
+                errorMsg = 'Data tidak boleh kosong';
+            @endif
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Gagal',
+                text: errorMsg,
+                confirmButtonColor: '#0d9488'
+            });
+        @endif
+
+        // Client-side validation
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan',
+                    text: 'Data tidak boleh kosong',
+                    confirmButtonColor: '#0d9488'
+                });
+            }
         });
     </script>
 </body>

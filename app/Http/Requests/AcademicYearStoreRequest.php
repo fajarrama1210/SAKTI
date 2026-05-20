@@ -13,8 +13,9 @@ class AcademicYearStoreRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('id');
         return [
-            'name' => 'required|string|max:20',
+            'name' => 'required|string|max:20|unique:academic_years,name,' . $id,
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'is_active' => 'nullable|boolean',
@@ -30,6 +31,7 @@ class AcademicYearStoreRequest extends FormRequest
             'date' => \App\Entities\ResponseEntity::MSG_VAL_DATE,
             'after' => \App\Entities\ResponseEntity::MSG_VAL_AFTER,
             'boolean' => \App\Entities\ResponseEntity::MSG_VAL_BOOLEAN,
+            'unique' => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
         ];
     }
 

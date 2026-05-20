@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="form-control-label">Jurusan <small class="text-muted">(Opsional)</small></label>
+                            <label class="form-control-label">Jurusan</label>
                             <select name="major_id" class="form-control @error('major_id') is-invalid @enderror">
                                 <option value="">Semua Jurusan</option>
                                 @foreach($majors as $major)

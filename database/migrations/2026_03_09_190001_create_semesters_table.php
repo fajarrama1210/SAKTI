@@ -11,13 +11,13 @@ return new class extends Migration
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('academic_year_id')->constrained()->cascadeOnDelete();
-            $table->string('name', 40); // e.g. "Semester Ganjil"
-            $table->tinyInteger('start_month'); // 1-12
-            $table->tinyInteger('end_month');   // 1-12
+            $table->string('name', 40); 
+            $table->tinyInteger('start_month'); 
+            $table->tinyInteger('end_month');   
             $table->timestamps();
         });
 
-        // Link bills to semesters after semesters table is created
+
         Schema::table('bills', function (Blueprint $table) {
             $table->foreignId('semester_id')->nullable()->after('academic_year_id')->constrained()->onDelete('cascade');
         });

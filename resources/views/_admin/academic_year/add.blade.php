@@ -7,13 +7,16 @@
             <h3 class="mb-0">Tambah Tahun Ajaran</h3>
         </div>
         <div class="card-body">
-            @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-            @if($errors->any())
-            <div class="alert alert-danger">
-                <ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-            </div>
+            @if ($errors->any())
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: "Silakan periksa kembali isian form yang ditandai merah."
+                        });
+                    });
+                </script>
             @endif
 
             <form action="{{ route('admin.academic-years.store') }}" method="POST">
