@@ -14,6 +14,10 @@ class DashboardController extends Controller
             return redirect()->route('student.dashboard');
         }
 
+        if (auth()->user()->role === 'kepala_sekolah') {
+            return redirect()->route('kepala-sekolah.dashboard');
+        }
+
         // Data for cards
         $totalStudents = DB::table(DatabaseEntity::TBL_STUDENTS)->count();
         $totalClassrooms = DB::table(DatabaseEntity::TBL_CLASSROOMS)->count();
