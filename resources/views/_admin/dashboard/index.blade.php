@@ -18,8 +18,8 @@
         }
 
         /* ======================================================
-        HEADER
-    ====================================================== */
+            HEADER
+        ====================================================== */
 
         .dashboard-header {
             background: linear-gradient(135deg,
@@ -29,18 +29,14 @@
             position: relative;
             overflow: hidden;
 
-            /* LENGKUNG */
-            border-radius: 25px;
+            border-radius: 28px;
 
-            /* JARAK */
             margin: 18px;
             padding: 45px 20px 140px;
 
-            /* BAYANGAN */
             box-shadow:
-                0 20px 45px rgb(73, 106, 77),
-                0 10px 25px rgba(45, 206, 137, .18),
-                inset 0 1px 1px rgba(255, 255, 255, .08);
+                0 20px 45px rgba(0, 0, 0, .12),
+                0 10px 25px rgba(45, 206, 137, .18);
         }
 
         .dashboard-header::before {
@@ -48,7 +44,7 @@
             position: absolute;
             width: 340px;
             height: 340px;
-            background: rgba(244, 7, 7, 0.08);
+            background: rgba(255, 255, 255, .06);
             border-radius: 50%;
             top: -120px;
             right: -90px;
@@ -59,37 +55,62 @@
             position: absolute;
             width: 240px;
             height: 240px;
-            background: rgba(255, 255, 255, .06);
+            background: rgba(255, 255, 255, .05);
             border-radius: 50%;
             bottom: -110px;
             left: -60px;
         }
 
         /* ======================================================
-        CARD GLOBAL
-    ====================================================== */
+            GLOBAL CARD
+        ====================================================== */
 
         .dashboard-card {
             border: none;
-            border-radius: var(--card-radius);
-
-            transition: .3s ease;
+            border-radius: 26px;
             overflow: hidden;
+            background: #fff;
+            position: relative;
 
-            background: #ffffff;
-
-            /* BAYANGAN */
             box-shadow:
                 0 10px 30px rgba(0, 0, 0, .06),
                 0 3px 10px rgba(0, 0, 0, .04);
+
+            transition: .3s ease;
         }
 
         .dashboard-card:hover {
             transform: translateY(-6px);
 
             box-shadow:
-                0 18px 40px rgba(0, 0, 0, .12),
-                0 8px 18px rgba(0, 0, 0, .08) !important;
+                0 20px 40px rgba(0, 0, 0, .12),
+                0 8px 18px rgba(0, 0, 0, .08);
+        }
+
+        /* ======================================================
+            CORAK CARD
+        ====================================================== */
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: rgba(45, 206, 137, .05);
+            border-radius: 50%;
+            top: -90px;
+            right: -80px;
+        }
+
+        .dashboard-card::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(45, 206, 137, .04);
+            border-radius: 50%;
+            bottom: -60px;
+            left: -40px;
         }
 
         /* ======================================================
@@ -97,25 +118,14 @@
     ====================================================== */
 
         .stats-card {
+            min-height: 155px;
+            height: 40%;
+            display: flex;
+            align-items: center;
             position: relative;
-            background: #fff;
-
-            border-radius: 24px;
-
-            /* BAYANGAN */
-            box-shadow:
-                0 10px 25px rgba(0, 0, 0, .07),
-                0 4px 10px rgba(0, 0, 0, .04);
         }
 
-        .stats-card:hover {
-            transform: translateY(-7px);
-
-            box-shadow:
-                0 22px 45px rgba(0, 0, 0, .12),
-                0 10px 20px rgba(45, 206, 137, .10);
-        }
-
+        /* DEFAULT BORDER */
         .stats-card::before {
             content: '';
             position: absolute;
@@ -123,76 +133,100 @@
             left: 0;
             width: 6px;
             height: 100%;
-
             background: linear-gradient(to bottom,
                     var(--primary-green),
                     var(--secondary-green));
         }
 
+        /* TOTAL SISWA */
+        .border-students::before {
+            background: linear-gradient(to bottom,
+                    #3b82f6,
+                    #60a5fa);
+        }
+
+        /* KELAS & JURUSAN */
+        .border-class::before {
+            background: linear-gradient(to bottom,
+                    #fb923c,
+                    #facc15);
+        }
+
+        /* PEMASUKAN */
+        .border-income::before {
+            background: linear-gradient(to bottom,
+                    #16a34a,
+                    #4ade80);
+        }
+
+        /* PENGELUARAN */
+        .border-expense::before {
+            background: linear-gradient(to bottom,
+                    #ef4444,
+                    #f87171);
+        }
+
         /* ======================================================
-        ICON
-    ====================================================== */
+            ICON
+        ====================================================== */
 
         .stats-icon {
-            width: 58px;
-            height: 58px;
+            width: 64px;
+            height: 64px;
+
+            border-radius: 50%;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            border-radius: 18px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
 
-            /* BAYANGAN ICON */
+            flex-shrink: 0;
+
             box-shadow:
                 0 10px 20px rgba(0, 0, 0, .10),
-                inset 0 1px 1px rgba(255, 255, 255, .12);
-        }
-
-        .stats-title {
-            font-size: .78rem;
-            font-weight: 700;
-
-            color: var(--muted-text);
-        }
-
-        .stats-value {
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--dark-text);
+                inset 0 1px 1px rgba(255, 255, 255, .15);
         }
 
         /* ======================================================
-        ACTION BUTTON
-    ====================================================== */
+            QUICK ACTION
+        ====================================================== */
 
         .quick-action {
-            border-radius: 22px;
+            border-radius: 24px;
             transition: .3s ease;
 
             background: #fff;
             border: 1px solid #edf2f7;
 
-            /* BAYANGAN */
+            position: relative;
+            overflow: hidden;
+
             box-shadow:
                 0 10px 25px rgba(0, 0, 0, .05),
                 0 3px 8px rgba(0, 0, 0, .03);
         }
 
+        .quick-action::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: rgba(45, 206, 137, .05);
+            border-radius: 50%;
+            top: -70px;
+            right: -70px;
+        }
+
         .quick-action:hover {
-            transform: translateY(-5px) scale(1.02);
+            transform: translateY(-5px);
 
             background: linear-gradient(135deg,
                     var(--primary-green),
                     var(--secondary-green));
 
             color: #fff !important;
-
-            box-shadow:
-                0 20px 35px rgba(45, 206, 137, .22),
-                0 8px 18px rgba(0, 0, 0, .08);
         }
 
         .quick-action:hover i,
@@ -201,8 +235,8 @@
         }
 
         /* ======================================================
-        TABLE
-    ====================================================== */
+            TABLE
+        ====================================================== */
 
         .custom-table thead {
             background: #f9fafb;
@@ -210,21 +244,23 @@
 
         .custom-table th {
             border-top: none !important;
-            font-size: .75rem;
+            font-size: .78rem;
             letter-spacing: .5px;
             text-transform: uppercase;
             color: var(--muted-text);
             font-weight: 700;
+            padding: 18px 22px;
         }
 
         .custom-table td {
             vertical-align: middle;
-            border-color: #f1f5f9;
+            border-color: #edf2f7;
+            padding: 20px 22px;
         }
 
         /* ======================================================
-        PAYMENT ICON
-    ====================================================== */
+            PAYMENT ICON
+        ====================================================== */
 
         .payment-icon {
             width: 42px;
@@ -242,14 +278,32 @@
 
             color: #fff;
 
-            /* BAYANGAN */
+            margin-right: 16px;
+
+            flex-shrink: 0;
+
             box-shadow:
                 0 8px 18px rgba(45, 206, 137, .22);
         }
 
         /* ======================================================
-        CHART
-    ====================================================== */
+            SECTION
+        ====================================================== */
+
+        .section-title {
+            font-weight: 800;
+            color: var(--dark-text);
+        }
+
+        .view-btn {
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-size: .78rem;
+            letter-spacing: .5px;
+
+            box-shadow:
+                0 8px 18px rgba(45, 206, 137, .18);
+        }
 
         .chart-container {
             position: relative;
@@ -257,51 +311,36 @@
         }
 
         /* ======================================================
-        SECTION TITLE
-    ====================================================== */
+            RESPONSIVE
+        ====================================================== */
 
-        .section-title {
-            font-weight: 700;
-            color: var(--dark-text);
+        @media(max-width:1200px) {
+
+            .stats-nominal {
+                font-size: 1.5rem;
+            }
         }
-
-        /* ======================================================
-        BUTTON
-    ====================================================== */
-
-        .view-btn {
-            border-radius: 50px;
-            padding: 8px 18px;
-            font-size: .72rem;
-            letter-spacing: .5px;
-
-            box-shadow:
-                0 8px 18px rgba(45, 206, 137, .18);
-        }
-
-        .stats-nominal{
-    font-size: 1.45rem;
-    font-weight: 800;
-    line-height: 1;
-}
-
-        /* ======================================================
-        RESPONSIVE
-    ====================================================== */
 
         @media(max-width:768px) {
 
-            .stats-value {
-                font-size: 1.3rem;
+            .dashboard-header {
+                margin: 10px;
+                padding: 35px 15px 120px;
+                border-radius: 24px;
             }
 
-            .dashboard-header {
-                border-radius: 28px;
+            .stats-card {
+                min-height: 140px;
+            }
 
-                margin: 10px;
+            .stats-value,
+            .stats-nominal {
+                font-size: 1.4rem;
+            }
 
-                padding:
-                    35px 15px 120px;
+            .stats-icon {
+                width: 56px;
+                height: 56px;
             }
         }
     </style>
@@ -327,9 +366,9 @@
                 <div class="row mt-4">
 
                     <!-- TOTAL SISWA -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card dashboard-card stats-card shadow-sm">
-                            <div class="card-body">
+                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
+                        <div class="card dashboard-card stats-card border-students w-100">
+                            <div class="card-body w-100">
 
                                 <div class="d-flex justify-content-between align-items-center">
 
@@ -343,7 +382,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="stats-icon bg-success text-white">
+                                    <div class="stats-icon bg-primary text-white">
                                         <i class="fas fa-user-graduate"></i>
                                     </div>
 
@@ -354,9 +393,9 @@
                     </div>
 
                     <!-- KELAS -->
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card dashboard-card stats-card shadow-sm">
-                            <div class="card-body">
+                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
+                        <div class="card dashboard-card stats-card border-class w-100">
+                            <div class="card-body w-100">
 
                                 <div class="d-flex justify-content-between align-items-center">
 
@@ -385,11 +424,10 @@
                     </div>
 
                     <!-- PEMASUKAN -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
+                        <div class="card dashboard-card stats-card border-income w-100">
 
-                        <div class="card dashboard-card stats-card">
-
-                            <div class="card-body">
+                            <div class="card-body w-100">
 
                                 <div class="d-flex justify-content-between align-items-center">
 
@@ -414,15 +452,13 @@
                             </div>
 
                         </div>
-
                     </div>
 
                     <!-- PENGELUARAN -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
+                        <div class="card dashboard-card stats-card border-expense w-100">
 
-                        <div class="card dashboard-card stats-card">
-
-                            <div class="card-body">
+                            <div class="card-body w-100">
 
                                 <div class="d-flex justify-content-between align-items-center">
 
@@ -447,298 +483,323 @@
                             </div>
 
                         </div>
-
                     </div>
 
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="container-fluid mt--6">
-
-        <div class="row">
-
-            <!-- CHART -->
-            <div class="col-xl-8 mb-4">
-                <div class="card dashboard-card shadow-sm h-100">
-
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h3 class="section-title mb-0">
-                            Statistik Keuangan 6 Bulan Terakhir
-                        </h3>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="financeChart"></canvas>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- QUICK ACTION -->
-            <div class="col-xl-4 mb-4">
-                <div class="card dashboard-card shadow-sm h-100">
-
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h3 class="section-title mb-0">
-                            Aksi Cepat
-                        </h3>
-                    </div>
-
-                    <div class="card-body">
+                    <!-- CONTENT -->
+                    <div class="container-fluid mt--6">
 
                         <div class="row">
 
-                            <div class="col-6 mb-4">
-                                <a href="{{ route('admin.students.create') }}"
-                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-primary text-decoration-none h-100">
+                            <!-- CHART -->
+                            <div class="col-xl-8 mb-4">
+                                <div class="card dashboard-card h-100">
 
-                                    <i class="fas fa-user-plus fa-2x mb-3"></i>
+                                    <div class="card-header bg-white border-0 pt-4">
+                                        <h3 class="section-title mb-0">
+                                            Statistik Keuangan 6 Bulan Terakhir
+                                        </h3>
+                                    </div>
 
-                                    <span class="font-weight-bold text-center">
-                                        Siswa Baru
-                                    </span>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="financeChart"></canvas>
+                                        </div>
+                                    </div>
 
-                                </a>
+                                </div>
                             </div>
 
-                            <div class="col-6 mb-4">
-                                <a href="{{ route('admin.transactions.create') }}"
-                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-success text-decoration-none h-100">
+                            <!-- QUICK ACTION -->
+                            <div class="col-xl-4 mb-4">
+                                <div class="card dashboard-card h-100">
 
-                                    <i class="fas fa-wallet fa-2x mb-3"></i>
+                                    <div class="card-header bg-white border-0 pt-4">
+                                        <h3 class="section-title mb-0">
+                                            Aksi Cepat
+                                        </h3>
+                                    </div>
 
-                                    <span class="font-weight-bold text-center">
-                                        Transaksi
-                                    </span>
+                                    <div class="card-body">
 
-                                </a>
-                            </div>
+                                        <div class="row">
 
-                            <div class="col-6 mb-4">
-                                <a href="{{ route('admin.reports.payment') }}"
-                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-info text-decoration-none h-100">
+                                            <div class="col-6 mb-4">
+                                                <a href="{{ route('admin.students.create') }}"
+                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-primary text-decoration-none h-100">
 
-                                    <i class="fas fa-chart-line fa-2x mb-3"></i>
+                                                    <i class="fas fa-user-plus fa-2x mb-3"></i>
 
-                                    <span class="font-weight-bold text-center">
-                                        Laporan
-                                    </span>
+                                                    <span class="font-weight-bold text-center">
+                                                        Siswa Baru
+                                                    </span>
 
-                                </a>
-                            </div>
+                                                </a>
+                                            </div>
 
-                            <div class="col-6 mb-4">
-                                <a href="{{ route('admin.spp.index') }}"
-                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 shadow-sm text-warning text-decoration-none h-100">
+                                            <div class="col-6 mb-4">
+                                                <a href="{{ route('admin.transactions.create') }}"
+                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-success text-decoration-none h-100">
 
-                                    <i class="fas fa-file-invoice-dollar fa-2x mb-3"></i>
+                                                    <i class="fas fa-wallet fa-2x mb-3"></i>
 
-                                    <span class="font-weight-bold text-center">
-                                        Tagihan SPP
-                                    </span>
+                                                    <span class="font-weight-bold text-center">
+                                                        Transaksi
+                                                    </span>
 
-                                </a>
+                                                </a>
+                                            </div>
+
+                                            <div class="col-6 mb-4">
+                                                <a href="{{ route('admin.reports.payment') }}"
+                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-info text-decoration-none h-100">
+
+                                                    <i class="fas fa-chart-line fa-2x mb-3"></i>
+
+                                                    <span class="font-weight-bold text-center">
+                                                        Laporan
+                                                    </span>
+
+                                                </a>
+                                            </div>
+
+                                            <div class="col-6 mb-4">
+                                                <a href="{{ route('admin.spp.index') }}"
+                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-warning text-decoration-none h-100">
+
+                                                    <i class="fas fa-file-invoice-dollar fa-2x mb-3"></i>
+
+                                                    <span class="font-weight-bold text-center">
+                                                        Tagihan SPP
+                                                    </span>
+
+                                                </a>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             </div>
 
                         </div>
 
+                        <!-- TABLE -->
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div class="card dashboard-card">
+
+                                    <div
+                                        class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+
+                                        <h3 class="section-title mb-0">
+                                            Histori Pembayaran Terbaru
+                                        </h3>
+
+                                        <a href="{{ route('admin.spp.recap') }}" class="btn btn-success view-btn">
+                                            Lihat Semua
+                                        </a>
+
+                                    </div>
+
+                                    <div class="table-responsive">
+
+                                        <table class="table custom-table align-items-center mb-0 text-center">
+
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Tanggal</th>
+                                                    <th class="text-center">No KK</th>
+                                                    <th class="text-center">Metode</th>
+                                                    <th class="text-center">Nominal</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                                @forelse($recentPayments as $pay)
+                                                    <tr>
+
+                                                        <!-- TANGGAL -->
+                                                        <td class="align-middle text-center">
+                                                            <div class="d-flex align-items-center justify-content-center">
+
+                                                                <div class="payment-icon me-3">
+                                                                    <i class="fas fa-calendar-alt"></i>
+                                                                </div>
+
+                                                                <div class="font-weight-bold">
+                                                                    {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+
+                                                        <!-- NO KK -->
+                                                        <td class="align-middle text-center text-muted font-weight-bold">
+                                                            {{ $pay->family_card_number }}
+                                                        </td>
+
+                                                        <!-- METODE -->
+                                                        <td class="align-middle text-center">
+
+                                                            @php
+                                                                $method = strtolower(
+                                                                    trim($pay->payment_method ?? 'cash'),
+                                                                );
+                                                            @endphp
+
+                                                            @if ($method == 'qris')
+                                                                <span class="badge bg-info text-white px-3 py-2">
+                                                                    QRIS
+                                                                </span>
+                                                            @elseif($method == 'cash')
+                                                                <span class="badge bg-success text-white px-3 py-2">
+                                                                    CASH
+                                                                </span>
+                                                            @elseif($method == 'transfer')
+                                                                <span class="badge bg-primary text-white px-3 py-2">
+                                                                    TRANSFER
+                                                                </span>
+                                                            @else
+                                                                <span class="badge bg-secondary text-white px-3 py-2">
+                                                                    {{ strtoupper($pay->payment_method ?? 'CASH') }}
+                                                                </span>
+                                                            @endif
+
+                                                        </td>
+
+                                                        <!-- NOMINAL -->
+                                                        <td class="align-middle text-center font-weight-bold text-success">
+                                                            + Rp {{ number_format($pay->amount, 0, ',', '.') }}
+                                                        </td>
+
+                                                    </tr>
+
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4" class="text-center py-5 text-muted">
+                                                            <i class="fas fa-receipt fa-2x mb-3"></i>
+                                                            <br>
+                                                            Belum ada pembayaran terbaru
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
-            </div>
+                    <!-- CHART -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
 
-        <!-- TABLE -->
-        <div class="row">
-            <div class="col-12">
+                            const ctx = document.getElementById('financeChart');
 
-                <div class="card dashboard-card shadow-sm">
+                            new Chart(ctx, {
 
-                    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                                type: 'bar',
 
-                        <h3 class="section-title mb-0">
-                            Histori Pembayaran Terbaru
-                        </h3>
+                                data: {
+                                    labels: @js($chartLabels),
 
-                        <a href="{{ route('admin.spp.recap') }}" class="btn btn-success view-btn">
-                            Lihat Semua
-                        </a>
+                                    datasets: [{
+                                            label: 'Pemasukan',
+                                            data: @js($chartIncome),
+                                            backgroundColor: 'rgba(45, 206, 137, .8)',
+                                            borderRadius: 12,
+                                            borderSkipped: false,
+                                        },
 
-                    </div>
+                                        {
+                                            label: 'Pengeluaran',
+                                            data: @js($chartExpense),
+                                            backgroundColor: 'rgba(245, 54, 92, .8)',
+                                            borderRadius: 12,
+                                            borderSkipped: false,
+                                        }
+                                    ]
+                                },
 
-                    <div class="table-responsive">
+                                options: {
 
-                        <table class="table custom-table align-items-center">
+                                    responsive: true,
+                                    maintainAspectRatio: false,
 
-                            <thead>
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>No KK</th>
-                                    <th>Metode</th>
-                                    <th>Nominal</th>
-                                </tr>
-                            </thead>
+                                    interaction: {
+                                        mode: 'index',
+                                        intersect: false
+                                    },
 
-                            <tbody>
+                                    plugins: {
 
-                                @forelse($recentPayments as $pay)
-                                    <tr>
+                                        legend: {
+                                            position: 'top',
+                                            labels: {
+                                                usePointStyle: true,
+                                                padding: 20
+                                            }
+                                        },
 
-                                        <td>
-                                            <div class="d-flex align-items-center">
+                                        tooltip: {
+                                            backgroundColor: '#111827',
+                                            padding: 14,
+                                            cornerRadius: 12,
 
-                                                <div class="payment-icon mr-3">
-                                                    <i class="fas fa-calendar-alt"></i>
-                                                </div>
+                                            callbacks: {
+                                                label: function(context) {
+                                                    return context.dataset.label + ': Rp ' +
+                                                        context.parsed.y.toLocaleString('id-ID');
+                                                }
+                                            }
+                                        }
+                                    },
 
-                                                <div class="font-weight-bold">
-                                                    {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
-                                                </div>
+                                    scales: {
 
-                                            </div>
-                                        </td>
+                                        x: {
+                                            grid: {
+                                                display: false
+                                            }
+                                        },
 
-                                        <td class="text-muted font-weight-bold">
-                                            {{ $pay->family_card_number }}
-                                        </td>
+                                        y: {
+                                            beginAtZero: true,
 
-                                        <td>
-                                            <span class="badge badge-success px-3 py-2">
-                                                {{ $pay->payment_method }}
-                                            </span>
-                                        </td>
+                                            ticks: {
+                                                callback: function(value) {
 
-                                        <td class="font-weight-bold text-success">
-                                            + Rp {{ number_format($pay->amount, 0, ',', '.') }}
-                                        </td>
+                                                    if (value >= 1000000) {
+                                                        return 'Rp ' + (value / 1000000) + ' Jt';
+                                                    }
 
-                                    </tr>
+                                                    if (value >= 1000) {
+                                                        return 'Rp ' + (value / 1000) + ' Rb';
+                                                    }
 
-                                @empty
-                                    <x-empty-state />
-                                @endforelse
+                                                    return 'Rp ' + value;
+                                                }
+                                            },
 
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- CHART -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const ctx = document.getElementById('financeChart');
-
-            const financeChart = new Chart(ctx, {
-
-                type: 'bar',
-
-                data: {
-                    labels: @js($chartLabels),
-
-                    datasets: [{
-                            label: 'Pemasukan',
-                            data: @js($chartIncome),
-                            backgroundColor: 'rgba(45, 206, 137, .8)',
-                            borderRadius: 12,
-                            borderSkipped: false,
-                        },
-
-                        {
-                            label: 'Pengeluaran',
-                            data: @js($chartExpense),
-                            backgroundColor: 'rgba(245, 54, 92, .8)',
-                            borderRadius: 12,
-                            borderSkipped: false,
-                        }
-                    ]
-                },
-
-                options: {
-
-                    responsive: true,
-                    maintainAspectRatio: false,
-
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
-
-                    plugins: {
-
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20
-                            }
-                        },
-
-                        tooltip: {
-                            backgroundColor: '#111827',
-                            padding: 14,
-                            cornerRadius: 12,
-
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': Rp ' +
-                                        context.parsed.y.toLocaleString('id-ID');
-                                }
-                            }
-                        }
-                    },
-
-                    scales: {
-
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        },
-
-                        y: {
-                            beginAtZero: true,
-
-                            ticks: {
-                                callback: function(value) {
-
-                                    if (value >= 1000000) {
-                                        return 'Rp ' + (value / 1000000) + ' Jt';
+                                            grid: {
+                                                borderDash: [5, 5]
+                                            }
+                                        }
                                     }
-
-                                    if (value >= 1000) {
-                                        return 'Rp ' + (value / 1000) + ' Rb';
-                                    }
-
-                                    return 'Rp ' + value;
                                 }
-                            },
+                            });
 
-                            grid: {
-                                borderDash: [5, 5]
-                            }
-                        }
-                    }
-                }
-            });
-
-        });
-    </script>
-@endsection
+                        });
+                    </script>
+                @endsection

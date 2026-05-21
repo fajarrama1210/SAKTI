@@ -25,6 +25,7 @@
         .pagination {
             gap: 6px;
         }
+
         .page-item .page-link {
             border: none !important;
             border-radius: 8px !important;
@@ -34,28 +35,32 @@
             transition: all 0.3s ease;
             background-color: #f8f9fa;
         }
+
         .page-item .page-link:hover {
             background-color: #1a8a5c;
             color: #ffffff;
             box-shadow: 0 4px 6px rgba(26, 138, 92, 0.2);
             transform: translateY(-1px);
         }
+
         .page-item.active .page-link {
             background-color: #1a8a5c;
             color: #ffffff;
             box-shadow: 0 4px 6px rgba(26, 138, 92, 0.3);
         }
+
         .page-item.disabled .page-link {
-            color: #ced4da;
+            color: #0080ff;
             background-color: transparent;
             pointer-events: none;
         }
-        
+
         #navbarUserDropdown {
             display: none !important;
             opacity: 0 !important;
             animation: none !important;
         }
+
         #navbarUserDropdown.open {
             display: block !important;
             opacity: 1 !important;
@@ -74,7 +79,8 @@
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
-    <div class="min-height-300 position-absolute w-100" style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);"></div>
+    <div class="min-height-300 position-absolute w-100"
+        style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);"></div>
 
     @include('_admin.layouts.sidebar')
 
@@ -85,20 +91,34 @@
 
             @yield('content')
 
-            <footer class="footer pt-3">
+            <footer class="footer pt-4 pb-4 mt-150">
                 <div class="container-fluid">
-                    <div class="row align-items-center justify-content-lg-between">
-                        <div class="col-lg-6 mb-lg-0 mb-4">
-                            <div class="copyright text-center text-sm text-muted text-lg-start">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear())
-                                </script>, made with <i class="fa fa-heart"></i> by Bolo Tuhan.
-                            </div>
+
+                <div class="row align-items-center justify-content-lg-between">
+
+                    <div class="col-lg-6 mb-lg-0 mb-3">
+
+                        <div class="copyright text-center text-lg-start text-dark"
+                            style="font-size: .95rem; letter-spacing: .4px;">
+
+                            ©
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>
+
+                            made with
+                            <i class="fa fa-heart text-danger"></i>
+                            by <span class="font-weight text-dark">Bolo Tuhan</span>
+
                         </div>
+
                     </div>
+
                 </div>
-            </footer>
+
+        </div>
+
+        </footer>
         </div>
     </main>
 
@@ -112,10 +132,10 @@
             const OriginalPS = window.PerfectScrollbar;
             window.PerfectScrollbar = function(element, options) {
                 if (element && (
-                    element.classList.contains('sidenav') || 
-                    element.classList.contains('navbar-collapse') || 
-                    element.id === 'sidenav-collapse-main'
-                )) {
+                        element.classList.contains('sidenav') ||
+                        element.classList.contains('navbar-collapse') ||
+                        element.id === 'sidenav-collapse-main'
+                    )) {
                     return {
                         update: function() {},
                         destroy: function() {}
@@ -133,9 +153,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             // ─── SweetAlert: Success Toast ───────────────────────────
-            @if(session('success'))
+            @if (session('success'))
                 const Toast = Swal.mixin({
                     toast: true,
                     position: "top-end",
@@ -154,7 +174,7 @@
             @endif
 
             // ─── SweetAlert: Error Modal ─────────────────────────────
-            @if(session('error'))
+            @if (session('error'))
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -190,14 +210,14 @@
             var menu = document.getElementById('navbarUserDropdown');
 
             if (trigger && menu) {
-                trigger.addEventListener('click', function (e) {
+                trigger.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     menu.classList.toggle('open');
                     trigger.setAttribute('aria-expanded', menu.classList.contains('open'));
                 });
 
-                document.addEventListener('click', function (e) {
+                document.addEventListener('click', function(e) {
                     if (!trigger.contains(e.target) && !menu.contains(e.target)) {
                         menu.classList.remove('open');
                         trigger.setAttribute('aria-expanded', 'false');

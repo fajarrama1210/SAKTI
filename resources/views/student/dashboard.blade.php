@@ -18,8 +18,64 @@
         }
 
         /* =========================================
-                        WELCOME CARD
-                    ========================================= */
+                    BACKGROUND HIJAU HEADER
+            ========================================= */
+
+        .student-dashboard-bg {
+            position: relative;
+
+            background: linear-gradient(135deg,
+                    #07814e 0%,
+                    #2dce89 100%);
+
+            border-radius: 0 0 40px 40px;
+
+            padding: 30px 20px 30px;
+
+            margin-bottom: -60px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, .12),
+                0 8px 18px rgba(45, 206, 137, .20);
+        }
+
+        .student-dashboard-bg::before {
+            content: '';
+
+            position: absolute;
+
+            width: 320px;
+            height: 320px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, .08);
+
+            top: -120px;
+            right: -100px;
+        }
+
+        .student-dashboard-bg::after {
+            content: '';
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, .05);
+
+            bottom: -120px;
+            left: -80px;
+        }
+
+        /* =========================================
+                                    WELCOME CARD
+                                ========================================= */
 
         .welcome-card {
             border: none;
@@ -63,8 +119,8 @@
         }
 
         /* =========================================
-                        STATS SECTION
-                    ========================================= */
+                                    STATS SECTION
+                                ========================================= */
 
         .stats-wrapper {
             display: flex;
@@ -157,8 +213,8 @@
         }
 
         /* =========================================
-                        MAIN CARD
-                    ========================================= */
+                                    MAIN CARD
+                                ========================================= */
 
         .main-card {
             border: none;
@@ -172,8 +228,8 @@
         }
 
         /* =========================================
-                        QR CARD
-                    ========================================= */
+                                    QR CARD
+                                ========================================= */
 
         .qr-wrapper {
             background: #f8f9fa;
@@ -202,8 +258,8 @@
         }
 
         /* =========================================
-                        TABLE
-                    ========================================= */
+                                    TABLE
+                                ========================================= */
 
         .custom-table thead {
             background: #f9fafb;
@@ -227,8 +283,8 @@
         }
 
         /* =========================================
-                        BADGE
-                    ========================================= */
+                                    BADGE
+                                ========================================= */
 
         .student-badge {
             background: #fff;
@@ -245,8 +301,8 @@
         }
 
         /* =========================================
-                        RESPONSIVE
-                    ========================================= */
+                                    RESPONSIVE
+                                ========================================= */
 
         @media(max-width:768px) {
 
@@ -271,8 +327,8 @@
         }
 
         /* =========================================
-                    PATTERN / CORAK CARD
-                ========================================= */
+                                PATTERN / CORAK CARD
+                            ========================================= */
 
         .stats-card,
         .main-card,
@@ -331,8 +387,8 @@
         }
 
         /* =========================================
-                    CORAK TITIK-TITIK
-                ========================================= */
+                                CORAK TITIK-TITIK
+                            ========================================= */
 
         .pattern-dots {
             position: absolute;
@@ -354,8 +410,8 @@
         }
 
         /* =========================================
-                    GLOW EFFECT
-                ========================================= */
+                                GLOW EFFECT
+                            ========================================= */
 
         .glow-success {
             position: absolute;
@@ -390,8 +446,8 @@
         }
 
         /* =========================================
-                    HOVER LEBIH HIDUP
-                ========================================= */
+                                HOVER LEBIH HIDUP
+                            ========================================= */
 
         .stats-card:hover {
             transform: translateY(-8px) scale(1.01);
@@ -408,42 +464,66 @@
                 0 22px 40px rgba(0, 0, 0, .12),
                 0 10px 20px rgba(0, 0, 0, .06);
         }
+
+        .footer .copyright,
+        .footer .copyright a,
+        .footer .fa-heart,
+        .footer .text-muted {
+            color: #000000c1 !important;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 30px;
+        }
+
+        .footer {
+            margin-top: -30px !important;
+            margin-left: 30px;
+            position: relative;
+            z-index: 10;
+        }
     </style>
 
-    <div class="container-fluid py-4">
+    <div class="student-dashboard-bg">
 
-        <!-- =========================================
-                        HEADER
-                    ========================================= -->
+        <div class="container-fluid py-4">
 
-        <div class="row mb-4">
+            <!-- =========================================
+                                    HEADER
+                                ========================================= -->
 
-            <div class="col-lg-12">
+            <div class="row mb-4">
 
-                <div class="card welcome-card text-white">
+                <div class="col-lg-12">
 
-                    <div class="card-body p-4 position-relative">
+                    <div class="card welcome-card text-white">
 
-                        <div class="d-md-flex justify-content-between align-items-center">
+                        <div class="card-body p-4 position-relative">
 
-                            <div>
+                            <div class="d-md-flex justify-content-between align-items-center">
 
-                                <h2 class="font-weight-bold text-white mb-2">
-                                    Halo, {{ $student->name }} 👋
-                                </h2>
+                                <div>
 
-                                <p class="mb-0 text-white" style="opacity:.9;">
-                                    Selamat datang kembali di portal siswa SAKTI.
-                                    Di sini Anda dapat memantau pembayaran SPP dan jadwal pelajaran Anda.
-                                </p>
+                                    <h2 class="font-weight-bold text-white mb-2">
+                                        Halo, {{ $student->name }} 👋
+                                    </h2>
 
-                            </div>
+                                    <p class="mb-0 text-white" style="opacity:.9;">
+                                        Selamat datang kembali di portal siswa SAKTI.
+                                        Di sini Anda dapat memantau pembayaran SPP dan jadwal pelajaran Anda.
+                                    </p>
 
-                            <div class="mt-3 mt-md-0">
+                                </div>
 
-                                <span class="student-badge">
-                                    KELAS {{ $student->grade_level }} - {{ $student->classroom_name }}
-                                </span>
+                                <div class="mt-3 mt-md-0">
+
+                                    <span class="student-badge">
+                                        KELAS {{ $student->grade_level }} - {{ $student->classroom_name }}
+                                    </span>
+
+                                </div>
 
                             </div>
 
@@ -455,249 +535,156 @@
 
             </div>
 
-        </div>
+            <!-- =========================================
+                                    STATS CARD
+                                ========================================= -->
 
-        <!-- =========================================
-                        STATS CARD
-                    ========================================= -->
+            <div class="row stats-wrapper">
 
-        <div class="row stats-wrapper">
+                <!-- TOTAL TAGIHAN -->
+                <div class="col-xl-3 col-md-6 stats-col">
 
-            <!-- TOTAL TAGIHAN -->
-            <div class="col-xl-3 col-md-6 stats-col">
+                    <div class="card stats-card">
 
-                <div class="card stats-card">
+                        <div class="pattern-dots"></div>
+                        <div class="glow-success"></div>
 
-                    <div class="pattern-dots"></div>
-                    <div class="glow-success"></div>
-
-                    <div class="card-body p-4">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <div class="stats-title">
-                                    Total Bulan Tagihan
-                                </div>
-
-                                <div class="stats-value">
-                                    {{ $totalBillsCount }} Bulan
-                                </div>
-
-                                <div class="stats-sub text-muted">
-                                    Seluruh tagihan semester ini
-                                </div>
-
-                            </div>
-
-                            <div class="stats-icon bg-info">
-                                <i class="fas fa-file-invoice"></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- TUNGGAKAN -->
-            <div class="col-xl-3 col-md-6 stats-col">
-
-                <div class="card stats-card">
-                    <div class="glow-danger"></div>
-                    <div class="card-body p-4">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <div class="stats-title">
-                                    Total Tunggakan
-                                </div>
-
-                                <div class="stats-value text-danger">
-                                    Rp {{ number_format($totalOutstanding, 0, ',', '.') }}
-                                </div>
-
-                                <div class="stats-sub text-danger">
-                                    Harus segera dilunasi
-                                </div>
-
-                            </div>
-
-                            <div class="stats-icon bg-danger">
-                                <i class="fas fa-exclamation-circle"></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- TERBAYAR -->
-            <div class="col-xl-3 col-md-6 stats-col">
-
-                <div class="card stats-card">
-                    <div class="pattern-dots"></div>
-                    <div class="glow-success"></div>
-                    <div class="card-body p-4">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <div class="stats-title">
-                                    Total Terbayar
-                                </div>
-
-                                <div class="stats-value text-success">
-                                    Rp {{ number_format($totalPaid, 0, ',', '.') }}
-                                </div>
-
-                                <div class="stats-sub text-success">
-                                    Pembayaran yang sah
-                                </div>
-
-                            </div>
-
-                            <div class="stats-icon bg-success">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- JURUSAN -->
-            <div class="col-xl-3 col-md-6 stats-col">
-
-                <div class="card stats-card">
-                    <div class="pattern-dots"></div>
-                    <div class="glow-success"></div>
-                    <div class="card-body p-4">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <div class="stats-title">
-                                    Jurusan Anda
-                                </div>
-
-                                <div class="stats-value" style="font-size:1.25rem;">
-                                    {{ $student->major_name }}
-                                </div>
-
-                                <div class="stats-sub text-muted">
-                                    Program keahlian terdaftar
-                                </div>
-
-                            </div>
-
-                            <div class="stats-icon bg-warning">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- =========================================
-                        CONTENT
-                    ========================================= -->
-
-        <div class="row mt-2">
-
-            <!-- PROFILE -->
-            <div class="col-lg-4 mb-4">
-
-                <div class="card main-card h-100">
-
-                    <div class="card-header bg-transparent border-0 pt-4">
-
-                        <h5 class="font-weight-bold text-dark mb-0">
-                            Kartu Pelajar Digital
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body text-center">
-
-                        <div class="qr-wrapper mb-4">
-
-                            <div class="qr-box mx-auto">
-
-                                <i class="fas fa-qrcode fa-5x text-dark"></i>
-
-                                <span class="text-xs font-weight-bold text-muted mt-3">
-                                    {{ $student->qr_code }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <h4 class="font-weight-bold text-dark mb-1">
-                            {{ $student->name }}
-                        </h4>
-
-                        <p class="text-muted mb-4">
-                            NISN : {{ $student->nisn }}
-                        </p>
-
-                        <hr>
-
-                        <div class="text-left">
-
-                            <div class="d-flex justify-content-between mb-3">
-
-                                <span class="text-muted font-weight-bold text-sm">
-                                    Nomor KK
-                                </span>
-
-                                <span class="font-weight-bold text-dark text-sm">
-                                    {{ $student->family_card_number }}
-                                </span>
-
-                            </div>
-
-                            <div class="d-flex justify-content-between mb-3">
-
-                                <span class="text-muted font-weight-bold text-sm">
-                                    No. Identitas
-                                </span>
-
-                                <span class="font-weight-bold text-dark text-sm">
-                                    {{ $student->id_number ?? '-' }}
-                                </span>
-
-                            </div>
+                        <div class="card-body p-4">
 
                             <div class="d-flex justify-content-between">
 
-                                <span class="text-muted font-weight-bold text-sm">
-                                    Status
-                                </span>
+                                <div>
 
-                                <span class="badge badge-success px-3 py-2">
-                                    {{ $student->status }}
-                                </span>
+                                    <div class="stats-title">
+                                        Total Bulan Tagihan
+                                    </div>
+
+                                    <div class="stats-value">
+                                        {{ $totalBillsCount }} Bulan
+                                    </div>
+
+                                    <div class="stats-sub text-muted">
+                                        Seluruh tagihan semester ini
+                                    </div>
+
+                                </div>
+
+                                <div class="stats-icon bg-info">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TUNGGAKAN -->
+                <div class="col-xl-3 col-md-6 stats-col">
+
+                    <div class="card stats-card">
+                        <div class="glow-danger"></div>
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+
+                                    <div class="stats-title">
+                                        Total Tunggakan
+                                    </div>
+
+                                    <div class="stats-value text-danger">
+                                        Rp {{ number_format($totalOutstanding, 0, ',', '.') }}
+                                    </div>
+
+                                    <div class="stats-sub text-danger">
+                                        Harus segera dilunasi
+                                    </div>
+
+                                </div>
+
+                                <div class="stats-icon bg-danger">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TERBAYAR -->
+                <div class="col-xl-3 col-md-6 stats-col">
+
+                    <div class="card stats-card">
+                        <div class="pattern-dots"></div>
+                        <div class="glow-success"></div>
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+
+                                    <div class="stats-title">
+                                        Total Terbayar
+                                    </div>
+
+                                    <div class="stats-value text-success">
+                                        Rp {{ number_format($totalPaid, 0, ',', '.') }}
+                                    </div>
+
+                                    <div class="stats-sub text-success">
+                                        Pembayaran yang sah
+                                    </div>
+
+                                </div>
+
+                                <div class="stats-icon bg-success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- JURUSAN -->
+                <div class="col-xl-3 col-md-6 stats-col">
+
+                    <div class="card stats-card">
+                        <div class="pattern-dots"></div>
+                        <div class="glow-success"></div>
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+
+                                    <div class="stats-title">
+                                        Jurusan Anda
+                                    </div>
+
+                                    <div class="stats-value" style="font-size:1.25rem;">
+                                        {{ $student->major_name }}
+                                    </div>
+
+                                    <div class="stats-sub text-muted">
+                                        Program keahlian terdaftar
+                                    </div>
+
+                                </div>
+
+                                <div class="stats-icon bg-warning">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
 
                             </div>
 
@@ -709,99 +696,218 @@
 
             </div>
 
-            <!-- TABLE -->
-            <div class="col-lg-8 mb-4">
+            <!-- =========================================
+                                    CONTENT
+                                ========================================= -->
 
-                <div class="card main-card h-100">
+            <div class="row mt-2">
 
-                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-4">
+                <!-- PROFILE -->
+                <div class="col-lg-4 mb-4">
 
-                        <h5 class="font-weight-bold text-dark mb-0">
-                            Histori Pembayaran Terkini
-                        </h5>
+                    <div class="card main-card h-100">
 
-                        <a href="{{ route('student.bills') }}" class="text-success font-weight-bold text-sm">
-                            Semua Tagihan →
-                        </a>
+                        <div class="card-header bg-transparent border-0 pt-4">
+
+                            <h5 class="font-weight-bold text-dark mb-0">
+                                Kartu Pelajar Digital
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body text-center">
+
+                            <div class="qr-wrapper mb-4">
+
+                                <div class="qr-box mx-auto">
+
+                                    <i class="fas fa-qrcode fa-5x text-dark"></i>
+
+                                    <span class="text-xs font-weight-bold text-muted mt-3">
+                                        {{ $student->qr_code }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <h4 class="font-weight-bold text-dark mb-1">
+                                {{ $student->name }}
+                            </h4>
+
+                            <p class="text-muted mb-4">
+                                NISN : {{ $student->nisn }}
+                            </p>
+
+                            <hr>
+
+                            <div class="text-left">
+
+                                <div class="d-flex justify-content-between mb-3">
+
+                                    <span class="text-muted font-weight-bold text-sm">
+                                        Nomor KK
+                                    </span>
+
+                                    <span class="font-weight-bold text-dark text-sm">
+                                        {{ $student->family_card_number }}
+                                    </span>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-3">
+
+                                    <span class="text-muted font-weight-bold text-sm">
+                                        No. Identitas
+                                    </span>
+
+                                    <span class="font-weight-bold text-dark text-sm">
+                                        {{ $student->id_number ?? '-' }}
+                                    </span>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+
+                                    <span class="text-muted font-weight-bold text-sm">
+                                        Status
+                                    </span>
+
+                                    <span class="badge badge-success px-3 py-2">
+                                        {{ $student->status }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
-                    <div class="card-body">
+                </div>
 
-                        <div class="table-responsive">
+                <!-- TABLE -->
+                <div class="col-lg-8 mb-4">
 
-                            <table class="table custom-table align-items-center mb-0">
+                    <div class="card main-card h-100">
 
-                                <thead>
+                        <div
+                            class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-4">
 
-                                    <tr>
-                                        <th>Periode Tagihan</th>
-                                        <th>Tanggal Bayar</th>
-                                        <th>Metode</th>
-                                        <th>Jumlah</th>
-                                        <th>Referensi</th>
-                                    </tr>
+                            <h5 class="font-weight-bold text-dark mb-0">
+                                Histori Pembayaran Terkini
+                            </h5>
 
-                                </thead>
+                            <a href="{{ route('student.bills') }}" class="text-success font-weight-bold text-sm">
+                                Semua Tagihan →
+                            </a>
 
-                                <tbody>
+                        </div>
 
-                                    @forelse($recentPayments as $payment)
-                                        <tr>
+                        <div class="card-body">
 
-                                            <td>
-                                                <span class="font-weight-bold text-dark text-sm">
-                                                    {{ \Carbon\Carbon::create()->month($payment->month)->translatedFormat('F') }}
-                                                    {{ $payment->year }}
-                                                </span>
-                                            </td>
+                            <div class="table-responsive">
 
-                                            <td>
-                                                <span class="text-muted text-sm">
-                                                    {{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d M Y H:i') }}
-                                                </span>
-                                            </td>
+                                <table class="table custom-table align-items-center mb-0">
 
-                                            <td>
-                                                <span class="badge badge-light px-3 py-2">
-                                                    {{ $payment->payment_method }}
-                                                </span>
-                                            </td>
+                                    <thead>
 
-                                            <td>
-                                                <span class="font-weight-bold text-success text-sm">
-                                                    Rp {{ number_format($payment->amount, 0, ',', '.') }}
-                                                </span>
-                                            </td>
+                                        <thead>
 
-                                            <td>
-                                                <span class="text-muted font-weight-bold text-sm">
-                                                    {{ $payment->reference_number ?? '-' }}
-                                                </span>
-                                            </td>
+                                            <tr>
+                                                <th class="text-center">Periode Tagihan</th>
+                                                <th class="text-center">Tanggal Bayar</th>
+                                                <th class="text-center">Metode</th>
+                                                <th class="text-center">Jumlah</th>
+                                                <th class="text-center">Referensi</th>
+                                            </tr>
 
-                                        </tr>
+                                        </thead>
 
-                                    @empty
+                                    </thead>
 
-                                        <tr>
+                                    <tbody>
 
-                                            <td colspan="5" class="text-center py-5">
+                                        @forelse($recentPayments as $payment)
+                                            <tr>
 
-                                                <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                                                <td class="text-center">
+                                                    <span class="font-weight-bold text-dark text-sm">
+                                                        {{ \Carbon\Carbon::create()->month($payment->month)->translatedFormat('F') }}
+                                                        {{ $payment->year }}
+                                                    </span>
+                                                </td>
 
-                                                <p class="text-muted mb-0">
-                                                    Belum ada riwayat pembayaran yang tercatat.
-                                                </p>
+                                                <td class="text-center">
+                                                    <span class="text-muted text-sm">
+                                                        {{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d M Y H:i') }}
+                                                    </span>
+                                                </td>
 
-                                            </td>
+                                                <td class="align-middle text-center">
 
-                                        </tr>
-                                    @endforelse
+                                                    @php
+                                                        $method = strtolower(trim($pay->payment_method ?? 'cash'));
+                                                    @endphp
 
-                                </tbody>
+                                                    @if ($method == 'qris')
+                                                        <span class="badge bg-info text-white px-3 py-2">
+                                                            QRIS
+                                                        </span>
+                                                    @elseif($method == 'cash')
+                                                        <span class="badge bg-success text-white px-3 py-2">
+                                                            CASH
+                                                        </span>
+                                                    @elseif($method == 'transfer')
+                                                        <span class="badge bg-primary text-white px-3 py-2">
+                                                            TRANSFER
+                                                        </span>
+                                                    @else
+                                                        <span class="badge bg-secondary text-white px-3 py-2">
+                                                            {{ strtoupper($pay->payment_method ?? 'CASH') }}
+                                                        </span>
+                                                    @endif
 
-                            </table>
+                                                </td>
+
+
+                                                <td class="text-center">
+                                                    <span class="font-weight-bold text-success text-sm">
+                                                        Rp {{ number_format($payment->amount, 0, ',', '.') }}
+                                                    </span>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <span class="text-muted font-weight-bold text-sm">
+                                                        {{ $payment->reference_number ?? '-' }}
+                                                    </span>
+                                                </td>
+
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+
+                                                <td colspan="5" class="text-center py-5">
+
+                                                    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+
+                                                    <p class="text-muted mb-0">
+                                                        Belum ada riwayat pembayaran yang tercatat.
+                                                    </p>
+
+                                                </td>
+
+                                            </tr>
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
 
                         </div>
 
@@ -812,6 +918,6 @@
             </div>
 
         </div>
-
+    </div>
     </div>
 @endsection
