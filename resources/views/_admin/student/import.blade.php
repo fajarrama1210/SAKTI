@@ -1,25 +1,29 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-xl-8 order-xl-1">
-            <div class="card">
+            <div class="card sakti-card">
                 <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0">Import Data Siswa Ekstraksi Excel</h3>
-                    <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-primary">Kembali</a>
+                    <h3 class="mb-0 text-sakti-green font-weight-bold">Import Data Siswa Ekstraksi Excel</h3>
+                    <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
                 </div>
 
                 <div class="card-body">
                     <div class="text-center mb-4 mt-2">
                         <i class="fas fa-file-excel fa-4x text-success mb-3"></i>
-                        <h4 class="text-uppercase text-muted">Unggah File Excel</h4>
+                        <h4 class="text-uppercase text-muted font-weight-bold">Unggah File Excel</h4>
                         <p class="text-sm text-muted mb-0">Silakan unggah file Excel Anda. Pastikan format kolom telah sesuai dengan template yang diunduh agar sistem dapat mengekstrak dan mendaftarkan akun siswa secara otomatis.</p>
                     </div>
 
                     @if (session('import_errors'))
                         <div class="alert alert-danger" role="alert">
-                            <h4 class="alert-heading text-white"><i class="fas fa-exclamation-triangle mr-2"></i> Ada Kesalahan pada File Excel!</h4>
+                            <h4 class="alert-heading text-white font-weight-bold"><i class="fas fa-exclamation-triangle mr-2"></i> Ada Kesalahan pada File Excel!</h4>
                             <p class="text-white text-sm mb-2">Beberapa data di baris berikut tidak dapat diimport. Silakan perbaiki file Excel Anda dan coba lagi.</p>
                             <hr class="my-2" style="border-color: rgba(255,255,255,.2)">
                             <ul class="mb-0 text-white text-sm pl-4" style="max-height: 200px; overflow-y: auto;">
@@ -44,7 +48,7 @@
                         </div>
 
                         <div class="text-center mt-4 mb-2">
-                            <button type="submit" class="btn btn-warning btn-lg w-100 mb-3"><i class="fas fa-upload mr-2"></i> Import Data Sekarang</button>
+                            <button type="submit" class="btn btn-sakti-primary btn-lg w-100 mb-3"><i class="fas fa-upload mr-2"></i> Import Data Sekarang</button>
                         </div>
                     </form>
                 </div>
@@ -52,11 +56,11 @@
         </div>
         
         <div class="col-xl-4 order-xl-2">
-            <div class="card card-profile">
+            <div class="card sakti-card card-profile">
                 <div class="card-body pt-0 pt-md-4">
                     <div class="text-center mt-md-5">
-                        <h5 class="h3">
-                            <i class="fas fa-info-circle text-primary"></i> Belum punya Templatenya?
+                        <h5 class="h3 text-sakti-green font-weight-bold">
+                            <i class="fas fa-info-circle"></i> Belum punya Templatenya?
                         </h5>
                         <div class="h5 font-weight-300 mt-3">
                             Unduh template Excel resmi untuk mempermudah pendaftaran data siswa Anda.

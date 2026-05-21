@@ -1,15 +1,19 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <h3 class="mb-0">Penempatan Siswa (Per Tahun Ajaran)</h3>
+        <div class="card sakti-card">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2 bg-white">
+                <h3 class="mb-0 text-sakti-green font-weight-bold">Penempatan Siswa (Per Tahun Ajaran)</h3>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm btn-info me-2">
                         <i class="fas fa-angle-double-up text-xs me-1"></i> Kenaikan Kelas Massal
                     </a>
-                    <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-success">
+                    <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-sakti-primary">
                         <i class="fas fa-graduation-cap text-xs me-1"></i> Kelulusan Massal
                     </a>
                 </div>
@@ -70,7 +74,7 @@
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Cari Siswa..."
                                     value="{{ $filters['search'] ?? '' }}">
-                                <button class="btn btn-primary mb-0" type="submit">
+                                <button class="btn btn-sakti-primary mb-0" type="submit">
                                     <i class="fas fa-search"></i> Cari
                                 </button>
                             </div>
@@ -84,12 +88,12 @@
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">No</th>
-                            <th class="text-center">NISN</th>
-                            <th class="text-center">Nama Siswa</th>
-                            <th class="text-center">Kelas</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Aksi</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">No</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">NISN</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Siswa</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -151,7 +155,7 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content text-start">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalPindahLabel{{ $row->id }}">Pindah Kelas</h5>
+                                                    <h5 class="modal-title font-weight-bold" id="modalPindahLabel{{ $row->id }}">Pindah Kelas</h5>
                                                     <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                                                         <i class="fas fa-times"></i>
                                                     </button>
@@ -187,7 +191,7 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content text-start">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalDOLabel{{ $row->id }}">Set Keluar / DO</h5>
+                                                    <h5 class="modal-title font-weight-bold" id="modalDOLabel{{ $row->id }}">Set Keluar / DO</h5>
                                                     <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                                                         <i class="fas fa-times"></i>
                                                     </button>

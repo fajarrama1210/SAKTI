@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Edit Data Siswa</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Edit Data Siswa</h3>
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -77,7 +81,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">Update Data Siswa</button>
+                    <button type="submit" class="btn btn-sakti-primary"><i class="fas fa-save mr-2"></i> Update Data Siswa</button>
                     <a href="{{ route('admin.students.index') }}" class="btn btn-secondary">Batal</a>
                 </div>
             </form>

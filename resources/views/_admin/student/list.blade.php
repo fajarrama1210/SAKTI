@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Daftar Siswa</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Daftar Siswa</h3>
             <div class="text-right">
                 <a href="{{ route('admin.students.import.view') }}" class="btn btn-sm btn-warning">
                     <i class="fas fa-file-import"></i> Import Excel
@@ -12,7 +16,7 @@
                 <a href="{{ route('admin.students.template') }}" class="btn btn-sm btn-success">
                     <i class="fas fa-download"></i> Template
                 </a>
-                <a href="{{ route('admin.students.create') }}" class="btn btn-sm btn-primary">
+                <a href="{{ route('admin.students.create') }}" class="btn btn-sm btn-sakti-primary">
                     <i class="fas fa-user-plus"></i> Tambah Manual
                 </a>
             </div>
@@ -23,14 +27,14 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col" class="text-center" style="width: 50px;">No</th>
-                        <th scope="col" class="text-center">NISN</th>
-                        <th scope="col" class="text-center">Nama Lengkap</th>
-                        <th scope="col" class="text-center">Kelas</th>
-                        <th scope="col" class="text-center">NIK</th>
-                        <th scope="col" class="text-center">No. KK</th>
-                        <th scope="col" class="text-center">Status</th>
-                        <th scope="col" class="text-center">Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">NISN</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Lengkap</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">NIK</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">No. KK</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

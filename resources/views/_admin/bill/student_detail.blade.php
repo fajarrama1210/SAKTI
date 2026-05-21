@@ -1,5 +1,8 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
 
 @section('content')
 <div class="container-fluid mt--6">
@@ -11,12 +14,12 @@
     <div class="row">
         {{-- Profil Siswa --}}
         <div class="col-xl-4 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card sakti-card shadow-sm h-100">
                 <div class="card-body text-center pt-5 pb-4">
-                    <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-4 text-white" style="width: 100px; height: 100px;">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-4 text-white" style="width: 100px; height: 100px; background: linear-gradient(135deg, #07814e 45%, #1e905f 100%); box-shadow: 0 4px 15px rgba(7, 129, 78, 0.3);">
                         <i class="fas fa-user-graduate fa-3x"></i>
                     </div>
-                    <h4 class="mb-1 text-dark">{{ $student->name }}</h4>
+                    <h4 class="mb-1 text-dark font-weight-bold">{{ $student->name }}</h4>
                     <p class="text-sm text-muted mb-3">
                         <span class="badge bg-secondary">NISN: {{ $student->nisn }}</span>
                     </p>
@@ -37,9 +40,9 @@
 
             {{-- Info Saudara SeKK --}}
             @if($siblings->count() > 1)
-            <div class="card shadow-sm border-0 mt-3">
+            <div class="card sakti-card shadow-sm border-0 mt-3">
                 <div class="card-header bg-white border-0 pb-0">
-                    <h5 class="mb-0"><i class="fas fa-users text-warning"></i> Saudara ({{ $siblings->count() }} orang se-KK)</h5>
+                    <h5 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-users text-warning"></i> Saudara ({{ $siblings->count() }} orang se-KK)</h5>
                     <div class="alert alert-warning mt-2 mb-0 py-2 px-3 border-0" style="font-size: 0.75rem;">
                         <i class="fas fa-info-circle"></i> Membayar salah satu = <b>Semua saudara otomatis lunas</b> di bulan yang sama.
                     </div>
@@ -66,20 +69,20 @@
 
         {{-- Kalender SPP --}}
         <div class="col-xl-8">
-            <div class="card shadow-sm h-100">
-                <div class="card-header pb-0 border-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-dark"><i class="fas fa-calendar-alt me-2"></i> Kalender SPP</h5>
-                    <span class="badge bg-primary">Tahun Ajaran: {{ $bills->first()->academic_year_name ?? '-' }}</span>
+            <div class="card sakti-card shadow-sm h-100">
+                <div class="card-header pb-0 border-0 d-flex justify-content-between align-items-center bg-white">
+                    <h5 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-calendar-alt me-2"></i> Kalender SPP</h5>
+                    <span class="badge btn-sakti-primary">Tahun Ajaran: {{ $bills->first()->academic_year_name ?? '-' }}</span>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="ps-4 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Periode Bulan</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nominal Tagihan</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                    <th class="ps-4 text-sakti-green text-xs font-weight-bold text-uppercase">Periode Bulan</th>
+                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Nominal Tagihan</th>
+                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Status</th>
+                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,7 +125,7 @@
                                             <span class="text-secondary text-sm font-weight-bold"><i class="fas fa-minus-circle me-1"></i> Cancelled</span>
                                         @else
                                         <button type="button" 
-                                                class="btn btn-sm btn-success btn-pay mb-0" 
+                                                class="btn btn-sm btn-sakti-primary btn-pay mb-0" 
                                                 data-id="{{ $bill->id }}" 
                                                 data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
                                                 data-amount="{{ number_format($bill->total_amount, 0, ',', '.') }}">

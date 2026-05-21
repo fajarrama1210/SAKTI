@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Kelulusan Massal Siswa</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Kelulusan Massal Siswa</h3>
             <a href="{{ route('admin.enrollments.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
         </div>
 
@@ -43,10 +47,10 @@
                                 <th style="width: 40px;">
                                     <input type="checkbox" id="checkAll">
                                 </th>
-                                <th>NISN</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Status Saat Ini</th>
+                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas</th>
+                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Status Saat Ini</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,7 +82,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary btn-block" onclick="return confirm('Apakah Anda yakin ingin meluluskan siswa terpilih?')">
+                    <button type="submit" class="btn btn-sakti-primary btn-block" onclick="return confirm('Apakah Anda yakin ingin meluluskan siswa terpilih?')">
                         Proses Kelulusan Siswa Terpilih
                     </button>
                 </div>

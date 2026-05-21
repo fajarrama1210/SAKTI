@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card shadow-sm">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h3 class="mb-0"><i class="fas fa-angle-double-up text-info"></i> Kenaikan Kelas Massal</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-angle-double-up text-sakti-green mr-2"></i> Kenaikan Kelas Massal</h3>
             <a href="{{ route('admin.enrollments.index') }}" class="btn btn-sm btn-secondary">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
@@ -30,7 +34,7 @@
 
             {{-- Filter Form --}}
             <div class="bg-light p-4 rounded-3 mb-4 shadow-sm border">
-                <h5 class="text-muted mb-3"><i class="fas fa-filter text-info"></i> Langkah 1: Tentukan Asal & Tujuan</h5>
+                <h5 class="text-muted mb-3 font-weight-bold"><i class="fas fa-filter text-info"></i> Langkah 1: Tentukan Asal & Tujuan</h5>
                 <form method="GET" action="{{ route('admin.enrollments.promotion') }}" class="row">
                     <div class="col-md-3">
                         <div class="form-group mb-3 mb-md-0">
@@ -76,7 +80,7 @@
 
                     <div class="col-md-3 d-flex align-items-end">
                         <div class="form-group w-100 mb-3 mb-md-0">
-                            <button type="submit" class="btn btn-primary w-100 mb-0" style="height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <button type="submit" class="btn btn-sakti-primary w-100 mb-0" style="height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                 <i class="fas fa-search"></i> Tampilkan Daftar Siswa
                             </button>
                         </div>
@@ -93,7 +97,7 @@
                         <input type="hidden" name="to_academic_year_id" value="{{ $toAY }}">
 
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h5 class="mb-0 text-dark"><i class="fas fa-users text-primary"></i> Langkah 2: Pilih Siswa & Kelas Baru</h5>
+                            <h5 class="mb-0 text-dark font-weight-bold"><i class="fas fa-users text-primary"></i> Langkah 2: Pilih Siswa & Kelas Baru</h5>
                             {{-- Premium bulk setup feature --}}
                             <div class="d-flex align-items-center gap-2 p-2 bg-light border rounded">
                                 <label class="mb-0 text-xs text-muted me-2 font-weight-bold text-nowrap"><i class="fas fa-bolt text-warning"></i> Set Semua Kelas Tujuan:</label>
@@ -117,10 +121,10 @@
                                                 <input type="checkbox" id="checkAll" class="form-check-input shadow-none cursor-pointer" checked>
                                             </div>
                                         </th>
-                                        <th>NISN</th>
-                                        <th>Nama Siswa</th>
-                                        <th>Kelas Asal</th>
-                                        <th>Kelas Tujuan Baru</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas Asal</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas Tujuan Baru</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,7 +156,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-info btn-block shadow-sm">
+                            <button type="submit" class="btn btn-sakti-primary btn-block shadow-sm">
                                 <i class="fas fa-angle-double-up me-1"></i> Proses Kenaikan Kelas Siswa Terpilih
                             </button>
                         </div>
@@ -160,14 +164,14 @@
                 @else
                     <div class="text-center py-5 bg-light rounded-3 mt-4 border border-dashed">
                         <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">Tidak ada siswa aktif yang ditemukan di kelas asal terpilih.</h4>
+                        <h4 class="text-muted font-weight-bold">Tidak ada siswa aktif yang ditemukan di kelas asal terpilih.</h4>
                         <p class="text-sm text-muted">Pastikan siswa sudah memiliki penempatan di tahun ajaran asal dan statusnya aktif.</p>
                     </div>
                 @endif
             @else
                 <div class="text-center py-6 bg-light rounded-3 mt-4 border border-dashed">
                     <i class="fas fa-angle-double-up fa-4x text-light mb-3"></i>
-                    <h4 class="text-muted">Tentukan Filter Tahun Ajaran & Kelas Asal</h4>
+                    <h4 class="text-muted font-weight-bold">Tentukan Filter Tahun Ajaran & Kelas Asal</h4>
                     <p class="text-sm text-muted">Gunakan form filter di atas untuk menampilkan daftar siswa yang akan dipromosikan.</p>
                 </div>
             @endif

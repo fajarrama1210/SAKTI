@@ -88,7 +88,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Total Uang Masuk</h5>
+                            <h5 class="card-title text-uppercase text-muted mb-0 font-weight-bold">Total Uang Masuk</h5>
                             <span class="h2 font-weight-bold text-success mb-0">Rp {{ number_format($totalIncome, 0, ',', '.') }}</span>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Total Uang Keluar</h5>
+                            <h5 class="card-title text-uppercase text-muted mb-0 font-weight-bold">Total Uang Keluar</h5>
                             <span class="h2 font-weight-bold text-danger mb-0">Rp {{ number_format($totalExpense, 0, ',', '.') }}</span>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Saldo</h5>
+                            <h5 class="card-title text-uppercase text-muted mb-0 font-weight-bold">Saldo</h5>
                             <span class="h2 font-weight-bold mb-0 {{ ($totalIncome - $totalExpense) >= 0 ? 'text-success' : 'text-danger' }}">
                                 Rp {{ number_format($totalIncome - $totalExpense, 0, ',', '.') }}
                             </span>

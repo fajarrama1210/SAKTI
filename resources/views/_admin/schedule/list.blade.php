@@ -1,26 +1,32 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">Jadwal Pelajaran</h3>
-                <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm btn-primary">Tambah Jadwal</a>
+        <div class="card sakti-card">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+                <h3 class="mb-0 text-sakti-green font-weight-bold">Jadwal Pelajaran</h3>
+                <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm btn-sakti-primary">
+                    <i class="fas fa-plus mr-2"></i> Tambah Jadwal
+                </a>
             </div>
 
             <div class="table-responsive">
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="text-center" style="width: 50px;">No</th>
-                            <th scope="col" class="text-center">Kelas</th>
-                            <th scope="col" class="text-center">Hari</th>
-                            <th scope="col" class="text-center">Jam</th>
-                            <th scope="col" class="text-center">Durasi</th>
-                            <th scope="col" class="text-center">Mata Pelajaran</th>
-                            <th scope="col" class="text-center">Ruang</th>
-                            <th scope="col" class="text-center">Guru Pengajar</th>
-                            <th scope="col" class="text-center">Aksi</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Hari</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jam</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Durasi</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Mata Pelajaran</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Ruang</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Guru Pengajar</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

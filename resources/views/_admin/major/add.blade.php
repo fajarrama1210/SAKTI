@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Tambah Jurusan</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Tambah Jurusan</h3>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.majors.store') }}" method="POST">
@@ -20,7 +24,7 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Simpan Data</button>
+                <button type="submit" class="btn btn-sakti-primary mt-3">Simpan Data</button>
                 <a href="{{ route('admin.majors.index') }}" class="btn btn-secondary mt-3">Batal</a>
             </form>
         </div>

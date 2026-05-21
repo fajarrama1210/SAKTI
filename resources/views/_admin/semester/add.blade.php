@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Tambah Semester</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Tambah Semester</h3>
         </div>
         <div class="card-body">
             @if(session('error'))
@@ -66,7 +70,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+                <button type="submit" class="btn btn-sakti-primary mt-3"><i class="fas fa-save mr-2"></i> Simpan</button>
                 <a href="{{ route('admin.semesters.index') }}" class="btn btn-secondary mt-3">Batal</a>
             </form>
         </div>

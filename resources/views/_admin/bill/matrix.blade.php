@@ -58,10 +58,10 @@
                     <table class="table align-items-center table-flush table-bordered">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">No</th>
-                                <th style="min-width: 250px">Nama Siswa</th>
+                                <th style="width: 60px" class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                                <th style="min-width: 250px" class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
                                 @foreach ($data['months'] as $m)
-                                    <th class="text-center text-sakti-green">
+                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">
                                         {{ \Carbon\Carbon::createFromDate($m['year'], $m['month'], 1)->translatedFormat('M Y') }}
                                     </th>
                                 @endforeach
@@ -116,7 +116,7 @@
                 <div class="card-footer bg-white py-4 px-4">
                     <div class="row align-items-center">
                         <div class="col-lg-9 mb-3 mb-lg-0">
-                            <h5 class="text-uppercase text-muted tracking-wide text-xs mb-3">Keterangan Status:</h5>
+                            <h5 class="text-uppercase text-muted tracking-wide text-xs mb-3 font-weight-bold">Keterangan Status:</h5>
                             <div class="legend-wrapper">
 
                                 <div class="legend-item">

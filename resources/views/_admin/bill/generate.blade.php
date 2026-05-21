@@ -1,17 +1,21 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
     <div class="row">
         <div class="col-xl-8 order-xl-1">
-            <div class="card">
-                <div class="card-header border-0">
+            <div class="card sakti-card">
+                <div class="card-header border-0 bg-white">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0"><i class="fas fa-magic"></i> Generate Tagihan Per Semester</h3>
+                            <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-magic"></i> Generate Tagihan Per Semester</h3>
                         </div>
                         <div class="col-4 text-right">
-                            <a href="{{ route('admin.bills.index') }}" class="btn btn-sm btn-primary">Kembali</a>
+                            <a href="{{ route('admin.bills.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
                         </div>
                     </div>
                 </div>
@@ -59,7 +63,7 @@
                             </div>
 
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-success" id="btn-generate">
+                                <button type="submit" class="btn btn-sakti-primary" id="btn-generate">
                                     <i class="fas fa-magic"></i> Generate Tagihan Sekarang
                                 </button>
                                 <a href="{{ route('admin.bills.index') }}" class="btn btn-secondary">Batal</a>
@@ -71,9 +75,9 @@
         </div>
 
         <div class="col-xl-4 order-xl-2">
-            <div class="card bg-gradient-warning shadow">
+            <div class="card sakti-card bg-gradient-warning shadow">
                 <div class="card-body text-white">
-                    <h5 class="text-white"><i class="fas fa-lightbulb"></i> Catatan Penting</h5>
+                    <h5 class="text-white font-weight-bold"><i class="fas fa-lightbulb"></i> Catatan Penting</h5>
                     <ul class="pl-3 mb-0 mt-2" style="font-size: 0.85rem;">
                         <li class="mb-2">Pastikan data <strong>Tarif Pembayaran</strong> sudah diatur untuk tahun ajaran semester yang dipilih.</li>
                         <li class="mb-2">Pastikan semua siswa aktif sudah terdaftar dengan <strong>Nomor KK yang benar</strong>.</li>

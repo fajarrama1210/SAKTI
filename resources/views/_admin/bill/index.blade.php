@@ -51,7 +51,7 @@
             <div class="card">
                 <div class="card-body text-center py-5">
                     <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
-                    <h4 class="text-muted">Tidak ditemukan siswa dengan kata kunci "{{ $search }}"</h4>
+                    <h4 class="text-muted font-weight-bold">Tidak ditemukan siswa dengan kata kunci "{{ $search }}"</h4>
                     <p class="text-muted">Coba cari dengan nama lain, NISN, atau Nomor KK.</p>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                         <div class="card-header pb-0 border-0">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <h5 class="mb-1 text-dark">{{ $student->name }}</h5>
+                                    <h5 class="mb-1 text-dark font-weight-bold">{{ $student->name }}</h5>
                                     <p class="text-sm text-muted mb-0">
                                         <span class="badge bg-secondary">NISN: {{ $student->nisn }}</span>
                                         <span class="mx-1">&bull;</span>

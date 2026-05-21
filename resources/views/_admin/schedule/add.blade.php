@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">Tambah Jadwal Pelajaran</h3>
+        <div class="card sakti-card">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+                <h3 class="mb-0 text-sakti-green font-weight-bold">Tambah Jadwal Pelajaran</h3>
                 <a href="{{ route('admin.schedules.index') }}" class="btn btn-sm btn-secondary">Batal / Kembali</a>
             </div>
             <div class="card-body">
@@ -27,18 +31,18 @@
                     </div>
 
                     <div class="border-top pt-3">
-                        <h4 class="mb-3 text-primary">Detail Jadwal Pelajaran</h4>
+                        <h4 class="mb-3 text-primary font-weight-bold">Detail Jadwal Pelajaran</h4>
                         <div class="table-responsive">
                             <table class="table align-items-center table-flush" id="schedules-table">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th scope="col" style="min-width: 140px;">Hari</th>
-                                        <th scope="col" style="min-width: 110px;">Jam Mulai</th>
-                                        <th scope="col" style="min-width: 90px;">Durasi (Jam)</th>
-                                        <th scope="col" style="min-width: 180px;">Mata Pelajaran</th>
-                                        <th scope="col" style="min-width: 160px;">Ruang</th>
-                                        <th scope="col" style="min-width: 180px;">Guru Pengajar</th>
-                                        <th scope="col" class="text-center" style="width: 50px;">Aksi</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 140px;">Hari</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 110px;">Jam Mulai</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 90px;">Durasi (Jam)</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 180px;">Mata Pelajaran</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 160px;">Ruang</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase" style="min-width: 180px;">Guru Pengajar</th>
+                                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="schedules-tbody">
@@ -90,7 +94,7 @@
                     </div>
 
                     <div class="mt-4 border-top pt-3">
-                        <button type="submit" class="btn btn-primary">Simpan Semua Jadwal</button>
+                        <button type="submit" class="btn btn-sakti-primary">Simpan Semua Jadwal</button>
                         <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>

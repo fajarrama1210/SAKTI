@@ -1,13 +1,17 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
     <div class="row justify-content-center">
         <div class="col-xl-8">
-            <div class="card shadow-sm border-0">
+            <div class="card sakti-card shadow-sm border-0">
                 <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
-                    <h3 class="mb-0 text-dark font-weight-bold">
-                        <i class="fas fa-file-invoice-dollar text-success me-2"></i> Detail Transaksi
+                    <h3 class="mb-0 text-sakti-green font-weight-bold">
+                        <i class="fas fa-file-invoice-dollar me-2"></i> Detail Transaksi
                     </h3>
                     <a href="{{ route('admin.transactions.index') }}" class="btn btn-sm btn-secondary shadow-sm">
                         <i class="fas fa-arrow-left"></i> Kembali
@@ -17,7 +21,7 @@
                 <div class="card-body bg-light pt-0">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card shadow-sm border-0 mb-4 mt-3">
+                            <div class="card sakti-card shadow-sm border-0 mb-4 mt-3">
                                 <div class="card-body p-4">
                                     <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4 flex-wrap gap-2">
                                         <div>

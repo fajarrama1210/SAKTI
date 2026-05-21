@@ -1,10 +1,17 @@
 @extends('_admin.layouts.app')
+
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">Master Kelas</h3>
-                <a href="{{ route('admin.classrooms.create') }}" class="btn btn-sm btn-primary">Tambah Kelas</a>
+        <div class="card sakti-card">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+                <h3 class="mb-0 text-sakti-green font-weight-bold">Master Kelas</h3>
+                <a href="{{ route('admin.classrooms.create') }}" class="btn btn-sm btn-sakti-primary">
+                    <i class="fas fa-plus mr-2"></i> Tambah Kelas
+                </a>
             </div>
 
 
@@ -12,11 +19,11 @@
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="text-center" style="width: 50px;">No</th>
-                            <th scope="col" class="text-center">Nama Kelas</th>
-                            <th scope="col" class="text-center">Tingkat</th>
-                            <th scope="col" class="text-center">Jurusan</th>
-                            <th scope="col" class="text-center">Aksi</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Kelas</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tingkat</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jurusan</th>
+                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

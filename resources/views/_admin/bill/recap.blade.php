@@ -1,15 +1,19 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0">
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="mb-0"><i class="fas fa-list-alt"></i> Rekap Tagihan SPP</h3>
+                    <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-list-alt"></i> Rekap Tagihan SPP</h3>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('admin.spp.index') }}" class="btn btn-sm btn-primary">
+                    <a href="{{ route('admin.spp.index') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-arrow-left"></i> Kembali ke Pembayaran
                     </a>
                 </div>
@@ -47,7 +51,7 @@
                     <input type="text" name="search" class="form-control form-control-sm" value="{{ $filters['search'] ?? '' }}" placeholder="Cari...">
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                    <button type="submit" class="btn btn-sm btn-sakti-primary"><i class="fas fa-filter"></i> Filter</button>
                     <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-secondary">Reset</a>
                 </div>
             </form>
@@ -58,14 +62,14 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Siswa</th>
-                        <th>NISN</th>
-                        <th>Kelas</th>
-                        <th class="text-center">Bulan</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Jatuh Tempo</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Bulan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jatuh Tempo</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,12 +1,16 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
 
     {{-- Header Info --}}
-    <div class="card mb-4">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Detail Tagihan</h3>
+    <div class="card sakti-card mb-4">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Detail Tagihan</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -30,7 +34,7 @@
                     <table class="table table-borderless table-sm">
                         <tr>
                             <td class="text-muted" width="180">Total Tagihan</td>
-                            <td><b class="text-primary" style="font-size: 1.2em;">Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</b></td>
+                            <td><b class="text-sakti-green" style="font-size: 1.2em;">Rp {{ number_format($bill->total_amount, 0, ',', '.') }}</b></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Total Dibayar</td>
@@ -58,7 +62,7 @@
                 </div>
             </div>
             @if($bill->status !== 'paid' && $bill->status !== 'cancelled')
-            <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="btn btn-success">
+            <a href="{{ route('admin.bills.pay-form', $bill->id) }}" class="btn btn-sakti-primary">
                 <i class="fas fa-money-bill-wave"></i> Catat Pembayaran
             </a>
             @endif
@@ -68,19 +72,19 @@
 
     {{-- Siswa dalam KK Ini --}}
     @if($siblings->isNotEmpty())
-    <div class="card mb-4">
-        <div class="card-header border-0 bg-light">
-            <h3 class="mb-0"><i class="fas fa-users text-primary"></i> Siswa dalam Nomor KK Ini ({{ $bill->family_card_number }})</h3>
+    <div class="card sakti-card mb-4">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-users"></i> Siswa dalam Nomor KK Ini ({{ $bill->family_card_number }})</h3>
         </div>
         <div class="table-responsive">
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Nama Siswa</th>
-                        <th>NISN</th>
-                        <th>Kelas</th>
-                        <th>Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,19 +112,19 @@
     @endif
 
     {{-- Rincian per Anak --}}
-    <div class="card mb-4">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Rincian Tagihan per Anak</h3>
+    <div class="card sakti-card mb-4">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Rincian Tagihan per Anak</h3>
         </div>
         <div class="table-responsive">
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>NISN</th>
-                        <th>Nama Siswa</th>
-                        <th>Jenis</th>
-                        <th>Jumlah</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jenis</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,21 +145,21 @@
     </div>
 
     {{-- Riwayat Pembayaran --}}
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Riwayat Pembayaran</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Riwayat Pembayaran</h3>
         </div>
         <div class="table-responsive">
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Jumlah</th>
-                        <th>Metode</th>
-                        <th>No. Referensi</th>
-                        <th>Diverifikasi Oleh</th>
-                        <th>Catatan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tanggal</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jumlah</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Metode</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No. Referensi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Diverifikasi Oleh</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Catatan</th>
                     </tr>
                 </thead>
                 <tbody>

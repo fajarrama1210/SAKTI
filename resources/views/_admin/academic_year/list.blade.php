@@ -1,11 +1,17 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Daftar Tahun Ajaran</h3>
-            <a href="{{ route('admin.academic-years.create') }}" class="btn btn-sm btn-primary">Tambah Tahun Ajaran</a>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Daftar Tahun Ajaran</h3>
+            <a href="{{ route('admin.academic-years.create') }}" class="btn btn-sm btn-sakti-primary">
+                <i class="fas fa-plus mr-2"></i> Tambah Tahun Ajaran
+            </a>
         </div>
 
 
@@ -13,12 +19,12 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col" class="text-center" style="width: 50px;">No</th>
-                        <th scope="col" class="text-center">Nama Tahun Ajaran</th>
-                        <th scope="col" class="text-center">Tanggal Mulai</th>
-                        <th scope="col" class="text-center">Tanggal Akhir</th>
-                        <th scope="col" class="text-center">Status</th>
-                        <th scope="col" class="text-center">Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Tahun Ajaran</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tanggal Mulai</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tanggal Akhir</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

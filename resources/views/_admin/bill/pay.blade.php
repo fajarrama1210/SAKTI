@@ -1,10 +1,14 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="mb-0"><i class="fas fa-money-bill-wave"></i> Catat Pembayaran</h3>
+    <div class="card sakti-card">
+        <div class="card-header border-0 bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-money-bill-wave"></i> Catat Pembayaran</h3>
         </div>
         <div class="card-body">
             @if(session('error'))
@@ -81,7 +85,7 @@
                     <textarea name="notes" class="form-control" rows="2" placeholder="Catatan tambahan...">{{ old('notes') }}</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">
+                <button type="submit" class="btn btn-sakti-primary mt-3">
                     <i class="fas fa-check"></i> Simpan Pembayaran
                 </button>
                 <a href="{{ route('admin.bills.show', $bill->id) }}" class="btn btn-secondary mt-3">Batal</a>
