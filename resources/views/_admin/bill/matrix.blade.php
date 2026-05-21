@@ -147,7 +147,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3 text-lg-right">
-                            <button class="btn btn-sm btn-outline-success btn-block w-100" onclick="window.print()" style="border-color: #07814e; color: #07814e;">
+                            <button class="btn btn-sm btn-outline-success btn-block w-100 mt-5" onclick="window.print()" style="border-color: #07814e; color: #07814e;">
                                 <i class="fas fa-print mr-2"></i> Cetak Laporan
                             </button>
                         </div>
