@@ -1,12 +1,16 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
-            <h3 class="mb-0">Daftar Tagihan</h3>
-            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-sm btn-success">
-                <i class="fas fa-magic"></i> Generate Tagihan per Semester
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Daftar Tagihan</h3>
+            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-sm btn-outline-success" style="border-color: #2dce89; color: #2dce89;">
+                <i class="fas fa-magic mr-1"></i> Generate Tagihan per Semester
             </a>
         </div>
 
@@ -15,14 +19,14 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>No. KK</th>
-                        <th>Tahun Ajaran</th>
-                        <th>Bulan</th>
-                        <th>Total Tagihan</th>
-                        <th>Status</th>
-                        <th>Jatuh Tempo</th>
-                        <th>Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No. KK</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tahun Ajaran</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Bulan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Total Tagihan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jatuh Tempo</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,11 +1,17 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Daftar Transaksi</h3>
-            <a href="{{ route('admin.transactions.create') }}" class="btn btn-sm btn-primary">Catat Transaksi</a>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Daftar Transaksi</h3>
+            <a href="{{ route('admin.transactions.create') }}" class="btn btn-sm btn-sakti-primary">
+                <i class="fas fa-plus mr-2"></i> Catat Transaksi
+            </a>
         </div>
 
 
@@ -13,14 +19,14 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th class="text-center">No</th>
-                        <th class="text-center">Tanggal</th>
-                        <th class="text-center">Tipe</th>
-                        <th class="text-center">Kategori</th>
-                        <th class="text-center">Keterangan</th>
-                        <th class="text-center">Jumlah</th>
-                        <th class="text-center">Dicatat Oleh</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tanggal</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tipe</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kategori</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Keterangan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jumlah</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Dicatat Oleh</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,8 +46,8 @@
                         <td class="text-center"><b>Rp {{ number_format($trx->amount, 0, ',', '.') }}</b></td>
                         <td class="text-center">{{ $trx->recorded_by_name ?? '-' }}</td>
                         <td class="text-center">
-                            <a href="{{ route('admin.transactions.show', $trx->id) }}" class="btn btn-sm btn-info mb-0" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 4px;">
-                                <i class="fas fa-eye me-1"></i> Detail
+                            <a href="{{ route('admin.transactions.show', $trx->id) }}" class="btn btn-sm btn-outline-info mb-0" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; border-color: #11cdef; color: #11cdef;">
+                                <i class="fas fa-eye mr-1"></i> Detail
                             </a>
                         </td>
                     </tr>
