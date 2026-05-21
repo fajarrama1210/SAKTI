@@ -163,4 +163,12 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/bills', [App\Http\Controllers\Student\StudentController::class, 'bills'])->name('bills');
     Route::get('/schedules', [App\Http\Controllers\Student\StudentController::class, 'schedules'])->name('schedules');
     Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
+    Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
+});
+
+Route::prefix('kepala-sekolah')->name('kepala-sekolah.')->middleware(['auth', 'role:kepala_sekolah'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\KepalaSekolah\PrincipalController::class, 'dashboard'])->name('dashboard');
+    Route::get('/students', [App\Http\Controllers\KepalaSekolah\PrincipalController::class, 'students'])->name('students');
+    Route::get('/transactions', [App\Http\Controllers\KepalaSekolah\PrincipalController::class, 'transactions'])->name('transactions');
+    Route::get('/bills', [App\Http\Controllers\KepalaSekolah\PrincipalController::class, 'bills'])->name('bills');
 });

@@ -39,7 +39,7 @@ class ReportController extends Controller
         $academicYears = $this->academicYearUseCase->getAll();
         $semesters = collect();
         $data = collect();
-        $filters = request()->only(['academic_year_id', 'semester_id', 'month', 'year']);
+        $filters = request()->only(['academic_year_id', 'semester_id', 'month']);
         $filtered = false;
 
         if (!empty($filters['academic_year_id'])) {
@@ -55,10 +55,6 @@ class ReportController extends Controller
 
             if (!empty($filters['month'])) {
                 $reportFilters['month'] = $filters['month'];
-            }
-
-            if (!empty($filters['year'])) {
-                $reportFilters['year'] = $filters['year'];
             }
 
             $data = $this->reportUseCase->getPaymentReport($reportFilters);
@@ -173,7 +169,7 @@ class ReportController extends Controller
 
     private function buildPaymentFilters(): array
     {
-        $input = request()->only(['academic_year_id', 'semester_id', 'month', 'year']);
+        $input = request()->only(['academic_year_id', 'semester_id', 'month']);
         $filters = [];
 
         if (!empty($input['academic_year_id'])) {
@@ -184,9 +180,6 @@ class ReportController extends Controller
         }
         if (!empty($input['month'])) {
             $filters['month'] = $input['month'];
-        }
-        if (!empty($input['year'])) {
-            $filters['year'] = $input['year'];
         }
         return $filters;
     }

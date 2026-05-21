@@ -27,7 +27,8 @@
                         <label>NIK (16 Digit)</label>
                         <input type="text" name="id_number"
                             class="form-control @error('id_number') is-invalid @enderror"
-                            value="{{ old('id_number') }}" required maxlength="16">
+                            value="{{ old('id_number') }}" required maxlength="16"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         @error('id_number')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -37,7 +38,8 @@
                         <label>Nomor KK (16 Digit)</label>
                         <input type="text" name="family_card_number"
                             class="form-control @error('family_card_number') is-invalid @enderror"
-                            value="{{ old('family_card_number') }}" required maxlength="16">
+                            value="{{ old('family_card_number') }}" required maxlength="16"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         @error('family_card_number')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -46,7 +48,8 @@
                     <div class="form-group">
                         <label>NISN</label>
                         <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror"
-                            value="{{ old('nisn') }}" required maxlength="10">
+                            value="{{ old('nisn') }}" required maxlength="10"
+                            inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         @error('nisn')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

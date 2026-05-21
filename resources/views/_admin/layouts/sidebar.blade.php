@@ -257,6 +257,42 @@
                     <span class="nav-link-text ms-1">Profil Saya</span>
                 </a>
             </li>
+            @elseif(auth()->user()->role === 'kepala_sekolah')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('kepala-sekolah.dashboard') ? 'active-menu' : '' }}" href="{{ route('kepala-sekolah.dashboard') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.dashboard')
+                    </div>
+                    <span class="nav-link-text ms-1">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Pemantauan</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('kepala-sekolah.students') ? 'active-menu' : '' }}" href="{{ route('kepala-sekolah.students') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.student')
+                    </div>
+                    <span class="nav-link-text ms-1">Data Siswa</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('kepala-sekolah.bills') ? 'active-menu' : '' }}" href="{{ route('kepala-sekolah.bills') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.invoice')
+                    </div>
+                    <span class="nav-link-text ms-1">Tagihan SPP</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('kepala-sekolah.transactions') ? 'active-menu' : '' }}" href="{{ route('kepala-sekolah.transactions') }}">
+                    <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
+                        @include('icon.transaction')
+                    </div>
+                    <span class="nav-link-text ms-1">Data Transaksi</span>
+                </a>
+            </li>
             @endif
         </ul>
     </div>
