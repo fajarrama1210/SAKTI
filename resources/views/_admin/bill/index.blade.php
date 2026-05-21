@@ -1,24 +1,29 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
 
 @section('content')
 <div class="container-fluid mt--6">
-    {{-- Sarch Box --}}
-    <div class="card mb-4">
-        <div class="card-header border-0">
+    {{-- Search Box --}}
+    <div class="card sakti-card mb-4">
+        <div class="card-header border-0 bg-white">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="mb-0"><i class="fas fa-money-bill-wave text-success"></i> Pembayaran SPP</h3>
+                    <h3 class="mb-0 text-sakti-green font-weight-bold">
+                        <i class="fas fa-money-bill-wave mr-2"></i> Pembayaran SPP
+                    </h3>
                 </div>
                 <div class="col-auto d-flex gap-2">
                     <form action="{{ route('admin.spp.sync') }}" method="POST" class="m-0">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Gunakan ini jika ada siswa atau tarif baru yang tagihannya belum muncul">
-                            <i class="fas fa-sync"></i> Sinkronisasi Tagihan
+                        <button type="submit" class="btn btn-sm btn-outline-success" style="border-color: #2dce89; color: #2dce89;" data-bs-toggle="tooltip" title="Gunakan ini jika ada siswa atau tarif baru yang tagihannya belum muncul">
+                            <i class="fas fa-sync mr-1"></i> Sinkronisasi Tagihan
                         </button>
                     </form>
-                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-outline-primary ml-2">
-                        <i class="fas fa-list-alt"></i> Rekap Tagihan
+                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-outline-primary ml-2" style="border-color: #5e72e4; color: #5e72e4;">
+                        <i class="fas fa-list-alt mr-1"></i> Rekap Tagihan
                     </a>
                 </div>
             </div>
@@ -82,8 +87,8 @@
                                     <table class="table align-items-center mb-0">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th class="ps-4 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Bulan Tagihan</th>
-                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase ps-4">Bulan Tagihan</th>
+                                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -123,9 +128,9 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="card-footer pt-0">
-                            <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-primary w-100">
-                                <i class="fas fa-arrow-right me-2"></i> Lihat Detail & Kelola Pembayaran
+                        <div class="card-footer pt-0 bg-white border-0">
+                            <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-sakti-primary w-100">
+                                <i class="fas fa-arrow-right mr-2"></i> Lihat Detail & Kelola Pembayaran
                             </a>
                         </div>
                     </div>
@@ -134,10 +139,10 @@
             </div>
         @endif
     @elseif(!$search)
-        <div class="card">
+        <div class="card sakti-card">
             <div class="card-body text-center py-5">
-                <i class="fas fa-search fa-4x text-primary mb-4" style="opacity:0.3"></i>
-                <h4 class="text-muted">Cari Siswa untuk Memulai Pembayaran</h4>
+                <i class="fas fa-search fa-4x text-sakti-green mb-4" style="opacity:0.3"></i>
+                <h4 class="text-muted font-weight-bold">Cari Siswa untuk Memulai Pembayaran</h4>
                 <p class="text-muted mb-0">Masukkan nama siswa, NISN, atau Nomor KK pada kolom pencarian di atas.</p>
             </div>
         </div>

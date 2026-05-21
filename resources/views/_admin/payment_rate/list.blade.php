@@ -1,11 +1,17 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Daftar Tarif Pembayaran</h3>
-            <a href="{{ route('admin.payment-rates.create') }}" class="btn btn-sm btn-primary">Tambah Tarif</a>
+    <div class="card sakti-card">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Daftar Tarif Pembayaran</h3>
+            <a href="{{ route('admin.payment-rates.create') }}" class="btn btn-sm btn-sakti-primary">
+                <i class="fas fa-plus mr-2"></i> Tambah Tarif
+            </a>
         </div>
 
 
@@ -13,13 +19,13 @@
             <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                     <tr>
-                        <th class="text-center">No</th>
-                        <th class="text-center">Tahun Ajaran</th>
-                        <th class="text-center">Jenis</th>
-                        <th class="text-center">Kelas</th>
-                        <th class="text-center">Jurusan</th>
-                        <th class="text-center">Tarif</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tahun Ajaran</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jenis</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jurusan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tarif</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
