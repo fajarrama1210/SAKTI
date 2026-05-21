@@ -1,19 +1,24 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
+
 @section('content')
 <div class="container-fluid mt--6">
     {{-- Filter --}}
-    <div class="card mb-4">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Laporan Transaksi Keuangan</h3>
+    <div class="card sakti-card mb-4">
+        <div class="card-header bg-white border-0 pb-0 pt-4 px-4">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Laporan Transaksi Keuangan</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-white border-bottom py-4 px-4">
             <form method="GET" action="{{ route('admin.reports.transaction') }}">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Tahun Ajaran</label>
-                            <select name="academic_year_id" class="form-control" id="academic_year_select">
+                <div class="row align-items-end">
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Tahun Ajaran</label>
+                            <select name="academic_year_id" class="form-control select2" id="academic_year_select">
                                 <option value="">-- Opsional --</option>
                                 @foreach($academicYears as $ay)
                                 <option value="{{ $ay->id }}" {{ ($filters['academic_year_id'] ?? '') == $ay->id ? 'selected' : '' }}>
@@ -23,10 +28,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Semester</label>
-                            <select name="semester_id" class="form-control" id="semester_select">
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Semester</label>
+                            <select name="semester_id" class="form-control select2" id="semester_select">
                                 <option value="">Semua</option>
                                 @foreach($semesters as $s)
                                 <option value="{{ $s->id }}" {{ ($filters['semester_id'] ?? '') == $s->id ? 'selected' : '' }}>
@@ -36,11 +41,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Bulan</label>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Bulan</label>
                             @php $bulan = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',7=>'Jul',8=>'Ags',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des']; @endphp
-                            <select name="month" class="form-control">
+                            <select name="month" class="form-control select2">
                                 <option value="">Semua</option>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ ($filters['month'] ?? '') == $num ? 'selected' : '' }}>{{ $nama }}</option>
@@ -48,16 +53,16 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Tahun</label>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Tahun</label>
                             <input type="number" name="year" class="form-control" value="{{ $filters['year'] ?? now()->year }}" min="2024" max="2030">
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Tipe</label>
-                            <select name="type" class="form-control">
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Tipe</label>
+                            <select name="type" class="form-control select2">
                                 <option value="">Semua</option>
                                 <option value="income" {{ ($filters['type'] ?? '') === 'income' ? 'selected' : '' }}>Uang Masuk</option>
                                 <option value="expense" {{ ($filters['type'] ?? '') === 'expense' ? 'selected' : '' }}>Uang Keluar</option>
@@ -65,9 +70,9 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <label class="d-none d-md-block">&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100" style="height: 44px;">Filter</button>
-                        </div>
+                        <button type="submit" class="btn btn-sakti-primary btn-block w-100 mb-0">
+                            <i class="fas fa-filter mr-2"></i> Filter
+                        </button>
                     </div>
                 </div>
             </form>
@@ -79,7 +84,7 @@
     {{-- Ringkasan --}}
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card card-stats">
+            <div class="card sakti-card card-stats">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -91,7 +96,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card card-stats">
+            <div class="card sakti-card card-stats">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -103,7 +108,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card card-stats">
+            <div class="card sakti-card card-stats">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -118,16 +123,16 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
-            <h3 class="mb-0">Detail Transaksi ({{ $data->count() }} data)</h3>
+    <div class="card sakti-card">
+        <div class="card-header bg-white border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Detail Transaksi ({{ $data->count() }} data)</h3>
             @if($data->count() > 0)
             <div>
-                <a href="{{ route('admin.reports.transaction.excel', request()->query()) }}" class="btn btn-sm btn-success">
-                    <i class="ni ni-archive-2"></i> Export Excel
+                <a href="{{ route('admin.reports.transaction.excel', request()->query()) }}" class="btn btn-sm btn-outline-success" style="border-color: #2dce89; color: #2dce89;">
+                    <i class="fas fa-file-excel mr-2"></i> Export Excel
                 </a>
-                <a href="{{ route('admin.reports.transaction.pdf', request()->query()) }}" class="btn btn-sm btn-danger">
-                    <i class="ni ni-single-copy-04"></i> Export PDF
+                <a href="{{ route('admin.reports.transaction.pdf', request()->query()) }}" class="btn btn-sm btn-outline-danger" style="border-color: #f5365c; color: #f5365c;">
+                    <i class="fas fa-file-pdf mr-2"></i> Export PDF
                 </a>
             </div>
             @endif
@@ -137,14 +142,14 @@
             <table class="table align-items-center table-flush table-sm">
                 <thead class="thead-light">
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Tipe</th>
-                        <th>Kategori</th>
-                        <th>Keterangan</th>
-                        <th>Uang Masuk</th>
-                        <th>Uang Keluar</th>
-                        <th>Dicatat Oleh</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tanggal</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tipe</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kategori</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Keterangan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Uang Masuk</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Uang Keluar</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Dicatat Oleh</th>
                     </tr>
                 </thead>
                 <tbody>

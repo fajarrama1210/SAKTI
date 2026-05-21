@@ -1,6 +1,12 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
+
+
     <div class="container-fluid mt--6">
         <div class="card sakti-card mb-4">
             <div class="card-header bg-white border-0 pb-0 pt-4 px-4">

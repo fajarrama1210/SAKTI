@@ -1,19 +1,24 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
+
 @section('content')
 <div class="container-fluid mt--6">
     {{-- Filter --}}
-    <div class="card mb-4">
-        <div class="card-header border-0">
-            <h3 class="mb-0">Laporan Pembayaran SPP</h3>
+    <div class="card sakti-card mb-4">
+        <div class="card-header bg-white border-0 pb-0 pt-4 px-4">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Laporan Pembayaran SPP</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-white border-bottom py-4 px-4">
             <form method="GET" action="{{ route('admin.reports.payment') }}">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="form-control-label">Tahun Ajaran</label>
-                            <select name="academic_year_id" class="form-control" id="academic_year_select" required>
+                <div class="row align-items-end">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Tahun Ajaran</label>
+                            <select name="academic_year_id" class="form-control select2" id="academic_year_select" required>
                                 <option value="">-- Pilih --</option>
                                 @foreach($academicYears as $ay)
                                 <option value="{{ $ay->id }}" {{ ($filters['academic_year_id'] ?? '') == $ay->id ? 'selected' : '' }}>
@@ -23,10 +28,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="form-control-label">Semester</label>
-                            <select name="semester_id" class="form-control" id="semester_select">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Semester</label>
+                            <select name="semester_id" class="form-control select2" id="semester_select">
                                 <option value="">Semua</option>
                                 @foreach($semesters as $s)
                                 <option value="{{ $s->id }}" {{ ($filters['semester_id'] ?? '') == $s->id ? 'selected' : '' }}>
@@ -36,11 +41,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="form-control-label">Bulan</label>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Bulan</label>
                             @php $bulan = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',7=>'Jul',8=>'Ags',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des']; @endphp
-                            <select name="month" class="form-control">
+                            <select name="month" class="form-control select2">
                                 <option value="">Semua</option>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ ($filters['month'] ?? '') == $num ? 'selected' : '' }}>{{ $nama }}</option>
@@ -48,15 +53,16 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Tahun</label>
+                    <div class="col-md-2 mb-3 mb-md-0">
+                        <div class="form-group mb-0">
+                            <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Tahun</label>
                             <input type="number" name="year" class="form-control" value="{{ $filters['year'] ?? now()->year }}" min="2024" max="2030">
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <label class="d-none d-md-block">&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100 mt-1">Filter</button>
+                        <button type="submit" class="btn btn-sakti-primary btn-block w-100 mb-0">
+                            <i class="fas fa-filter mr-2"></i> Filter
+                        </button>
                     </div>
                 </div>
             </form>
@@ -65,16 +71,16 @@
 
     {{-- Hasil & Export --}}
     @if($filtered)
-    <div class="card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
-            <h3 class="mb-0">Hasil Laporan ({{ $data->count() }} data)</h3>
+    <div class="card sakti-card">
+        <div class="card-header bg-white border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap">
+            <h3 class="mb-0 text-sakti-green font-weight-bold">Hasil Laporan ({{ $data->count() }} data)</h3>
             @if($data->count() > 0)
             <div>
-                <a href="{{ route('admin.reports.payment.excel', request()->query()) }}" class="btn btn-sm btn-success">
-                    <i class="ni ni-archive-2"></i> Export Excel
+                <a href="{{ route('admin.reports.payment.excel', request()->query()) }}" class="btn btn-sm btn-outline-success" style="border-color: #2dce89; color: #2dce89;">
+                    <i class="fas fa-file-excel mr-2"></i> Export Excel
                 </a>
-                <a href="{{ route('admin.reports.payment.pdf', request()->query()) }}" class="btn btn-sm btn-danger">
-                    <i class="ni ni-single-copy-04"></i> Export PDF
+                <a href="{{ route('admin.reports.payment.pdf', request()->query()) }}" class="btn btn-sm btn-outline-danger" style="border-color: #f5365c; color: #f5365c;">
+                    <i class="fas fa-file-pdf mr-2"></i> Export PDF
                 </a>
             </div>
             @endif
@@ -84,19 +90,19 @@
             <table class="table align-items-center table-flush table-sm">
                 <thead class="thead-light">
                     <tr>
-                        <th class="text-center">No</th>
-                        <th class="text-center">Tahun Ajaran</th>
-                        <th class="text-center">NISN</th>
-                        <th class="text-center">Nama Siswa</th>
-                        <th class="text-center">Kelas</th>
-                        <th class="text-center">Jurusan</th>
-                        <th class="text-center">No. KK</th>
-                        <th class="text-center">Bulan</th>
-                        <th class="text-center">Jenis</th>
-                        <th class="text-center">Tagihan</th>
-                        <th class="text-center">Dibayar</th>
-                        <th class="text-center">Sisa</th>
-                        <th class="text-center">Status</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tahun Ajaran</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">NISN</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Kelas</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jurusan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">No. KK</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Bulan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Jenis</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Tagihan</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Dibayar</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Sisa</th>
+                        <th class="text-sakti-green text-xs font-weight-bold text-uppercase">Status</th>
                     </tr>
                 </thead>
                 <tbody>
