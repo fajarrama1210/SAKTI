@@ -100,8 +100,35 @@ class PrincipalController extends Controller
 
     public function students(Request $request)
     {
-        $search = $request->input('search');
-        
+        $search      = $request->input('search');
+        $classroomId = $request->input('classroom_id');
+        $status      = $request->input('status');
+
+        // ── Summary Stats ────────────────────────────────────────────
+        $totalStudents = DB::table('students')->count();
+
+        $gradeStats = DB::table('students as s')
+            ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
+            ->selectRaw('c.grade_level, COUNT(s.id) as total')
+            ->groupBy('c.grade_level')
+            ->orderBy('c.grade_level')
+            ->get();
+
+        $statusStats = DB::table('students')
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+
+        // ── Filter Options ───────────────────────────────────────────
+        $classroomOptions = DB::table('classrooms as c')
+            ->join('majors as m', 'c.major_id', '=', 'm.id')
+            ->select('c.id', 'c.name', 'c.grade_level', 'm.name as major_name')
+            ->orderBy('c.grade_level')
+            ->orderBy('m.name')
+            ->get();
+
+        // ── Main Query ───────────────────────────────────────────────
         $query = DB::table('students as s')
             ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
             ->join('majors as m', 'c.major_id', '=', 'm.id')
@@ -116,27 +143,69 @@ class PrincipalController extends Controller
             });
         }
 
-        $students = $query->orderBy('s.id', 'desc')->paginate(10)->withQueryString();
+        if ($classroomId) {
+            $query->where('s.classroom_id', $classroomId);
+        }
 
-        return view('kepala_sekolah.students', compact('students', 'search'));
+        if ($status) {
+            $query->where('s.status', $status);
+        }
+
+        $students = $query->orderBy('c.grade_level')->orderBy('s.name')->paginate(15)->withQueryString();
+
+        return view('kepala_sekolah.students', compact(
+            'students', 'search', 'classroomId', 'status',
+            'totalStudents', 'gradeStats', 'statusStats', 'classroomOptions'
+        ));
     }
 
     public function transactions(Request $request)
     {
-        $search = $request->input('search');
-        
-        $query = DB::table('transactions');
+        $search  = $request->input('search');
+        $type    = $request->input('type');    // income | expense | ''
+        $month   = $request->input('month');   // YYYY-MM  | ''
+
+        // ── Summary Stats (always global) ────────────────────────────
+        $summaryStats = DB::table('transactions')
+            ->selectRaw('
+                COALESCE(SUM(CASE WHEN type = "income"  THEN amount ELSE 0 END), 0) as total_income,
+                COALESCE(SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END), 0) as total_expense,
+                COUNT(*) as total_count
+            ')
+            ->first();
+
+        $netCash = ($summaryStats->total_income ?? 0) - ($summaryStats->total_expense ?? 0);
+
+        // ── Main Query ───────────────────────────────────────────────
+        $query = DB::table('transactions as t')
+            ->leftJoin('users as u', 't.recorded_by', '=', 'u.id')
+            ->select('t.*', 'u.name as recorder_name');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('reference_number', 'like', "%{$search}%");
+                $q->where('t.description', 'like', "%{$search}%")
+                  ->orWhere('t.category', 'like', "%{$search}%");
             });
         }
 
-        $transactions = $query->orderBy('date', 'desc')->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        if ($type) {
+            $query->where('t.type', $type);
+        }
 
-        return view('kepala_sekolah.transactions', compact('transactions', 'search'));
+        if ($month) {
+            $query->whereRaw('DATE_FORMAT(t.date, "%Y-%m") = ?', [$month]);
+        }
+
+        $transactions = $query
+            ->orderBy('t.date', 'desc')
+            ->orderBy('t.id', 'desc')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('kepala_sekolah.transactions', compact(
+            'transactions', 'search', 'type', 'month',
+            'summaryStats', 'netCash'
+        ));
     }
 
     public function bills(Request $request)
@@ -144,10 +213,32 @@ class PrincipalController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
 
+        // ── Summary Stats (always global, not filtered) ──────────────
+        $summaryStats = DB::table('bills as b')
+            ->join('students as s', 'b.student_id', '=', 's.id')
+            ->selectRaw('
+                COUNT(*) as total_bills,
+                SUM(b.total_amount) as total_amount,
+                COALESCE(SUM((SELECT SUM(p.amount) FROM payments p WHERE p.bill_id = b.id)), 0) as total_paid,
+                SUM(CASE WHEN b.status = "paid" THEN 1 ELSE 0 END) as count_paid,
+                SUM(CASE WHEN b.status = "partial" THEN 1 ELSE 0 END) as count_partial,
+                SUM(CASE WHEN b.status = "unpaid" THEN 1 ELSE 0 END) as count_unpaid
+            ')
+            ->first();
+
+        $totalOutstanding = max(0, ($summaryStats->total_amount ?? 0) - ($summaryStats->total_paid ?? 0));
+
+        // ── Main Query ───────────────────────────────────────────────
         $query = DB::table('bills as b')
             ->join('students as s', 'b.student_id', '=', 's.id')
             ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
-            ->select('b.*', 's.name as student_name', 's.nisn', 'c.name as classroom_name');
+            ->select(
+                'b.*',
+                's.name as student_name',
+                's.nisn',
+                'c.name as classroom_name',
+                DB::raw('COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.bill_id = b.id), 0) as paid_amount')
+            );
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -160,8 +251,11 @@ class PrincipalController extends Controller
             $query->where('b.status', $status);
         }
 
-        $bills = $query->orderBy('b.year', 'desc')->orderBy('b.month', 'desc')->paginate(10)->withQueryString();
+        $bills = $query->orderBy('b.year', 'desc')->orderBy('b.month', 'desc')->paginate(15)->withQueryString();
 
-        return view('kepala_sekolah.bills', compact('bills', 'search', 'status'));
+        return view('kepala_sekolah.bills', compact(
+            'bills', 'search', 'status',
+            'summaryStats', 'totalOutstanding'
+        ));
     }
 }
