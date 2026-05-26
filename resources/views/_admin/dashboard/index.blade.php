@@ -1,861 +1,412 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
-    <style>
-        :root {
-            --primary-green: #1a8a5c;
-            --secondary-green: #2dce89;
-            --soft-green: #e9fff5;
-            --dark-text: #344767;
-            --muted-text: #8392ab;
-            --danger-color: #f5365c;
-            --warning-color: #fb6340;
-            --card-radius: 22px;
-        }
-
-        body {
-            background: #f8fafc;
-        }
-
-        /* ======================================================
-            HEADER
-        ====================================================== */
-
-        .dashboard-header {
-            background: linear-gradient(135deg,
-                    #07814e 45%,
-                    #1e905f 100%);
-
-            position: relative;
-            overflow: hidden;
-
-            border-radius: 28px;
-
-            margin: 18px;
-            padding: 45px 20px 140px;
-
-            box-shadow:
-                0 20px 45px rgba(0, 0, 0, .12),
-                0 10px 25px rgba(45, 206, 137, .18);
-        }
-
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            width: 340px;
-            height: 340px;
-            background: rgba(255, 255, 255, .06);
-            border-radius: 50%;
-            top: -120px;
-            right: -90px;
-        }
-
-        .dashboard-header::after {
-            content: '';
-            position: absolute;
-            width: 240px;
-            height: 240px;
-            background: rgba(255, 255, 255, .05);
-            border-radius: 50%;
-            bottom: -110px;
-            left: -60px;
-        }
-
-        /* ======================================================
-            GLOBAL CARD
-        ====================================================== */
-
-        .dashboard-card {
-            border: none;
-            border-radius: 26px;
-            overflow: hidden;
-            background: #fff;
-            position: relative;
-
-            box-shadow:
-                0 10px 30px rgba(0, 0, 0, .06),
-                0 3px 10px rgba(0, 0, 0, .04);
-
-            transition: .3s ease;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-6px);
-
-            box-shadow:
-                0 20px 40px rgba(0, 0, 0, .12),
-                0 8px 18px rgba(0, 0, 0, .08);
-        }
-
-        /* ======================================================
-            CORAK CARD
-        ====================================================== */
-
-        .dashboard-card::before {
-            content: '';
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            background: rgba(45, 206, 137, .05);
-            border-radius: 50%;
-            top: -90px;
-            right: -80px;
-        }
-
-        .dashboard-card::after {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: rgba(45, 206, 137, .04);
-            border-radius: 50%;
-            bottom: -60px;
-            left: -40px;
-        }
-
-        /* ======================================================
-        STATS CARD
-    ====================================================== */
-
-        .stats-card {
-            min-height: 155px;
-            height: 40%;
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        /* DEFAULT BORDER */
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom,
-                    var(--primary-green),
-                    var(--secondary-green));
-        }
-
-        /* TOTAL SISWA */
-        .border-students::before {
-            background: linear-gradient(to bottom,
-                    #3b82f6,
-                    #60a5fa);
-        }
-
-        /* KELAS & JURUSAN */
-        .border-class::before {
-            background: linear-gradient(to bottom,
-                    #fb923c,
-                    #facc15);
-        }
-
-        /* PEMASUKAN */
-        .border-income::before {
-            background: linear-gradient(to bottom,
-                    #16a34a,
-                    #4ade80);
-        }
-
-        /* PENGELUARAN */
-        .border-expense::before {
-            background: linear-gradient(to bottom,
-                    #ef4444,
-                    #f87171);
-        }
-
-        /* ======================================================
-            ICON
-        ====================================================== */
-
-        .stats-icon {
-            width: 64px;
-            height: 64px;
-
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 1.4rem;
-
-            flex-shrink: 0;
-
-            box-shadow:
-                0 10px 20px rgba(0, 0, 0, .10),
-                inset 0 1px 1px rgba(255, 255, 255, .15);
-        }
-
-        /* ======================================================
-            QUICK ACTION
-        ====================================================== */
-
-        .quick-action {
-            border-radius: 24px;
-            transition: .3s ease;
-
-            background: #fff;
-            border: 1px solid #edf2f7;
-
-            position: relative;
-            overflow: hidden;
-
-            box-shadow:
-                0 10px 25px rgba(0, 0, 0, .05),
-                0 3px 8px rgba(0, 0, 0, .03);
-        }
-
-        .quick-action::before {
-            content: '';
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            background: rgba(45, 206, 137, .05);
-            border-radius: 50%;
-            top: -70px;
-            right: -70px;
-        }
-
-        .quick-action:hover {
-            transform: translateY(-5px);
-
-            background: linear-gradient(135deg,
-                    var(--primary-green),
-                    var(--secondary-green));
-
-            color: #fff !important;
-        }
-
-        .quick-action:hover i,
-        .quick-action:hover span {
-            color: #fff !important;
-        }
-
-        /* ======================================================
-            TABLE
-        ====================================================== */
-
-        .custom-table thead {
-            background: #f9fafb;
-        }
-
-        .custom-table th {
-            border-top: none !important;
-            font-size: .78rem;
-            letter-spacing: .5px;
-            text-transform: uppercase;
-            color: var(--muted-text);
-            font-weight: 700;
-            padding: 18px 22px;
-        }
-
-        .custom-table td {
-            vertical-align: middle;
-            border-color: #edf2f7;
-            padding: 20px 22px;
-        }
-
-        /* ======================================================
-            PAYMENT ICON
-        ====================================================== */
-
-        .payment-icon {
-            width: 42px;
-            height: 42px;
-
-            border-radius: 14px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: linear-gradient(135deg,
-                    var(--primary-green),
-                    var(--secondary-green));
-
-            color: #fff;
-
-            margin-right: 16px;
-
-            flex-shrink: 0;
-
-            box-shadow:
-                0 8px 18px rgba(45, 206, 137, .22);
-        }
-
-        /* ======================================================
-            SECTION
-        ====================================================== */
-
-        .section-title {
-            font-weight: 800;
-            color: var(--dark-text);
-        }
-
-        .view-btn {
-            border-radius: 50px;
-            padding: 10px 22px;
-            font-size: .78rem;
-            letter-spacing: .5px;
-
-            box-shadow:
-                0 8px 18px rgba(45, 206, 137, .18);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 380px;
-        }
-
-        /* ======================================================
-            RESPONSIVE
-        ====================================================== */
-
-        @media(max-width:1200px) {
-
-            .stats-nominal {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media(max-width:768px) {
-
-            .dashboard-header {
-                margin: 10px;
-                padding: 35px 15px 120px;
-                border-radius: 24px;
-            }
-
-            .stats-card {
-                min-height: 140px;
-            }
-
-            .stats-value,
-            .stats-nominal {
-                font-size: 1.4rem;
-            }
-
-            .stats-icon {
-                width: 56px;
-                height: 56px;
-            }
-        }
-    </style>
 
     <!-- HEADER -->
-    <div class="header py-6 mb-2 dashboard-header">
+    <div class="dashboard-header mb-4">
         <div class="container-fluid">
-            <div class="header-body">
+            <div class="header-body position-relative" style="z-index: 1;">
+                <h2 class="text-white font-weight-bold mb-1" style="font-size: 1.6rem; letter-spacing: -0.02em;">
+                    Dashboard SAKTI
+                </h2>
+                <p class="text-white mb-0" style="opacity: .75; font-size: 0.9rem;">
+                    Monitoring data sekolah & keuangan realtime
+                </p>
+            </div>
+        </div>
+    </div>
 
-                <div class="row align-items-center py-4">
-                    <div class="col-lg-6 col-7">
-                        <h2 class="text-white font-weight-bold mb-1">
-                            Dashboard SAKTI
-                        </h2>
+    <!-- STATS CARDS — Terpisah dari header -->
+    <div class="row mb-4">
 
-                        <p class="text-white mb-0 opacity-8">
-                            Monitoring data sekolah & keuangan realtime
-                        </p>
+        <!-- TOTAL SISWA -->
+        <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
+            <div class="card dashboard-card stats-card border-students w-100">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-title mb-1">TOTAL SISWA</div>
+                            <div class="stats-value">{{ $totalStudents }}</div>
+                        </div>
+                        <div class="stats-icon icon-students">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- STATS -->
-                <div class="row mt-4">
-
-                    <!-- TOTAL SISWA -->
-                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
-                        <div class="card dashboard-card stats-card border-students w-100">
-                            <div class="card-body w-100">
-
-                                <div class="d-flex justify-content-between align-items-center">
-
-                                    <div>
-                                        <div class="stats-title mb-2">
-                                            TOTAL SISWA
-                                        </div>
-
-                                        <div class="stats-value">
-                                            {{ $totalStudents }}
-                                        </div>
-                                    </div>
-
-                                    <div class="stats-icon bg-primary text-white">
-                                        <i class="fas fa-user-graduate"></i>
-                                    </div>
-
-                                </div>
-
+        <!-- KELAS & JURUSAN -->
+        <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
+            <div class="card dashboard-card stats-card border-class w-100">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-title mb-1">KELAS & JURUSAN</div>
+                            <div class="stats-value">
+                                {{ $totalClassrooms }}
+                                <span style="font-size: .9rem; font-weight: 500; color: var(--muted-text);">/ {{ $totalMajors }}</span>
                             </div>
                         </div>
+                        <div class="stats-icon icon-class">
+                            <i class="fas fa-school"></i>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- KELAS -->
-                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
-                        <div class="card dashboard-card stats-card border-class w-100">
-                            <div class="card-body w-100">
+        <!-- PEMASUKAN -->
+        <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
+            <div class="card dashboard-card stats-card border-income w-100">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-title mb-1">PEMASUKAN</div>
+                            <div class="stats-nominal" style="color: #059669;">
+                                Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}
+                            </div>
+                        </div>
+                        <div class="stats-icon icon-income">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                <div class="d-flex justify-content-between align-items-center">
+        <!-- PENGELUARAN -->
+        <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
+            <div class="card dashboard-card stats-card border-expense w-100">
+                <div class="card-body py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stats-title mb-1">PENGELUARAN</div>
+                            <div class="stats-nominal" style="color: #ef4444;">
+                                Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}
+                            </div>
+                        </div>
+                        <div class="stats-icon icon-expense">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                    <div>
-                                        <div class="stats-title mb-2">
-                                            KELAS & JURUSAN
+    </div>
+
+    <!-- CHART & QUICK ACTION -->
+    <div class="row mb-4">
+
+        <!-- CHART -->
+        <div class="col-xl-8 mb-4 mb-xl-0">
+            <div class="card dashboard-card h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-chart-bar me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Statistik Keuangan 6 Bulan Terakhir
+                    </h3>
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <div class="chart-container">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTION -->
+        <div class="col-xl-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-bolt me-2" style="color: #f59e0b; opacity: .8;"></i>
+                        Aksi Cepat
+                    </h3>
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <div class="row g-3">
+
+                        <div class="col-6">
+                            <a href="{{ route('admin.students.create') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #6366f1;">
+                                <i class="fas fa-user-plus fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Siswa Baru</span>
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ route('admin.transactions.create') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #059669;">
+                                <i class="fas fa-wallet fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Transaksi</span>
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ route('admin.reports.payment') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #0ea5e9;">
+                                <i class="fas fa-chart-line fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Laporan</span>
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ route('admin.spp.index') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #f59e0b;">
+                                <i class="fas fa-file-invoice-dollar fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Tagihan SPP</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- HISTORI PEMBAYARAN -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-receipt me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Histori Pembayaran Terbaru
+                    </h3>
+                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-success view-btn">
+                        Lihat Semua <i class="fas fa-arrow-right ms-1" style="font-size: .7rem;"></i>
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table custom-table align-items-center mb-0 text-center">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tanggal</th>
+                                <th class="text-center">No KK</th>
+                                <th class="text-center">Metode</th>
+                                <th class="text-center">Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentPayments as $pay)
+                                <tr>
+                                    <td class="align-middle text-center">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="payment-icon me-2">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div class="font-weight-bold" style="font-size: .88rem;">
+                                                {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
+                                            </div>
                                         </div>
-
-                                        <div class="stats-value">
-                                            {{ $totalClassrooms }}
-
-                                            <span class="text-muted" style="font-size:1rem;">
-                                                / {{ $totalMajors }}
+                                    </td>
+                                    <td class="align-middle text-center font-weight-bold" style="color: var(--muted-text);">
+                                        {{ $pay->family_card_number }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @php
+                                            $method = strtolower(trim($pay->payment_method ?? 'cash'));
+                                        @endphp
+                                        @if ($method == 'qris')
+                                            <span class="badge px-3 py-2" style="background: #ecfeff; color: #0891b2; font-weight: 600;">QRIS</span>
+                                        @elseif($method == 'cash')
+                                            <span class="badge px-3 py-2" style="background: #ecfdf5; color: #059669; font-weight: 600;">CASH</span>
+                                        @elseif($method == 'transfer')
+                                            <span class="badge px-3 py-2" style="background: #eff6ff; color: #2563eb; font-weight: 600;">TRANSFER</span>
+                                        @else
+                                            <span class="badge px-3 py-2" style="background: #f8fafc; color: #64748b; font-weight: 600;">
+                                                {{ strtoupper($pay->payment_method ?? 'CASH') }}
                                             </span>
-                                        </div>
-                                    </div>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center font-weight-bold" style="color: #059669;">
+                                        + Rp {{ number_format($pay->amount, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-5" style="color: var(--muted-text);">
+                                        <i class="fas fa-receipt fa-2x mb-3 d-block" style="opacity: .4;"></i>
+                                        Belum ada pembayaran terbaru
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                    <div class="stats-icon bg-warning text-white">
-                                        <i class="fas fa-school"></i>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PEMASUKAN -->
-                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
-                        <div class="card dashboard-card stats-card border-income w-100">
-
-                            <div class="card-body w-100">
-
-                                <div class="d-flex justify-content-between align-items-center">
-
-                                    <div>
-
-                                        <div class="stats-title mb-2">
-                                            PEMASUKAN
-                                        </div>
-
-                                        <div class="stats-nominal text-success">
-                                            Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}
-                                        </div>
-
-                                    </div>
-
-                                    <div class="stats-icon text-success" style="background: var(--soft-green);">
-                                        <i class="fas fa-arrow-down"></i>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- PENGELUARAN -->
-                    <div class="col-xl-3 col-md-6 col-sm-6 mb-4 d-flex">
-                        <div class="card dashboard-card stats-card border-expense w-100">
-
-                            <div class="card-body w-100">
-
-                                <div class="d-flex justify-content-between align-items-center">
-
-                                    <div>
-
-                                        <div class="stats-title mb-2">
-                                            PENGELUARAN
-                                        </div>
-
-                                        <div class="stats-nominal text-danger">
-                                            Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}
-                                        </div>
-
-                                    </div>
-
-                                    <div class="stats-icon bg-danger text-white">
-                                        <i class="fas fa-arrow-up"></i>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- CONTENT -->
-                    <div class="container-fluid mt--6">
-
-                        <div class="row">
-
-                            <!-- CHART -->
-                            <div class="col-xl-8 mb-4">
-                                <div class="card dashboard-card h-100">
-
-                                    <div class="card-header bg-white border-0 pt-4">
-                                        <h3 class="section-title mb-0">
-                                            Statistik Keuangan 6 Bulan Terakhir
-                                        </h3>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <div class="chart-container">
-                                            <canvas id="financeChart"></canvas>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!-- QUICK ACTION -->
-                            <div class="col-xl-4 mb-4">
-                                <div class="card dashboard-card h-100">
-
-                                    <div class="card-header bg-white border-0 pt-4">
-                                        <h3 class="section-title mb-0">
-                                            Aksi Cepat
-                                        </h3>
-                                    </div>
-
-                                    <div class="card-body">
-
-                                        <div class="row">
-
-                                            <div class="col-6 mb-4">
-                                                <a href="{{ route('admin.students.create') }}"
-                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-primary text-decoration-none h-100">
-
-                                                    <i class="fas fa-user-plus fa-2x mb-3"></i>
-
-                                                    <span class="font-weight-bold text-center">
-                                                        Siswa Baru
-                                                    </span>
-
-                                                </a>
-                                            </div>
-
-                                            <div class="col-6 mb-4">
-                                                <a href="{{ route('admin.transactions.create') }}"
-                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-success text-decoration-none h-100">
-
-                                                    <i class="fas fa-wallet fa-2x mb-3"></i>
-
-                                                    <span class="font-weight-bold text-center">
-                                                        Transaksi
-                                                    </span>
-
-                                                </a>
-                                            </div>
-
-                                            <div class="col-6 mb-4">
-                                                <a href="{{ route('admin.reports.payment') }}"
-                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-info text-decoration-none h-100">
-
-                                                    <i class="fas fa-chart-line fa-2x mb-3"></i>
-
-                                                    <span class="font-weight-bold text-center">
-                                                        Laporan
-                                                    </span>
-
-                                                </a>
-                                            </div>
-
-                                            <div class="col-6 mb-4">
-                                                <a href="{{ route('admin.spp.index') }}"
-                                                    class="quick-action d-flex flex-column align-items-center justify-content-center p-4 text-warning text-decoration-none h-100">
-
-                                                    <i class="fas fa-file-invoice-dollar fa-2x mb-3"></i>
-
-                                                    <span class="font-weight-bold text-center">
-                                                        Tagihan SPP
-                                                    </span>
-
-                                                </a>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- TABLE -->
-                        <div class="row">
-                            <div class="col-12">
-
-                                <div class="card dashboard-card">
-
-                                    <div
-                                        class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-
-                                        <h3 class="section-title mb-0">
-                                            Histori Pembayaran Terbaru
-                                        </h3>
-
-                                        <a href="{{ route('admin.spp.recap') }}" class="btn btn-success view-btn">
-                                            Lihat Semua
+    <!-- PENGAJUAN IZIN/SAKIT PENDING -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-envelope-open-text me-2" style="color: #f59e0b; opacity: .8;"></i>
+                        Pengajuan Izin/Sakit Pending
+                    </h3>
+                    <a href="{{ route('admin.letters.index') }}" class="btn btn-sm btn-warning view-btn" style="color: #fff;">
+                        Kelola Pengajuan ({{ $pendingLettersCount }})
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table custom-table align-items-center mb-0 text-center">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tanggal</th>
+                                <th class="text-center">Siswa</th>
+                                <th class="text-center">Kategori</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($pendingLetters as $letter)
+                                <tr>
+                                    <td class="align-middle text-center font-weight-bold" style="font-size: .88rem;">
+                                        {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d M Y') }}
+                                    </td>
+                                    <td class="align-middle text-center font-weight-bold" style="color: var(--muted-text);">
+                                        {{ $letter->student_name }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @if($letter->type == 'sick')
+                                            <span class="badge px-3 py-2" style="background: #fef2f2; color: #ef4444; font-weight: 600;">Sakit</span>
+                                        @else
+                                            <span class="badge px-3 py-2" style="background: #ecfeff; color: #0891b2; font-weight: 600;">Izin</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a href="{{ route('admin.letters.index') }}" class="btn btn-sm mb-0" style="background: var(--soft-green); color: var(--primary-green); font-weight: 600; border-radius: 10px;">
+                                            <i class="fas fa-eye me-1"></i> Tinjau
                                         </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4" style="color: var(--muted-text);">
+                                        <i class="fas fa-check-circle mb-2 d-block" style="font-size: 1.5rem; opacity: .3;"></i>
+                                        Belum ada pengajuan izin pending.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                    </div>
+    <!-- CHART SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('financeChart');
 
-                                    <div class="table-responsive">
-
-                                        <table class="table custom-table align-items-center mb-0 text-center">
-
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">Tanggal</th>
-                                                    <th class="text-center">No KK</th>
-                                                    <th class="text-center">Metode</th>
-                                                    <th class="text-center">Nominal</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-
-                                                @forelse($recentPayments as $pay)
-                                                    <tr>
-
-                                                        <!-- TANGGAL -->
-                                                        <td class="align-middle text-center">
-                                                            <div class="d-flex align-items-center justify-content-center">
-
-                                                                <div class="payment-icon me-3">
-                                                                    <i class="fas fa-calendar-alt"></i>
-                                                                </div>
-
-                                                                <div class="font-weight-bold">
-                                                                    {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
-                                                                </div>
-
-                                                            </div>
-                                                        </td>
-
-                                                        <!-- NO KK -->
-                                                        <td class="align-middle text-center text-muted font-weight-bold">
-                                                            {{ $pay->family_card_number }}
-                                                        </td>
-
-                                                        <!-- METODE -->
-                                                        <td class="align-middle text-center">
-
-                                                            @php
-                                                                $method = strtolower(
-                                                                    trim($pay->payment_method ?? 'cash'),
-                                                                );
-                                                            @endphp
-
-                                                            @if ($method == 'qris')
-                                                                <span class="badge bg-info text-white px-3 py-2">
-                                                                    QRIS
-                                                                </span>
-                                                            @elseif($method == 'cash')
-                                                                <span class="badge bg-success text-white px-3 py-2">
-                                                                    CASH
-                                                                </span>
-                                                            @elseif($method == 'transfer')
-                                                                <span class="badge bg-primary text-white px-3 py-2">
-                                                                    TRANSFER
-                                                                </span>
-                                                            @else
-                                                                <span class="badge bg-secondary text-white px-3 py-2">
-                                                                    {{ strtoupper($pay->payment_method ?? 'CASH') }}
-                                                                </span>
-                                                            @endif
-
-                                                        </td>
-
-                                                        <!-- NOMINAL -->
-                                                        <td class="align-middle text-center font-weight-bold text-success">
-                                                            + Rp {{ number_format($pay->amount, 0, ',', '.') }}
-                                                        </td>
-
-                                                    </tr>
-
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="4" class="text-center py-5 text-muted">
-                                                            <i class="fas fa-receipt fa-2x mb-3"></i>
-                                                            <br>
-                                                            Belum ada pembayaran terbaru
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- PENGATURAN SURAT IZIN WIDGET -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="card dashboard-card">
-                                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                                    <h3 class="section-title mb-0">
-                                        Pengajuan Izin/Sakit Pending
-                                    </h3>
-                                    <a href="{{ route('admin.letters.index') }}" class="btn btn-warning view-btn">
-                                        Kelola Pengajuan ({{ $pendingLettersCount }})
-                                    </a>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table custom-table align-items-center mb-0 text-center">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Tanggal</th>
-                                                <th class="text-center">Siswa</th>
-                                                <th class="text-center">Kategori</th>
-                                                <th class="text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($pendingLetters as $letter)
-                                                <tr>
-                                                    <td class="align-middle text-center font-weight-bold">
-                                                        {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d M Y') }}
-                                                    </td>
-                                                    <td class="align-middle text-center text-muted font-weight-bold">
-                                                        {{ $letter->student_name }}
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span class="badge bg-info text-white px-3 py-2">
-                                                            {{ $letter->type == 'sick' ? 'Sakit' : 'Izin' }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <a href="{{ route('admin.letters.index') }}" class="btn btn-sm btn-outline-primary mb-0">
-                                                            Tinjau
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="4" class="text-center py-4 text-muted">
-                                                        Belum ada pengajuan izin pending.
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CHART -->
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-
-                            const ctx = document.getElementById('financeChart');
-
-                            new Chart(ctx, {
-
-                                type: 'bar',
-
-                                data: {
-                                    labels: @js($chartLabels),
-
-                                    datasets: [{
-                                            label: 'Pemasukan',
-                                            data: @js($chartIncome),
-                                            backgroundColor: 'rgba(45, 206, 137, .8)',
-                                            borderRadius: 12,
-                                            borderSkipped: false,
-                                        },
-
-                                        {
-                                            label: 'Pengeluaran',
-                                            data: @js($chartExpense),
-                                            backgroundColor: 'rgba(245, 54, 92, .8)',
-                                            borderRadius: 12,
-                                            borderSkipped: false,
-                                        }
-                                    ]
-                                },
-
-                                options: {
-
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-
-                                    interaction: {
-                                        mode: 'index',
-                                        intersect: false
-                                    },
-
-                                    plugins: {
-
-                                        legend: {
-                                            position: 'top',
-                                            labels: {
-                                                usePointStyle: true,
-                                                padding: 20
-                                            }
-                                        },
-
-                                        tooltip: {
-                                            backgroundColor: '#111827',
-                                            padding: 14,
-                                            cornerRadius: 12,
-
-                                            callbacks: {
-                                                label: function(context) {
-                                                    return context.dataset.label + ': Rp ' +
-                                                        context.parsed.y.toLocaleString('id-ID');
-                                                }
-                                            }
-                                        }
-                                    },
-
-                                    scales: {
-
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            }
-                                        },
-
-                                        y: {
-                                            beginAtZero: true,
-
-                                            ticks: {
-                                                callback: function(value) {
-
-                                                    if (value >= 1000000) {
-                                                        return 'Rp ' + (value / 1000000) + ' Jt';
-                                                    }
-
-                                                    if (value >= 1000) {
-                                                        return 'Rp ' + (value / 1000) + ' Rb';
-                                                    }
-
-                                                    return 'Rp ' + value;
-                                                }
-                                            },
-
-                                            grid: {
-                                                borderDash: [5, 5]
-                                            }
-                                        }
-                                    }
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @js($chartLabels),
+                    datasets: [{
+                            label: 'Pemasukan',
+                            data: @js($chartIncome),
+                            backgroundColor: 'rgba(5, 150, 105, .75)',
+                            borderRadius: 10,
+                            borderSkipped: false,
+                            barPercentage: 0.6,
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: @js($chartExpense),
+                            backgroundColor: 'rgba(239, 68, 68, .75)',
+                            borderRadius: 10,
+                            borderSkipped: false,
+                            barPercentage: 0.6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded',
+                                padding: 20,
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    weight: 600,
+                                    size: 12
                                 }
-                            });
-
-                        });
-                    </script>
-                @endsection
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleFont: { family: "'Inter', sans-serif", weight: 600 },
+                            bodyFont: { family: "'Inter', sans-serif" },
+                            padding: 14,
+                            cornerRadius: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': Rp ' +
+                                        context.parsed.y.toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11,
+                                    weight: 500
+                                },
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11,
+                                    weight: 500
+                                },
+                                color: '#94a3b8',
+                                callback: function(value) {
+                                    if (value >= 1000000) return 'Rp ' + (value / 1000000) + ' Jt';
+                                    if (value >= 1000) return 'Rp ' + (value / 1000) + ' Rb';
+                                    return 'Rp ' + value;
+                                }
+                            },
+                            grid: {
+                                borderDash: [3, 3],
+                                color: '#f1f5f9'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+@endsection

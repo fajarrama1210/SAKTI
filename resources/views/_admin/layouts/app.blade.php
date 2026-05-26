@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/sakti favicon/apple-touch-icon.png') }}" />
     <meta name="apple-mobile-web-app-title" content="SAKTI" />
     <link rel="manifest" href="{{ asset('assets/sakti favicon/site.webmanifest') }}" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -21,6 +21,12 @@
     @stack('styles')
 
     <style>
+        /* ── Inter Font Override ────────────────────────────── */
+        body, h1, h2, h3, h4, h5, h6, p, span, a, td, th,
+        .btn, input, select, textarea, label, .nav-link {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+
         /* Minimalist Modern Green Pagination */
         .pagination {
             gap: 6px;
@@ -37,20 +43,20 @@
         }
 
         .page-item .page-link:hover {
-            background-color: #1a8a5c;
+            background-color: #059669;
             color: #ffffff;
-            box-shadow: 0 4px 6px rgba(26, 138, 92, 0.2);
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
             transform: translateY(-1px);
         }
 
         .page-item.active .page-link {
-            background-color: #1a8a5c;
+            background-color: #059669;
             color: #ffffff;
-            box-shadow: 0 4px 6px rgba(26, 138, 92, 0.3);
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3);
         }
 
         .page-item.disabled .page-link {
-            color: #0080ff;
+            color: #94a3b8;
             background-color: transparent;
             pointer-events: none;
         }
@@ -80,7 +86,7 @@
 
 <body class="g-sidenav-show bg-gray-100">
     <div class="min-height-300 position-absolute w-100"
-        style="background: linear-gradient(135deg, #155d3e 0%, #1a8a5c 40%, #2dce89 100%);"></div>
+        style="background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #34d399 100%);"></div>
 
     @include('_admin.layouts.sidebar')
 

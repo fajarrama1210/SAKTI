@@ -1,47 +1,74 @@
-/* CSS Custom SAKTI */
+/* ================================================================
+   CSS Custom SAKTI — Stylesheet Terpusat
+   Font: Inter | Palette: Emerald Green + Slate Neutrals
+   ================================================================ */
 
-/* Card Utama dengan Shadow Custom */
+
+/* ================================================================
+   0. TYPOGRAPHY — FONT INTER
+   ================================================================ */
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
+}
+
+
+/* ================================================================
+   1. CARD UTAMA
+   ================================================================ */
+
 .sakti-card {
     background: #ffffff;
     border-radius: 15px;
     border: none;
     box-shadow:
-        0 20px 45px rgb(73, 106, 77, 0.15), /* Opacity disesuaikan sedikit agar teks dalam card tetap fokus */
+        0 20px 45px rgb(73, 106, 77, 0.15),
         0 10px 25px rgba(45, 206, 137, .18),
         inset 0 1px 1px rgba(255, 255, 255, .08);
     overflow: hidden;
 }
 
-/* Tombol & Elemen dengan Gradasi Hijau SAKTI */
+/* ================================================================
+   2. TOMBOL & ELEMEN HIJAU SAKTI
+   ================================================================ */
+
 .btn-sakti-primary {
-    background: linear-gradient(135deg, #07814e 45%, #1e905f 100%);
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
     color: #ffffff !important;
     border: none;
-    box-shadow: 0 4px 6px rgba(7, 129, 78, 0.2);
+    box-shadow: 0 4px 6px rgba(5, 150, 105, 0.25);
     transition: all 0.3s ease;
+    border-radius: 10px;
+    font-weight: 600;
 }
 
 .btn-sakti-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(7, 129, 78, 0.3);
+    box-shadow: 0 7px 14px rgba(5, 150, 105, 0.35);
 }
 
 .text-sakti-green {
-    color: #07814e !important;
+    color: #059669 !important;
 }
 
-/* Styling Khusus Keterangan Status (Legend) */
+/* ================================================================
+   3. LEGEND STATUS
+   ================================================================ */
+
 .legend-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem; /* Jarak antar kapsul keterangan */
+    gap: 1rem;
     align-items: center;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Jarak pas antara ikon dan teks di dalam kapsul */
+    gap: 0.5rem;
     background: #f8fafc;
     padding: 0.35rem 0.8rem 0.35rem 0.35rem;
     border-radius: 50px;
@@ -51,8 +78,8 @@
 
 .legend-item:hover {
     background: #ffffff;
-    border-color: #07814e;
-    box-shadow: 0 2px 8px rgba(7, 129, 78, 0.1);
+    border-color: #059669;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.1);
 }
 
 .legend-icon {
@@ -74,12 +101,629 @@
 }
 
 /* Warna spesifik ikon legend */
-.icon-lunas { background-color: #2dce89; }
-.icon-sebagian { background-color: #fb6340; }
-.icon-menunggak { background-color: #f5365c; }
+.icon-lunas { background-color: #10b981; }
+.icon-sebagian { background-color: #f97316; }
+.icon-menunggak { background-color: #ef4444; }
 .icon-belum {
     background-color: transparent;
-    border: 1.5px solid #8898aa;
-    color: #8898aa;
+    border: 1.5px solid #94a3b8;
+    color: #94a3b8;
 }
-.icon-batal { background-color: #8898aa; }
+.icon-batal { background-color: #94a3b8; }
+
+
+/* ================================================================
+   4. VARIABEL GLOBAL
+   ================================================================ */
+
+:root {
+    --primary-green: #059669;
+    --secondary-green: #34d399;
+    --soft-green: #ecfdf5;
+    --dark-text: #1e293b;
+    --muted-text: #64748b;
+    --danger-color: #ef4444;
+    --warning-color: #f97316;
+    --info-color: #0ea5e9;
+    --card-radius: 20px;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+
+/* ================================================================
+   5. DASHBOARD — HEADER
+   ================================================================ */
+
+.dashboard-header {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%);
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    margin: 0;
+    padding: 40px 32px 32px;
+    box-shadow:
+        0 20px 45px rgba(5, 150, 105, .15),
+        0 10px 25px rgba(52, 211, 153, .12);
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    background: rgba(255, 255, 255, .06);
+    border-radius: 50%;
+    top: -120px;
+    right: -90px;
+}
+
+.dashboard-header::after {
+    content: '';
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    background: rgba(255, 255, 255, .04);
+    border-radius: 50%;
+    bottom: -110px;
+    left: -60px;
+}
+
+/* ================================================================
+   6. DASHBOARD — GLOBAL CARD
+   ================================================================ */
+
+.dashboard-card {
+    border: none;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, .06),
+        0 4px 16px rgba(0, 0, 0, .04);
+    transition: all .25s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, .10),
+        0 4px 12px rgba(0, 0, 0, .06);
+}
+
+/* Corak dekoratif — lebih halus */
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(5, 150, 105, .03);
+    border-radius: 50%;
+    top: -90px;
+    right: -80px;
+    pointer-events: none;
+}
+
+.dashboard-card::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: rgba(5, 150, 105, .02);
+    border-radius: 50%;
+    bottom: -60px;
+    left: -40px;
+    pointer-events: none;
+}
+
+/* ================================================================
+   7. DASHBOARD — STATS CARD
+   ================================================================ */
+
+.stats-card {
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: var(--card-radius) !important;
+}
+
+/* Border kiri */
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: var(--card-radius) 0 0 var(--card-radius);
+    background: linear-gradient(to bottom, var(--primary-green), var(--secondary-green));
+}
+
+/* Variasi warna border */
+.border-students::before {
+    background: linear-gradient(to bottom, #6366f1, #818cf8);
+}
+.border-class::before {
+    background: linear-gradient(to bottom, #f59e0b, #fbbf24);
+}
+.border-income::before {
+    background: linear-gradient(to bottom, #059669, #34d399);
+}
+.border-expense::before {
+    background: linear-gradient(to bottom, #ef4444, #f87171);
+}
+
+/* Stats title */
+.stats-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted-text);
+}
+
+/* Stats value */
+.stats-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.stats-nominal {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+/* ================================================================
+   8. DASHBOARD — ICON
+   ================================================================ */
+
+.stats-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+}
+
+/* Icon warna khusus */
+.stats-icon.icon-students {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+}
+.stats-icon.icon-class {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #fff;
+}
+.stats-icon.icon-income {
+    background: var(--soft-green);
+    color: var(--primary-green);
+}
+.stats-icon.icon-expense {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+/* ================================================================
+   9. DASHBOARD — QUICK ACTION
+   ================================================================ */
+
+.quick-action {
+    border-radius: 18px;
+    transition: all .25s ease;
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, .04);
+}
+
+.quick-action::before {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(5, 150, 105, .04);
+    border-radius: 50%;
+    top: -50px;
+    right: -50px;
+}
+
+.quick-action:hover {
+    transform: translateY(-4px);
+    background: linear-gradient(135deg, #059669, #34d399);
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(5, 150, 105, .25);
+    border-color: transparent;
+}
+
+.quick-action:hover i,
+.quick-action:hover span {
+    color: #fff !important;
+}
+
+/* ================================================================
+   10. DASHBOARD — TABLE
+   ================================================================ */
+
+.custom-table thead {
+    background: #f8fafc;
+}
+
+.custom-table th {
+    border-top: none !important;
+    font-size: .72rem;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--muted-text);
+    font-weight: 700;
+    padding: 16px 20px;
+}
+
+.custom-table td {
+    vertical-align: middle;
+    border-color: #f1f5f9;
+    padding: 16px 20px;
+    font-size: 0.88rem;
+}
+
+/* ================================================================
+   11. DASHBOARD — PAYMENT ICON
+   ================================================================ */
+
+.payment-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    color: #fff;
+    margin-right: 14px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, .2);
+    font-size: 0.82rem;
+}
+
+/* ================================================================
+   12. DASHBOARD — SECTION TITLES & BUTTONS
+   ================================================================ */
+
+.section-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--dark-text);
+    letter-spacing: -0.02em;
+}
+
+.view-btn {
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, .15);
+    transition: all .25s ease;
+}
+
+.view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(5, 150, 105, .25);
+}
+
+.chart-container {
+    position: relative;
+    height: 360px;
+}
+
+
+/* ================================================================
+   13. TRANSACTION SHOW — DETAIL PAGE
+   ================================================================ */
+
+.trx-detail-card {
+    background: #ffffff;
+    border-radius: var(--card-radius);
+    border: none;
+    overflow: hidden;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, .06),
+        0 8px 24px rgba(0, 0, 0, .06);
+}
+
+.trx-detail-header {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.trx-detail-header::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, .06);
+    border-radius: 50%;
+    top: -100px;
+    right: -60px;
+}
+
+.trx-detail-header::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, .04);
+    border-radius: 50%;
+    bottom: -60px;
+    left: -30px;
+}
+
+.trx-detail-header .trx-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.trx-detail-header .trx-code {
+    color: rgba(255, 255, 255, .65);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+.trx-detail-header .btn-back {
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .3);
+    color: #fff;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(4px);
+}
+
+.trx-detail-header .btn-back:hover {
+    background: rgba(255, 255, 255, .3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+    color: #fff;
+}
+
+/* Amount showcase */
+.trx-amount-box {
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+    border: 1px solid #d1fae5;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.trx-amount-box::before {
+    content: '';
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    background: rgba(5, 150, 105, .04);
+    border-radius: 50%;
+    top: -80px;
+    right: -60px;
+}
+
+.trx-amount-box.expense {
+    background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+    border-color: #fecaca;
+}
+
+.trx-amount-box.expense::before {
+    background: rgba(239, 68, 68, .04);
+}
+
+.trx-amount-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted-text);
+    margin-bottom: 8px;
+}
+
+.trx-amount-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+/* Badge — warna yang tidak bentrok dengan header hijau */
+.trx-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.trx-badge-income {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, .35);
+    backdrop-filter: blur(4px);
+}
+
+.trx-badge-expense {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, .35);
+    backdrop-filter: blur(4px);
+}
+
+/* Detail rows */
+.trx-detail-row {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s ease;
+}
+
+.trx-detail-row:last-child {
+    border-bottom: none;
+}
+
+.trx-detail-row:hover {
+    background: #f8fafc;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 10px;
+}
+
+.trx-detail-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+
+.trx-detail-icon.icon-date {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+.trx-detail-icon.icon-category {
+    background: #fff7ed;
+    color: #f97316;
+}
+.trx-detail-icon.icon-source {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+.trx-detail-icon.icon-user {
+    background: #fdf2f8;
+    color: #ec4899;
+}
+.trx-detail-icon.icon-time {
+    background: #ecfeff;
+    color: #06b6d4;
+}
+.trx-detail-icon.icon-desc {
+    background: var(--soft-green);
+    color: var(--primary-green);
+}
+
+.trx-detail-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted-text);
+    margin-bottom: 3px;
+}
+
+.trx-detail-value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.5;
+}
+
+/* Source badges in detail */
+.trx-source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.trx-source-auto {
+    background: #f5f3ff;
+    color: #7c3aed;
+    border: 1px solid #e9d5ff;
+}
+
+.trx-source-manual {
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+
+/* ================================================================
+   14. RESPONSIVE
+   ================================================================ */
+
+@media(max-width:1200px) {
+    .stats-nominal {
+        font-size: 1.3rem;
+    }
+}
+
+@media(max-width:768px) {
+    .dashboard-header {
+        padding: 28px 18px 24px;
+        border-radius: 20px;
+    }
+
+    .stats-card {
+        min-height: 120px;
+    }
+
+    .stats-value,
+    .stats-nominal {
+        font-size: 1.3rem;
+    }
+
+    .stats-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1rem;
+    }
+
+    .trx-detail-header {
+        padding: 20px;
+    }
+
+    .trx-amount-value {
+        font-size: 1.8rem;
+    }
+
+    .trx-detail-row {
+        flex-wrap: wrap;
+    }
+}
