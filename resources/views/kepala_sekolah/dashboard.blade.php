@@ -286,6 +286,49 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <!-- PENGATURAN SURAT IZIN WIDGET -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card dashboard-card shadow-sm">
+                <div class="card-header bg-white border-0 pt-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="section-title mb-0">Pengajuan Izin/Sakit Siswa</h5>
+                        <p class="text-sm text-muted mb-0">Daftar pengajuan izin atau sakit yang belum disetujui.</p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-xs font-weight-bold">Tanggal</th>
+                                <th class="text-xs font-weight-bold">Nama Siswa</th>
+                                <th class="text-xs font-weight-bold">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($pendingLetters as $letter)
+                                <tr>
+                                    <td class="text-sm font-weight-bold">
+                                        {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td class="text-sm font-weight-bold text-dark">{{ $letter->student_name }}</td>
+                                    <td>
+                                        <span class="badge bg-light text-info px-3 py-2 font-weight-bold text-xs">{{ $letter->type == 'sick' ? 'Sakit' : 'Izin' }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center py-4 text-muted">Belum ada pengajuan izin pending.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @push('scripts')

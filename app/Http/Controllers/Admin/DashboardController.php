@@ -80,6 +80,16 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        // Pending Letters (Last 5)
+        $pendingLetters = DB::table('letters as l')
+            ->join('students as s', 'l.student_id', '=', 's.id')
+            ->select('l.*', 's.name as student_name')
+            ->where('l.status', 'pending')
+            ->orderBy('l.created_at', 'desc')
+            ->limit(5)
+            ->get();
+        $pendingLettersCount = DB::table('letters')->where('status', 'pending')->count();
+
         return view('_admin.dashboard.index', compact(
             'totalStudents',
             'totalClassrooms',
@@ -90,7 +100,9 @@ class DashboardController extends Controller
             'chartLabels',
             'chartIncome',
             'chartExpense',
-            'recentPayments'
+            'recentPayments',
+            'pendingLetters',
+            'pendingLettersCount'
         ));
     }
 }

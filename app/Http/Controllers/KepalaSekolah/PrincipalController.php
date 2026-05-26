@@ -78,6 +78,16 @@ class PrincipalController extends Controller
             ->limit(5)
             ->get();
 
+        // 7. Pending Letters (Last 5)
+        $pendingLetters = DB::table('letters as l')
+            ->join('students as s', 'l.student_id', '=', 's.id')
+            ->select('l.*', 's.name as student_name')
+            ->where('l.status', 'pending')
+            ->orderBy('l.created_at', 'desc')
+            ->limit(5)
+            ->get();
+        $pendingLettersCount = DB::table('letters')->where('status', 'pending')->count();
+
         return view('kepala_sekolah.dashboard', compact(
             'totalStudents',
             'totalClassrooms',
@@ -94,7 +104,9 @@ class PrincipalController extends Controller
             'classroomStudentCounts',
             'paymentMethods',
             'paymentMethodCounts',
-            'recentPayments'
+            'recentPayments',
+            'pendingLetters',
+            'pendingLettersCount'
         ));
     }
 

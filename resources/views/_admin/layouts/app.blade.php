@@ -182,6 +182,21 @@
                 });
             @endif
 
+            // ─── SweetAlert: Validation Errors ───────────────────────
+            @if ($errors->any())
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal Menyimpan Data",
+                    html: `
+                        <ul class="text-start mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                });
+            @endif
+
             // ─── Delete Confirmation ─────────────────────────────────
             const deleteForms = document.querySelectorAll('form.delete-form');
             deleteForms.forEach(form => {

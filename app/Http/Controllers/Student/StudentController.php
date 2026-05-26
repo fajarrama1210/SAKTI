@@ -56,12 +56,29 @@ class StudentController extends Controller
             ->limit(5)
             ->get();
 
+        // Tagihan yang perlu perhatian (partial/unpaid) untuk reminder
+        $reminderBills = DB::table('bills as b')
+            ->join('semesters as sm', 'b.semester_id', '=', 'sm.id')
+            ->join('academic_years as ay', 'b.academic_year_id', '=', 'ay.id')
+            ->select('b.*', 'ay.name as academic_year_name')
+            ->where('b.student_id', $studentId)
+            ->whereIn('b.status', ['partial', 'unpaid'])
+            ->orderBy('b.year', 'asc')
+            ->orderBy('b.month', 'asc')
+            ->get();
+
+        // Hitung paid_amount untuk setiap reminder bill
+        foreach ($reminderBills as $rb) {
+            $rb->paid_amount = DB::table('payments')->where('bill_id', $rb->id)->sum('amount');
+        }
+
         return view('student.dashboard', compact(
             'student',
             'totalBillsCount',
             'totalOutstanding',
             'totalPaid',
-            'recentPayments'
+            'recentPayments',
+            'reminderBills'
         ));
     }
 
