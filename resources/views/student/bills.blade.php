@@ -21,6 +21,32 @@
         </div>
     </div>
 
+    <!-- Reminder Cicilan -->
+    @php $partialBills = $bills->filter(fn($b) => in_array($b->status, ['partial','unpaid'])); @endphp
+    @if($partialBills->isNotEmpty())
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm" style="border-radius:16px;overflow:hidden;">
+                <div class="d-flex align-items-center px-4 py-3" style="background:linear-gradient(135deg,#ff6b35,#f7931e);">
+                    <div class="me-3" style="width:40px;height:40px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-bell text-white"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0 text-white font-weight-bold">⚠️ Pengingat: Ada {{ $partialBills->count() }} Tagihan yang Belum Lunas</h6>
+                        <small class="text-white" style="opacity:.85;">Klik tagihan di bawah untuk melihat detail dan riwayat cicilan Anda.</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-white font-weight-bold" style="font-size:1.3rem;">
+                            Rp {{ number_format($partialBills->sum(fn($b) => $b->total_amount - $b->paid_amount), 0, ',', '.') }}
+                        </div>
+                        <small class="text-white" style="opacity:.85;">Total sisa tunggakan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Bills List -->
     <div class="row">
         <div class="col-lg-12">

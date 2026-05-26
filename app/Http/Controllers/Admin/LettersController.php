@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\Letters;
+use App\Models\Letter;
 use Illuminate\Http\Request;
 
 class LettersController extends Controller
@@ -12,54 +12,27 @@ class LettersController extends Controller
      */
     public function index()
     {
-        //
+        $letters = Letter::with('student.user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        return view('_admin.letters.index', compact('letters'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Update the status of the specified resource in storage.
      */
-    public function create()
+    public function updateStatus(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $letter = Letter::findOrFail($id);
+        $letter->update([
+            'status' => $request->status
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Letters $letters)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Letters $letters)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Letters $letters)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Letters $letters)
-    {
-        //
+        return redirect()->route('admin.letters.index')->with('success', 'Status surat izin berhasil diperbarui.');
     }
 }

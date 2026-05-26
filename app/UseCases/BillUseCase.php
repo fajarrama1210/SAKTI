@@ -97,7 +97,7 @@ class BillUseCase
      */
     public function getStudentBills($studentId)
     {
-        return DB::table(DatabaseEntity::TBL_BILLS . ' as b')
+        $bills = DB::table(DatabaseEntity::TBL_BILLS . ' as b')
             ->join(DatabaseEntity::TBL_SEMESTERS . ' as sm', 'b.semester_id', '=', 'sm.id')
             ->join(DatabaseEntity::TBL_ACADEMIC_YEARS . ' as ay', 'b.academic_year_id', '=', 'ay.id')
             ->select('b.*', 'sm.name as semester_name', 'ay.name as academic_year_name')
@@ -105,6 +105,15 @@ class BillUseCase
             ->orderBy('b.year', 'asc')
             ->orderBy('b.month', 'asc')
             ->get();
+
+        // Tambahkan paid_amount untuk setiap tagihan (untuk progress cicilan)
+        foreach ($bills as $bill) {
+            $bill->paid_amount = DB::table(DatabaseEntity::TBL_PAYMENTS)
+                ->where('bill_id', $bill->id)
+                ->sum('amount');
+        }
+
+        return $bills;
     }
 
     /**

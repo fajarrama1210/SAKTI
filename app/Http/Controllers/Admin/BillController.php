@@ -90,14 +90,26 @@ class BillController extends Controller
     public function pay(Request $request, $billId)
     {
         $request->validate([
-            'payment_method' => 'required|in:cash,transfer,other',
+            'payment_type'   => 'required|in:full,partial',
+            'payment_method' => 'required|in:cash,qris,transfer,other',
             'amount'         => 'nullable|numeric|min:1',
+            'payment_date'   => 'required|date',
+            'reference_number' => 'nullable|string|max:100',
+            'notes'          => 'nullable|string|max:500',
         ]);
 
+        // Jika full: set amount ke null, BillUseCase akan bayar seluruh sisa
+        $amount = ($request->payment_type === 'full') ? null : $request->amount;
+
+        // Jika partial: wajib ada amount
+        if ($request->payment_type === 'partial' && empty($amount)) {
+            return redirect()->back()->withErrors(['amount' => 'Jumlah cicilan harus diisi.'])->withInput();
+        }
+
         $data = [
-            'amount'           => $request->amount,
+            'amount'           => $amount,
             'payment_method'   => $request->payment_method,
-            'payment_date'     => now()->toDateString(),
+            'payment_date'     => $request->payment_date,
             'reference_number' => $request->reference_number,
             'notes'            => $request->notes,
             'verified_by'      => auth()->id(),
@@ -110,11 +122,14 @@ class BillController extends Controller
             return redirect()->back()->with('error', $msg);
         }
 
-        // Kembali ke halaman detail siswa
+        // Ambil status terbaru untuk pesan yang sesuai
         $bill = $this->billUseCase->getById($billId);
+        $message = ($bill->status === 'paid')
+            ? '✅ Pembayaran LUNAS berhasil dicatat! Saudara se-KK juga otomatis lunas.'
+            : '⏳ Cicilan berhasil dicatat! Sisa tagihan akan ditagih pada pembayaran berikutnya.';
 
         return redirect()->route('admin.spp.student', $bill->student_id)
-            ->with('success', 'Pembayaran berhasil dicatat! Saudara dengan KK yang sama juga otomatis lunas.');
+            ->with('success', $message);
     }
 
     /**

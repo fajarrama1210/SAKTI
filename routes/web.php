@@ -156,6 +156,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/transaction/excel', [ReportController::class, 'transactionExportExcel'])->name('transaction.excel');
         Route::get('/transaction/pdf', [ReportController::class, 'transactionExportPdf'])->name('transaction.pdf');
     });
+
+    Route::prefix('letters')->name('letters.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\LettersController::class, 'index'])->name('index');
+        Route::put('/{id}/status', [\App\Http\Controllers\Admin\LettersController::class, 'updateStatus'])->name('update-status');
+    });
 });
 
 Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])->group(function () {
@@ -164,6 +169,8 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/schedules', [App\Http\Controllers\Student\StudentController::class, 'schedules'])->name('schedules');
     Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
     Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
+    Route::get('/letters', [App\Http\Controllers\Student\LetterController::class, 'index'])->name('letters.index');
+    Route::post('/letters', [App\Http\Controllers\Student\LetterController::class, 'store'])->name('letters.store');
 });
 
 Route::prefix('kepala-sekolah')->name('kepala-sekolah.')->middleware(['auth', 'role:kepala_sekolah'])->group(function () {

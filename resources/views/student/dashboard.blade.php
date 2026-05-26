@@ -535,6 +535,83 @@
 
             </div>
 
+            {{-- =========================================
+                                    REMINDER CICILAN
+                                ========================================= --}}
+
+            @if($reminderBills->isNotEmpty())
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm" style="border-radius:20px;overflow:hidden;">
+                        <div class="card-body p-0">
+                            {{-- Header Reminder --}}
+                            <div class="d-flex align-items-center px-4 py-3" style="background:linear-gradient(135deg,#ff6b35,#f7931e);">
+                                <div class="me-3" style="width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                    <i class="fas fa-bell text-white fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 text-white font-weight-bold">⚠️ Pengingat Pembayaran SPP</h6>
+                                    <small class="text-white" style="opacity:.85;">Anda memiliki <b>{{ $reminderBills->count() }}</b> tagihan yang belum lunas. Segera selesaikan pembayaran Anda.</small>
+                                </div>
+                                <a href="{{ route('student.bills') }}" class="btn btn-sm text-white font-weight-bold" style="background:rgba(255,255,255,.2);border-radius:10px;border:1px solid rgba(255,255,255,.4);white-space:nowrap;">
+                                    Lihat Semua →
+                                </a>
+                            </div>
+                            {{-- List Tagihan --}}
+                            <div class="px-4 py-3">
+                                <div class="row g-3">
+                                    @foreach($reminderBills->take(3) as $rb)
+                                    @php
+                                        $rbPaid = $rb->paid_amount ?? 0;
+                                        $rbRemaining = $rb->total_amount - $rbPaid;
+                                        $rbPct = $rb->total_amount > 0 ? min(100, round($rbPaid / $rb->total_amount * 100)) : 0;
+                                        $rbPeriod = \Carbon\Carbon::createFromDate($rb->year, $rb->month, 1)->translatedFormat('F Y');
+                                        $rbDueDate = \Carbon\Carbon::parse($rb->due_date)->translatedFormat('d M Y');
+                                        $isOverdue = \Carbon\Carbon::parse($rb->due_date)->isPast();
+                                    @endphp
+                                    <div class="col-md-4">
+                                        <div class="p-3 rounded-3 h-100" style="background:{{ $rb->status === 'partial' ? '#fffbeb' : '#fff5f5' }};border:1px solid {{ $rb->status === 'partial' ? '#fcd34d' : '#fca5a5' }};">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div>
+                                                    <span class="text-xs font-weight-bold text-muted">Periode</span>
+                                                    <div class="font-weight-bold text-dark">{{ $rbPeriod }}</div>
+                                                </div>
+                                                @if($rb->status === 'partial')
+                                                    <span class="badge" style="background:linear-gradient(135deg,#f7931e,#f5a623);color:#fff;border-radius:8px;">Dicicil</span>
+                                                @else
+                                                    <span class="badge" style="background:linear-gradient(135deg,#f5365c,#d63031);color:#fff;border-radius:8px;">Belum Bayar</span>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex justify-content-between text-xs mb-1">
+                                                <span class="text-muted">Terbayar: <b class="text-success">Rp {{ number_format($rbPaid,0,',','.') }}</b></span>
+                                                <span class="text-muted">Sisa: <b class="text-danger">Rp {{ number_format($rbRemaining,0,',','.') }}</b></span>
+                                            </div>
+                                            <div style="height:6px;border-radius:50px;background:#e9ecef;overflow:hidden;" class="mb-2">
+                                                <div style="height:100%;width:{{ $rbPct }}%;border-radius:50px;background:linear-gradient(90deg,#f7931e,#2dce89);transition:width .6s;"></div>
+                                            </div>
+                                            <small class="text-{{ $isOverdue ? 'danger' : 'muted' }}">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                Jatuh Tempo: {{ $rbDueDate }}
+                                                @if($isOverdue) <b class="text-danger">(Terlambat!)</b> @endif
+                                            </small>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @if($reminderBills->count() > 3)
+                                <div class="text-center mt-3">
+                                    <a href="{{ route('student.bills') }}" class="btn btn-sm btn-warning font-weight-bold">
+                                        <i class="fas fa-list me-1"></i>Lihat {{ $reminderBills->count() - 3 }} tagihan lainnya
+                                    </a>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- =========================================
                                     STATS CARD
                                 ========================================= -->
