@@ -171,6 +171,14 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
     Route::get('/letters', [App\Http\Controllers\Student\LetterController::class, 'index'])->name('letters.index');
     Route::post('/letters', [App\Http\Controllers\Student\LetterController::class, 'store'])->name('letters.store');
+
+    // ===== PEMBAYARAN QRIS MIDTRANS =====
+    Route::post('/bills/{billId}/pay-qris', [App\Http\Controllers\Student\PaymentController::class, 'createQrisToken'])
+        ->name('bills.pay-qris')
+        ->where('billId', '[0-9]+');
+    Route::get('/bills/{billId}/payment-status', [App\Http\Controllers\Student\PaymentController::class, 'checkPaymentStatus'])
+        ->name('bills.payment-status')
+        ->where('billId', '[0-9]+');
 });
 
 Route::prefix('kepala-sekolah')->name('kepala-sekolah.')->middleware(['auth', 'role:kepala_sekolah'])->group(function () {

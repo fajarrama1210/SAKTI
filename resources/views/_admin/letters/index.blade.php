@@ -15,12 +15,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success text-white">
-        {{ session('success') }}
-    </div>
-    @endif
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card border-0 shadow-sm">
