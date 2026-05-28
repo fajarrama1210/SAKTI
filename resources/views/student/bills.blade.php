@@ -1,45 +1,50 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
 <div class="container-fluid py-4">
 
-    {{-- Page Title --}}
-    <div class="row mb-3">
-        <div class="col-12">
-            <h5 class="font-weight-bold text-dark mb-0">Tagihan & Pembayaran SPP</h5>
-            <p class="text-sm text-muted mb-0">Lihat detail tagihan dan lakukan pembayaran melalui QRIS.</p>
+    {{-- Header --}}
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-file-invoice-dollar me-2"></i> Tagihan & Pembayaran SPP
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Lihat detail tagihan dan lakukan pembayaran melalui QRIS.
+                </p>
+            </div>
         </div>
     </div>
 
     {{-- Info Siswa --}}
     <div class="row mb-4">
         <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-xs h-100" style="border-left: 4px solid #2dce89 !important; border-radius: 10px;">
-                <div class="card-body py-3 px-4">
-                    <p class="text-xs text-muted mb-1 text-uppercase font-weight-bold" style="letter-spacing:.5px;">Nama Siswa</p>
-                    <h6 class="mb-0 text-dark font-weight-bold">{{ $student->name }}</h6>
-                </div>
+            <div class="summary-card sc-blue h-100">
+                <div class="sc-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="sc-label">Nama Siswa</div>
+                <div class="sc-value" style="font-size: 1.1rem;">{{ $student->name }}</div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <div class="card border-0 shadow-xs h-100" style="border-left: 4px solid #5e72e4 !important; border-radius: 10px;">
-                <div class="card-body py-3 px-4">
-                    <p class="text-xs text-muted mb-1 text-uppercase font-weight-bold" style="letter-spacing:.5px;">NISN</p>
-                    <h6 class="mb-0 text-dark font-weight-bold">{{ $student->nisn }}</h6>
-                </div>
+            <div class="summary-card sc-purple h-100">
+                <div class="sc-icon"><i class="fas fa-id-card"></i></div>
+                <div class="sc-label">NISN</div>
+                <div class="sc-value">{{ $student->nisn }}</div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
             @php
                 $totalTunggakan = collect($bills)->filter(fn($b) => in_array($b->status, ['partial','unpaid']))->sum(fn($b) => $b->total_amount - $b->paid_amount);
             @endphp
-            <div class="card border-0 shadow-xs h-100" style="border-left: 4px solid {{ $totalTunggakan > 0 ? '#f5365c' : '#2dce89' }} !important; border-radius: 10px;">
-                <div class="card-body py-3 px-4">
-                    <p class="text-xs text-muted mb-1 text-uppercase font-weight-bold" style="letter-spacing:.5px;">Total Tunggakan</p>
-                    <h6 class="mb-0 font-weight-bold {{ $totalTunggakan > 0 ? 'text-danger' : 'text-success' }}">
-                        Rp {{ number_format($totalTunggakan, 0, ',', '.') }}
-                    </h6>
-                </div>
+            <div class="summary-card {{ $totalTunggakan > 0 ? 'sc-red' : 'sc-green' }} h-100">
+                <div class="sc-icon"><i class="fas {{ $totalTunggakan > 0 ? 'fa-exclamation-circle' : 'fa-check-circle' }}"></i></div>
+                <div class="sc-label">Total Tunggakan</div>
+                <div class="sc-value" style="font-size: 1.1rem;">Rp {{ number_format($totalTunggakan, 0, ',', '.') }}</div>
             </div>
         </div>
     </div>
@@ -55,12 +60,13 @@
     {{-- Daftar Tagihan --}}
     <div class="row">
         <div class="col-12">
-            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-                <div class="card-header bg-transparent border-bottom py-3 px-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0 font-weight-bold text-dark">Riwayat Tagihan Bulanan</h6>
-                        <span class="badge bg-secondary">{{ count($bills) }} Tagihan</span>
-                    </div>
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-receipt me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Riwayat Tagihan Bulanan
+                    </h3>
+                    <span class="badge px-3 py-2" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-weight: 700; border-radius: 50px;">{{ count($bills) }} Tagihan</span>
                 </div>
                 <div class="card-body p-0">
 

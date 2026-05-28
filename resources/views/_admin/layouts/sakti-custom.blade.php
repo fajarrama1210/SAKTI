@@ -228,32 +228,30 @@ body {
     align-items: center;
     position: relative;
     border-radius: var(--card-radius) !important;
+    border: 1px solid transparent;
 }
 
-/* Border kiri */
+/* Hilangkan border kiri lama */
 .stats-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 100%;
-    border-radius: var(--card-radius) 0 0 var(--card-radius);
-    background: linear-gradient(to bottom, var(--primary-green), var(--secondary-green));
+    display: none;
 }
 
-/* Variasi warna border */
-.border-students::before {
-    background: linear-gradient(to bottom, #6366f1, #818cf8);
+/* Variasi warna card penuh */
+.border-students {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border-color: #bfdbfe !important;
 }
-.border-class::before {
-    background: linear-gradient(to bottom, #f59e0b, #fbbf24);
+.border-class {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+    border-color: #fde68a !important;
 }
-.border-income::before {
-    background: linear-gradient(to bottom, #059669, #34d399);
+.border-income {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+    border-color: #a7f3d0 !important;
 }
-.border-expense::before {
-    background: linear-gradient(to bottom, #ef4444, #f87171);
+.border-expense {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+    border-color: #fecaca !important;
 }
 
 /* Stats title */
@@ -686,19 +684,20 @@ body {
 }
 
 
-/* ================================================================
-   14. LETTERS — HALAMAN PENGAJUAN IZIN
-   ================================================================ */
 
-.letters-header {
-    background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%);
+
+.sakti-page-header {
+    background:  linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%);
     border-radius: var(--card-radius);
     padding: 28px 32px;
     position: relative;
     overflow: hidden;
+box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+                0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.letters-header::before {
+.sakti-page-header::before {
     content: '';
     position: absolute;
     width: 200px;
@@ -709,7 +708,7 @@ body {
     right: -60px;
 }
 
-.letters-header::after {
+.sakti-page-header::after {
     content: '';
     position: absolute;
     width: 120px;
@@ -868,7 +867,7 @@ body {
     }
 
     .trx-detail-header,
-    .letters-header {
+    .sakti-page-header {
         padding: 20px;
     }
 
@@ -939,4 +938,46 @@ body {
 .btn-glass-danger:hover {
     background: #ef4444 !important;
     border-color: #ef4444 !important;
+}
+
+/* Summary Cards (from Report & Dashboard) */
+.summary-card {
+    border-radius: 14px;
+    padding: 20px 22px;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+}
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+.summary-card::after {
+    content: '';
+    position: absolute;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    top: -40px; right: -30px;
+    background: rgba(255,255,255,.12);
+}
+.summary-card.sc-green  { background: linear-gradient(135deg,#059669,#34d399); }
+.summary-card.sc-orange { background: linear-gradient(135deg,#ea580c,#fb923c); }
+.summary-card.sc-red    { background: linear-gradient(135deg,#dc2626,#f87171); }
+.summary-card.sc-blue   { background: linear-gradient(135deg,#0284c7,#38bdf8); }
+.summary-card.sc-purple { background: linear-gradient(135deg,#7c3aed,#a78bfa); }
+.summary-card .sc-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(255,255,255,.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: #fff;
+    margin-bottom: 14px;
+}
+.summary-card .sc-label {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .8px; color: rgba(255,255,255,.75); margin-bottom: 4px;
+}
+.summary-card .sc-value {
+    font-size: 1.45rem; font-weight: 800; color: #fff; letter-spacing: -.5px; line-height: 1.2;
 }

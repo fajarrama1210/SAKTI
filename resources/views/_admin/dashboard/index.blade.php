@@ -7,7 +7,7 @@
 @section('content')
 
     <!-- HEADER -->
-    <div class="dashboard-header mb-4">
+    <div class="sakti-page-header mb-4">
         <div class="container-fluid">
             <div class="header-body position-relative" style="z-index: 1;">
                 <h2 class="text-white font-weight-bold mb-1" style="font-size: 1.6rem; letter-spacing: -0.02em;">
@@ -25,76 +25,40 @@
 
         <!-- TOTAL SISWA -->
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
-            <div class="card dashboard-card stats-card border-students w-100">
-                <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
-                        <div style="min-width: 0; flex: 1;">
-                            <div class="stats-title mb-1">TOTAL SISWA</div>
-                            <div class="stats-value">{{ $totalStudents }}</div>
-                        </div>
-                        <div class="stats-icon icon-students">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                    </div>
-                </div>
+            <div class="summary-card sc-blue h-100">
+                <div class="sc-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="sc-label">TOTAL SISWA</div>
+                <div class="sc-value">{{ $totalStudents }}</div>
             </div>
         </div>
 
         <!-- KELAS & JURUSAN -->
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
-            <div class="card dashboard-card stats-card border-class w-100">
-                <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
-                        <div style="min-width: 0; flex: 1;">
-                            <div class="stats-title mb-1">KELAS & JURUSAN</div>
-                            <div class="stats-value">
-                                {{ $totalClassrooms }}
-                                <span style="font-size: .9rem; font-weight: 500; color: var(--muted-text);">/ {{ $totalMajors }}</span>
-                            </div>
-                        </div>
-                        <div class="stats-icon icon-class">
-                            <i class="fas fa-school"></i>
-                        </div>
-                    </div>
+            <div class="summary-card sc-orange h-100">
+                <div class="sc-icon"><i class="fas fa-school"></i></div>
+                <div class="sc-label">KELAS & JURUSAN</div>
+                <div class="sc-value">
+                    {{ $totalClassrooms }}
+                    <span style="font-size: .9rem; font-weight: 500; color: rgba(255,255,255,.8);">/ {{ $totalMajors }}</span>
                 </div>
             </div>
         </div>
 
         <!-- PEMASUKAN -->
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
-            <div class="card dashboard-card stats-card border-income w-100">
-                <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
-                        <div style="min-width: 0; flex: 1;">
-                            <div class="stats-title mb-1">PEMASUKAN</div>
-                            <div class="stats-nominal" style="color: #059669;">
-                                Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}
-                            </div>
-                        </div>
-                        <div class="stats-icon icon-income">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                    </div>
-                </div>
+            <div class="summary-card sc-green h-100">
+                <div class="sc-icon"><i class="fas fa-arrow-down"></i></div>
+                <div class="sc-label">PEMASUKAN</div>
+                <div class="sc-value">Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}</div>
             </div>
         </div>
 
         <!-- PENGELUARAN -->
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
-            <div class="card dashboard-card stats-card border-expense w-100">
-                <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
-                        <div style="min-width: 0; flex: 1;">
-                            <div class="stats-title mb-1">PENGELUARAN</div>
-                            <div class="stats-nominal" style="color: #ef4444;">
-                                Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}
-                            </div>
-                        </div>
-                        <div class="stats-icon icon-expense">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                </div>
+            <div class="summary-card sc-red h-100">
+                <div class="sc-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="sc-label">PENGELUARAN</div>
+                <div class="sc-value">Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}</div>
             </div>
         </div>
 

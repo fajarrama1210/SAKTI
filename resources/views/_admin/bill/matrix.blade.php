@@ -9,7 +9,7 @@
 
     <div class="container-fluid mt--6">
         <!-- HEADER -->
-        <div class="letters-header mb-4">
+        <div class="sakti-page-header mb-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
                 <div>
                     <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">

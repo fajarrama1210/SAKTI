@@ -203,22 +203,23 @@
 <div class="container-fluid mt--6">
 
     {{-- ══ HEADER ══ --}}
-    <div class="report-header">
-        <div class="report-header-content d-flex justify-content-between align-items-center flex-wrap" style="gap:12px;">
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
             <div>
-                <p class="text-white mb-1" style="opacity:.7; font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;">SAKTI — Laporan</p>
-                <h2 class="text-white font-weight-bold mb-1" style="font-size:1.5rem; letter-spacing:-.02em;">
-                    <i class="fas fa-file-invoice-dollar mr-2"></i> Laporan Pembayaran SPP
-                </h2>
-                <p class="text-white mb-0" style="opacity:.65; font-size:.86rem;">Rekap rinci tagihan dan pembayaran SPP seluruh siswa.</p>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-file-invoice-dollar me-2"></i> Laporan Pembayaran SPP
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Rekap rinci tagihan dan pembayaran SPP seluruh siswa.
+                </p>
             </div>
             @if($filtered && $data->count() > 0)
-            <div class="d-flex gap-2" style="gap:8px;">
-                <a href="{{ route('admin.reports.payment.excel', request()->query()) }}" class="btn-export-excel">
-                    <i class="fas fa-file-excel"></i> Excel
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.reports.payment.excel', request()->query()) }}" class="btn btn-sm btn-glass btn-glass-success">
+                    <i class="fas fa-file-excel me-1"></i> Excel
                 </a>
-                <a href="{{ route('admin.reports.payment.pdf', request()->query()) }}" class="btn-export-pdf">
-                    <i class="fas fa-file-pdf"></i> PDF
+                <a href="{{ route('admin.reports.payment.pdf', request()->query()) }}" class="btn btn-sm btn-glass btn-glass-danger">
+                    <i class="fas fa-file-pdf me-1"></i> PDF
                 </a>
             </div>
             @endif
@@ -279,13 +280,9 @@
                 <div class="row align-items-end">
                     <div class="col-md-5 col-sm-12 mb-3 mb-md-0">
                         <label class="filter-label">Pencarian</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" style="background:#f8fafc; border-color:#e2e8f0; border-right:0;">
-                                    <i class="fas fa-search" style="color:#94a3b8; font-size:.8rem;"></i>
-                                </span>
-                            </div>
-                            <input type="text" name="search" class="form-control" placeholder="Nama siswa, NISN, jenis pembayaran..." value="{{ $filters['search'] ?? '' }}" style="border-left:0;">
+                        <div class="position-relative">
+                            <i class="fas fa-search position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; z-index: 10;"></i>
+                            <input type="text" name="search" class="form-control" placeholder="Nama siswa, NISN, jenis pembayaran..." value="{{ $filters['search'] ?? '' }}" style="padding-left: 40px;">
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3 mb-md-0">

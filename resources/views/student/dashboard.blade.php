@@ -21,57 +21,7 @@
                     BACKGROUND HIJAU HEADER
             ========================================= */
 
-        .student-dashboard-bg {
-            position: relative;
-
-            background: linear-gradient(135deg,
-                    #07814e 0%,
-                    #2dce89 100%);
-
-            border-radius: 0 0 40px 40px;
-
-            padding: 30px 20px 30px;
-
-            margin-bottom: -60px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 15px 35px rgba(0, 0, 0, .12),
-                0 8px 18px rgba(45, 206, 137, .20);
-        }
-
-        .student-dashboard-bg::before {
-            content: '';
-
-            position: absolute;
-
-            width: 320px;
-            height: 320px;
-
-            border-radius: 50%;
-
-            background: rgba(255, 255, 255, .08);
-
-            top: -120px;
-            right: -100px;
-        }
-
-        .student-dashboard-bg::after {
-            content: '';
-
-            position: absolute;
-
-            width: 240px;
-            height: 240px;
-
-            border-radius: 50%;
-
-            background: rgba(255, 255, 255, .05);
-
-            bottom: -120px;
-            left: -80px;
-        }
+        /* background wrapper removed */
 
         /* =========================================
                                     WELCOME CARD
@@ -488,14 +438,12 @@
         }
 
         .footer {
-            margin-top: -30px !important;
-            margin-left: 30px;
+            margin-top: 0 !important;
             position: relative;
             z-index: 10;
         }
     </style>
 
-    <div class="student-dashboard-bg">
 
         <div class="container-fluid py-4">
 
@@ -1014,6 +962,5 @@
             </div>
 
         </div>
-    </div>
     </div>
 @endsection
