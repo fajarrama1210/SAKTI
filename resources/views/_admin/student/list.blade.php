@@ -19,15 +19,15 @@
             </div>
             <div class="d-flex gap-2">
                 <!-- Original btn-warning (yellow) -->
-                <a href="{{ route('admin.students.import.view') }}" class="btn btn-sm" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fcd34d; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <a href="{{ route('admin.students.import.view') }}" class="btn btn-sm btn-glass btn-glass-warning">
                     <i class="fas fa-file-import me-1"></i> Import Excel
                 </a>
                 <!-- Original btn-success (green) - we will use white/light green for contrast on green bg -->
-                <a href="{{ route('admin.students.template') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <a href="{{ route('admin.students.template') }}" class="btn btn-sm btn-glass btn-glass-white">
                     <i class="fas fa-download me-1"></i> Template
                 </a>
                 <!-- Original btn-sakti-primary (primary/green) -->
-                <a href="{{ route('admin.students.create') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <a href="{{ route('admin.students.create') }}" class="btn btn-sm btn-glass btn-glass-white">
                     <i class="fas fa-user-plus me-1"></i> Tambah Manual
                 </a>
             </div>

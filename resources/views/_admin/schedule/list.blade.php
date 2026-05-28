@@ -17,7 +17,7 @@
                     Kelola jadwal pelajaran untuk semua kelas.
                 </p>
             </div>
-            <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+            <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm btn-glass btn-glass-white">
                 <i class="fas fa-plus me-1"></i> Tambah Jadwal
             </a>
         </div>

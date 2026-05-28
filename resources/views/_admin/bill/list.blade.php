@@ -17,7 +17,7 @@
                     Kelola data tagihan siswa bulanan maupun sekali bayar.
                 </p>
             </div>
-            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-sm" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #a7f3d0; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+            <a href="{{ route('admin.bills.generate-form') }}" class="btn btn-sm btn-glass btn-glass-success">
                 <i class="fas fa-magic me-1"></i> Generate Tagihan per Semester
             </a>
         </div>

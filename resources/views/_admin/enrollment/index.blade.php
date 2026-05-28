@@ -18,10 +18,10 @@
                 </p>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm" style="background: rgba(14, 165, 233, 0.2); border: 1px solid rgba(14, 165, 233, 0.5); color: #bae6fd; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm btn-glass btn-glass-primary">
                     <i class="fas fa-angle-double-up me-1"></i> Kenaikan Kelas Massal
                 </a>
-                <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-glass btn-glass-danger">
                     <i class="fas fa-graduation-cap me-1"></i> Kelulusan Massal
                 </a>
             </div>

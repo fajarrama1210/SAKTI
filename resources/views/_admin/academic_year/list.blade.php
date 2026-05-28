@@ -17,7 +17,7 @@
                     Kelola periode tahun ajaran aktif dan non-aktif.
                 </p>
             </div>
-            <a href="{{ route('admin.academic-years.create') }}" class="btn btn-sm" style="background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+            <a href="{{ route('admin.academic-years.create') }}" class="btn btn-sm btn-glass btn-glass-white">
                 <i class="fas fa-plus me-1"></i> Tambah Tahun Ajaran
             </a>
         </div>

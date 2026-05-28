@@ -880,4 +880,63 @@ body {
         flex-wrap: wrap;
     }
 }
-</style>
+
+.btn-glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff !important;
+}
+.btn-glass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn-glass-white {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+.btn-glass-white:hover {
+    background: #ffffff !important;
+    color: #059669 !important; /* text-sakti-green to contrast with white */
+    border-color: #ffffff !important;
+}
+
+.btn-glass-primary {
+    background: rgba(14, 165, 233, 0.2) !important;
+    border: 1px solid rgba(14, 165, 233, 0.6) !important;
+}
+.btn-glass-primary:hover {
+    background: #0ea5e9 !important;
+    border-color: #0ea5e9 !important;
+}
+
+.btn-glass-success {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border: 1px solid rgba(16, 185, 129, 0.6) !important;
+}
+.btn-glass-success:hover {
+    background: #10b981 !important;
+    border-color: #10b981 !important;
+}
+
+.btn-glass-warning {
+    background: rgba(245, 158, 11, 0.2) !important;
+    border: 1px solid rgba(245, 158, 11, 0.6) !important;
+}
+.btn-glass-warning:hover {
+    background: #f59e0b !important;
+    border-color: #f59e0b !important;
+}
+
+.btn-glass-danger {
+    background: rgba(239, 68, 68, 0.25) !important;
+    border: 1px solid rgba(239, 68, 68, 0.6) !important;
+}
+.btn-glass-danger:hover {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+}

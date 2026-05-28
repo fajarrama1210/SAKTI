@@ -6,36 +6,40 @@
 
 @section('content')
 <div class="container-fluid mt--6">
-    {{-- Search Box --}}
-    <div class="card sakti-card mb-4">
-        <div class="card-header border-0 bg-white">
-            <div class="row align-items-center">
-                
-                <div class="col">
-                    <h3 class="mb-0 text-sakti-green font-weight-bold">
-                        <i class="fas fa-money-bill-wave mr-2"></i> Pembayaran SPP
-                    </h3>
-                </div>
-                <div class="col-auto d-flex gap-2">
-                    <form action="{{ route('admin.spp.sync') }}" method="POST" class="m-0">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-success" style="border-color: #2dce89; color: #2dce89;" data-bs-toggle="tooltip" title="Gunakan ini jika ada siswa atau tarif baru yang tagihannya belum muncul">
-                            <i class="fas fa-sync mr-1"></i> Sinkronisasi Tagihan
-                        </button>
-                    </form>
-                    <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-outline-primary ml-2" style="border-color: #5e72e4; color: #5e72e4;">
-                        <i class="fas fa-list-alt mr-1"></i> Rekap Tagihan
-                    </a>
-                </div>
+    <!-- HEADER -->
+    <div class="letters-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-money-bill-wave me-2"></i> Pembayaran SPP
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Cari siswa untuk kelola dan catat pembayaran SPP bulanan.
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <form action="{{ route('admin.spp.sync') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-glass btn-glass-danger" data-bs-toggle="tooltip" title="Gunakan ini jika ada siswa atau tarif baru yang tagihannya belum muncul">
+                        <i class="fas fa-sync me-1"></i> Sinkronisasi Tagihan
+                    </button>
+                </form>
+                <a href="{{ route('admin.spp.recap') }}" class="btn btn-sm btn-glass btn-glass-primary">
+                    <i class="fas fa-list-alt me-1"></i> Rekap Tagihan
+                </a>
             </div>
         </div>
-        <div class="card-body pt-0">
+    </div>
+
+    {{-- Search Box --}}
+    <div class="card dashboard-card mb-4 border-0 shadow-sm">
+        <div class="card-body p-4">
             <form method="GET" action="{{ route('admin.spp.index') }}">
-                <div class="input-group">
+                <div class="input-group input-group-lg">
                     <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
                     <input type="text" name="search" class="form-control border-start-0 ps-0 {{ $search ? 'border-end-0' : '' }}" value="{{ $search }}"
                            placeholder="Ketik nama siswa, NISN, atau No. KK lalu tekan Enter..."
-                           autofocus autocomplete="off">
+                           autofocus autocomplete="off" style="font-weight: 500; font-size: 1rem;">
                     @if($search)
                         <a href="{{ route('admin.spp.index') }}" class="input-group-text bg-white text-danger border-start-0 text-decoration-none" title="Bersihkan Pencarian" style="cursor: pointer;">
                             <i class="fas fa-times"></i>
@@ -85,29 +89,29 @@
                                     $currentYear  = now()->year;
                                 @endphp
                                 <div class="table-responsive">
-                                    <table class="table align-items-center mb-0">
-                                        <thead class="thead-light">
+                                    <table class="table letters-table align-items-center mb-0">
+                                        <thead>
                                             <tr>
-                                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase ps-4">Bulan Tagihan</th>
-                                                <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
+                                                <th class="text-center" style="width: 50%;">Bulan Tagihan</th>
+                                                <th class="text-center" style="width: 50%;">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($student->bills->take(6) as $bill)
                                             <tr class="{{ ($bill->month == $currentMonth && $bill->year == $currentYear) ? 'bg-light' : '' }}">
-                                                <td class="ps-4 align-middle">
+                                                <td class="text-center align-middle">
                                                     <span class="text-sm font-weight-bold text-dark">
                                                         {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
                                                     </span>
                                                     @if($bill->month == $currentMonth && $bill->year == $currentYear)
-                                                        <span class="badge bg-primary ms-2">Bulan Ini</span>
+                                                        <span class="badge" style="background: rgba(94, 114, 228, 0.1); color: #5e72e4; font-weight: 600; font-size: 0.65rem; margin-left: 6px;">Bulan Ini</span>
                                                     @endif
                                                 </td>
-                                                <td class="align-middle text-center text-sm">
+                                                <td class="text-center align-middle">
                                                     @if($bill->status === 'paid')
-                                                        <span class="badge bg-success"><i class="fas fa-check"></i> Lunas</span>
+                                                        <span class="badge" style="background: rgba(45, 206, 137, 0.1); color: #2dce89; font-weight: 600;"><i class="fas fa-check me-1"></i> Lunas</span>
                                                     @else
-                                                        <span class="badge bg-danger"><i class="fas fa-times"></i> Belum Bayar</span>
+                                                        <span class="badge" style="background: rgba(245, 54, 92, 0.1); color: #f5365c; font-weight: 600;"><i class="fas fa-times me-1"></i> Belum Bayar</span>
                                                     @endif
                                                 </td>
                                             </tr>
