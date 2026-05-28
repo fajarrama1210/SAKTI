@@ -98,23 +98,35 @@
           <div class="modal-body">
               <div class="mb-3">
                   <label for="submission_date" class="form-label">Tanggal Mulai (Izin/Sakit)</label>
-                  <input type="date" class="form-control" id="submission_date" name="submission_date" required>
+                  <input type="date" class="form-control @error('submission_date') is-invalid @enderror" id="submission_date" name="submission_date" value="{{ old('submission_date') }}" required>
+                  @error('submission_date')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
               </div>
               <div class="mb-3">
                   <label for="type" class="form-label">Kategori</label>
-                  <select class="form-select" id="type" name="type" required>
-                      <option value="sick">Sakit</option>
-                      <option value="permission">Izin</option>
+                  <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
+                      <option value="sick" {{ old('type') == 'sick' ? 'selected' : '' }}>Sakit</option>
+                      <option value="permission" {{ old('type') == 'permission' ? 'selected' : '' }}>Izin</option>
                   </select>
+                  @error('type')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
               </div>
               <div class="mb-3">
                   <label for="description" class="form-label">Keterangan / Deskripsi</label>
-                  <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                  <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
+                  @error('description')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
               </div>
               <div class="mb-3">
                   <label for="file" class="form-label">Upload Surat (PDF/JPG/PNG)</label>
-                  <input class="form-control" type="file" id="file" name="file" accept=".pdf,.png,.jpg,.jpeg" required>
+                  <input class="form-control @error('file') is-invalid @enderror" type="file" id="file" name="file" accept=".pdf,.png,.jpg,.jpeg" required>
                   <small class="text-muted">Maksimal ukuran 2MB.</small>
+                  @error('file')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
               </div>
           </div>
           <div class="modal-footer">
@@ -125,4 +137,15 @@
     </div>
   </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @if($errors->any())
+            var addLetterModal = new bootstrap.Modal(document.getElementById('addLetterModal'));
+            addLetterModal.show();
+        @endif
+    });
+</script>
+@endpush
 @endsection

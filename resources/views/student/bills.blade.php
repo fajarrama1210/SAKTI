@@ -149,24 +149,33 @@
                                     <div class="col-lg-4">
                                         <p class="text-xs text-uppercase text-muted font-weight-bold mb-3" style="letter-spacing:.5px;">Riwayat Pembayaran</p>
                                         @if(count($bill->payments) > 0)
-                                            @foreach($bill->payments as $pay)
-                                            <div class="d-flex align-items-start gap-3 mb-3">
-                                                <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-gradient-success rounded-circle"
-                                                     style="width:32px;height:32px;">
-                                                    <i class="fas fa-check text-white" style="font-size:10px;"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="text-sm font-weight-bold text-dark">Rp {{ number_format($pay->amount, 0, ',', '.') }}</div>
-                                                    <div class="text-xs text-muted">
-                                                        {{ \Carbon\Carbon::parse($pay->payment_date)->translatedFormat('d M Y') }}
-                                                        @if($pay->payment_method) · {{ strtoupper($pay->payment_method) }}@endif
-                                                    </div>
-                                                    @if($pay->reference_number)
-                                                    <div class="text-xs text-muted">Ref: {{ $pay->reference_number }}</div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            @endforeach
+                                             @foreach($bill->payments as $pay)
+                                             <div class="d-flex align-items-start gap-3 mb-3">
+                                                 <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-gradient-success rounded-circle"
+                                                      style="width:32px;height:32px;">
+                                                     <i class="fas fa-check text-white" style="font-size:10px;"></i>
+                                                 </div>
+                                                 <div class="flex-grow-1">
+                                                     <div class="text-sm font-weight-bold text-dark">Rp {{ number_format($pay->amount, 0, ',', '.') }}</div>
+                                                     <div class="text-xs text-muted">
+                                                         {{ \Carbon\Carbon::parse($pay->payment_date)->translatedFormat('d M Y') }}
+                                                         @if($pay->payment_method)
+                                                             · <span class="text-uppercase">{{ $pay->payment_method }}</span>
+                                                         @endif
+                                                     </div>
+                                                     @if($pay->reference_number)
+                                                     <div class="text-xs text-muted">Ref: {{ $pay->reference_number }}</div>
+                                                     @endif
+                                                     <div class="mt-1">
+                                                         <a href="{{ route('student.invoice.show', $pay->id) }}"
+                                                            class="text-xs text-primary font-weight-bold"
+                                                            target="_blank">
+                                                             <i class="fas fa-file-invoice me-1"></i>Lihat Invoice
+                                                         </a>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             @endforeach
                                         @else
                                             <div class="text-center py-3 text-muted">
                                                 <i class="fas fa-receipt fa-2x mb-2 opacity-5"></i>

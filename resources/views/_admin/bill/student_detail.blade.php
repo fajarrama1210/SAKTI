@@ -189,9 +189,50 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         @if($bill->status === 'paid')
-                                            <span class="text-success text-sm"><i class="fas fa-check-double me-1"></i>Verified</span>
+                                            @php
+                                                $lastPayment = \Illuminate\Support\Facades\DB::table('payments')
+                                                    ->where('bill_id', $bill->id)
+                                                    ->orderByDesc('payment_date')
+                                                    ->first();
+                                            @endphp
+                                            <div class="d-flex gap-1 justify-content-center">
+                                                <span class="text-success text-sm"><i class="fas fa-check-double me-1"></i>Verified</span>
+                                                @if($lastPayment)
+                                                <a href="{{ route('admin.spp.invoice', $lastPayment->id) }}"
+                                                   class="btn btn-sm btn-outline-info mb-0"
+                                                   target="_blank"
+                                                   title="Lihat Invoice">
+                                                    <i class="fas fa-file-invoice"></i>
+                                                </a>
+                                                @endif
+                                            </div>
                                         @elseif($bill->status === 'cancelled')
                                             <span class="text-secondary text-sm"><i class="fas fa-minus-circle me-1"></i>Cancelled</span>
+                                        @elseif($bill->status === 'partial')
+                                            @php
+                                                $lastPayment = \Illuminate\Support\Facades\DB::table('payments')
+                                                    ->where('bill_id', $bill->id)
+                                                    ->orderByDesc('payment_date')
+                                                    ->first();
+                                            @endphp
+                                            <div class="d-flex gap-1 justify-content-center flex-wrap">
+                                                <button type="button" class="btn btn-sm btn-sakti-primary btn-pay mb-0"
+                                                    data-id="{{ $bill->id }}"
+                                                    data-period="{{ \Carbon\Carbon::createFromDate($bill->year,$bill->month,1)->translatedFormat('F Y') }}"
+                                                    data-total="{{ $bill->total_amount }}"
+                                                    data-paid="{{ $paidAmt }}"
+                                                    data-remaining="{{ $remaining }}">
+                                                    <i class="fas fa-money-bill-wave me-1"></i>Lanjut Cicil
+                                                </button>
+                                                @if($lastPayment)
+                                                <a href="{{ route('admin.spp.invoice', $lastPayment->id) }}"
+                                                   class="btn btn-sm btn-outline-info mb-0"
+                                                   target="_blank"
+                                                   title="Lihat Invoice">
+                                                    <i class="fas fa-file-invoice"></i>
+                                                </a>
+                                                @endif
+                                            </div>
                                         @else
                                             <button type="button" class="btn btn-sm btn-sakti-primary btn-pay mb-0"
                                                 data-id="{{ $bill->id }}"
@@ -199,8 +240,7 @@
                                                 data-total="{{ $bill->total_amount }}"
                                                 data-paid="{{ $paidAmt }}"
                                                 data-remaining="{{ $remaining }}">
-                                                <i class="fas fa-money-bill-wave me-1"></i>
-                                                {{ $bill->status === 'partial' ? 'Lanjut Cicil' : 'Bayar' }}
+                                                <i class="fas fa-money-bill-wave me-1"></i>Bayar
                                             </button>
                                         @endif
                                     </td>
