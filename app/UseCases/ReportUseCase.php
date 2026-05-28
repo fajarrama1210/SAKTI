@@ -56,10 +56,25 @@ class ReportUseCase
             $query->where('b.year', $filters['year']);
         }
 
-        $results = $query
-            ->orderBy('s.name', 'asc')
-            ->orderBy('b.month', 'asc')
-            ->get();
+        // Search
+        if (!empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('s.name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('s.nisn', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('pt.name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('c.grade_level', 'like', '%' . $filters['search'] . '%');
+            });
+        }
+
+        $query->orderBy('s.name', 'asc')->orderBy('b.month', 'asc');
+
+        if (!empty($filters['is_export'])) {
+            $results = $query->get();
+        } else {
+            $perPage = $filters['per_page'] ?? 50;
+            $paginator = $query->paginate($perPage);
+            $results = $paginator->getCollection();
+        }
 
         // 1. Ambil semua Bill Item ID
         $billItemIds = $results->pluck('bill_item_id')->toArray();
@@ -86,6 +101,11 @@ class ReportUseCase
             }
         }
 
-        return $results;
+        if (!empty($filters['is_export'])) {
+            return $results;
+        }
+
+        $paginator->setCollection($results);
+        return $paginator;
     }
 }
