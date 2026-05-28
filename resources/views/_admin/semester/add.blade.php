@@ -6,17 +6,36 @@
 
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card sakti-card">
-        <div class="card-header border-0 bg-white">
-            <h3 class="mb-0 text-sakti-green font-weight-bold">Tambah Semester</h3>
+
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-book me-2"></i> Tambah Semester
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">Tambah data semester baru ke sistem SAKTI.</p>
+            </div>
+            <a href="{{ route('admin.semesters.index') }}" class="btn btn-sm btn-glass btn-glass-white">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
         </div>
-        <div class="card-body">
+    </div>
+
+    <div class="sakti-form-card">
+        <div class="form-card-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="header-icon"><i class="fas fa-plus"></i></div>
+                <div><h3>Formulir Tambah Semester</h3><p>Isi data semester yang akan ditambahkan</p></div>
+            </div>
+        </div>
+        <div class="form-card-body">
             @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+            <div class="sakti-warning-box"><i class="fas fa-exclamation-triangle"></i> {{ session('error') }}</div>
             @endif
             @if($errors->any())
-            <div class="alert alert-danger">
-                <ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            <div class="sakti-warning-box">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul class="mb-0 mt-1">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
             </div>
             @endif
 
@@ -46,8 +65,6 @@
                             <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Contoh: Semester Ganjil" required>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Bulan Mulai</label>
@@ -69,9 +86,10 @@
                         </div>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-sakti-primary mt-3"><i class="fas fa-save mr-2"></i> Simpan</button>
-                <a href="{{ route('admin.semesters.index') }}" class="btn btn-secondary mt-3">Batal</a>
+                <div class="form-action-bar">
+                    <button type="submit" class="btn btn-sakti-primary"><i class="fas fa-save me-1"></i> Simpan</button>
+                    <a href="{{ route('admin.semesters.index') }}" class="btn btn-secondary">Batal</a>
+                </div>
             </form>
         </div>
     </div>

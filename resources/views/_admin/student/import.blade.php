@@ -6,15 +6,31 @@
 
 @section('content')
 <div class="container-fluid mt--6">
+
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-file-import me-2"></i> Import Data Siswa
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">Unggah file Excel untuk mendaftarkan siswa secara massal.</p>
+            </div>
+            <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-glass btn-glass-white">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xl-8 order-xl-1">
-            <div class="card sakti-card">
-                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0 text-sakti-green font-weight-bold">Import Data Siswa Ekstraksi Excel</h3>
-                    <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
+            <div class="sakti-form-card">
+                <div class="form-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="header-icon"><i class="fas fa-file-excel"></i></div>
+                        <div><h3>Unggah File Excel</h3><p>Format .xlsx atau .xls, maks 2MB</p></div>
+                    </div>
                 </div>
-
-                <div class="card-body">
+                <div class="form-card-body">
                     <div class="text-center mb-4 mt-2">
                         <i class="fas fa-file-excel fa-4x text-success mb-3"></i>
                         <h4 class="text-uppercase text-muted font-weight-bold">Unggah File Excel</h4>
@@ -54,25 +70,16 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-4 order-xl-2">
-            <div class="card sakti-card card-profile">
-                <div class="card-body pt-0 pt-md-4">
-                    <div class="text-center mt-md-5">
-                        <h5 class="h3 text-sakti-green font-weight-bold">
-                            <i class="fas fa-info-circle"></i> Belum punya Templatenya?
-                        </h5>
-                        <div class="h5 font-weight-300 mt-3">
-                            Unduh template Excel resmi untuk mempermudah pendaftaran data siswa Anda.
-                        </div>
-                        <p class="mt-4 mb-4 text-sm text-muted">
-                            Template ini dilengkapi dengan <strong class="text-dark">dropdown data kelas otomatis</strong> (tidak perlu tebak ID lagi!) dan akan secara otomatis membuatkan akun login bagi siswa terkait.
-                        </p>
-                        <a href="{{ route('admin.students.template') }}" class="btn btn-success">
-                            <i class="fas fa-download mr-1"></i> Download Template
-                        </a>
-                    </div>
-                </div>
+            <div class="sakti-info-box" style="border-radius: 20px; padding: 28px;">
+                <h5 style="color: #065f46; font-weight: 700;"><i class="fas fa-info-circle"></i> Belum punya Template?</h5>
+                <p class="mt-2 mb-3" style="font-size: .88rem;">
+                    Unduh template Excel resmi. Template dilengkapi dengan <strong>dropdown data kelas otomatis</strong> dan akan membuatkan akun login bagi siswa secara otomatis.
+                </p>
+                <a href="{{ route('admin.students.template') }}" class="btn btn-sakti-primary btn-sm">
+                    <i class="fas fa-download me-1"></i> Download Template
+                </a>
             </div>
         </div>
     </div>

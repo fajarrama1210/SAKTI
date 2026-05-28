@@ -981,3 +981,157 @@ box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
 .summary-card .sc-value {
     font-size: 1.45rem; font-weight: 800; color: #fff; letter-spacing: -.5px; line-height: 1.2;
 }
+
+
+/* ================================================================
+   FORM PAGES — Add / Edit / Detail Cards
+   ================================================================ */
+
+/* Card container for form pages */
+.sakti-form-card {
+    background: #fff;
+    border-radius: 20px;
+    border: none;
+    box-shadow:
+        0 4px 24px rgba(5, 150, 105, .08),
+        0 1px 4px rgba(0,0,0,.04);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+/* Gradient header bar inside form card */
+.sakti-form-card .form-card-header {
+    background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #34d399 100%);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sakti-form-card .form-card-header h3 {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.sakti-form-card .form-card-header p {
+    color: rgba(255,255,255,.75);
+    font-size: 0.82rem;
+    margin: 2px 0 0 0;
+}
+
+.sakti-form-card .form-card-header .header-icon {
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,.18);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.sakti-form-card .form-card-body {
+    padding: 28px;
+}
+
+/* Section separator inside form */
+.form-section-label {
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--muted-text, #8898aa);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e9ecef;
+}
+
+/* Info box inside forms (like alert-info styled) */
+.sakti-info-box {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 1px solid #a7f3d0;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: .85rem;
+    color: #065f46;
+}
+
+.sakti-info-box i {
+    color: #059669;
+    margin-right: 6px;
+}
+
+.sakti-warning-box {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 1px solid #fcd34d;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: .85rem;
+    color: #92400e;
+}
+
+.sakti-warning-box i {
+    color: #d97706;
+    margin-right: 6px;
+}
+
+/* Form control enhanced */
+.sakti-form-card .form-control,
+.sakti-form-card .form-select {
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    padding: 10px 14px;
+    font-size: .9rem;
+    transition: border-color .2s, box-shadow .2s;
+    background-color: #f8fafc;
+    color: var(--dark-text, #1a2332);
+}
+
+.sakti-form-card .form-control:focus,
+.sakti-form-card .form-select:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5,150,105,.12);
+    background-color: #fff;
+    outline: none;
+}
+
+.sakti-form-card label.form-control-label,
+.sakti-form-card label.form-label {
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--muted-text, #8898aa);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+}
+
+/* Form action buttons row */
+.form-action-bar {
+    display: flex;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1.5px solid #e9ecef;
+    margin-top: 20px;
+}
+
+/* Detail info table inside form card */
+.sakti-detail-table td {
+    padding: 10px 4px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: .9rem;
+    vertical-align: middle;
+}
+.sakti-detail-table td:first-child {
+    color: var(--muted-text, #8898aa);
+    font-weight: 600;
+    width: 170px;
+}
+.sakti-detail-table tr:last-child td {
+    border-bottom: none;
+}
+
