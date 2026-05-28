@@ -7,7 +7,7 @@
 @section('content')
 <div class="container-fluid mt--6">
     <!-- HEADER -->
-    <div class="letters-header mb-4">
+    <div class="sakti-page-header mb-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
             <div>
                 <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
@@ -17,7 +17,7 @@
                     Kelola data kategori atau jenis pembayaran.
                 </p>
             </div>
-            <a href="{{ route('admin.payment-types.create') }}" class="btn btn-sm" style="background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+            <a href="{{ route('admin.payment-types.create') }}" class="btn btn-sm btn-glass btn-glass-white">
                 <i class="fas fa-plus me-1"></i> Tambah Jenis
             </a>
         </div>

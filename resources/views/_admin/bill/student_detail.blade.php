@@ -59,10 +59,21 @@
     </div>
     @endif
 
-    <div class="d-flex mb-3">
-        <a href="{{ route('admin.spp.index') }}" class="btn btn-sm btn-outline-white text-white border-white">
-            <i class="fas fa-arrow-left me-1"></i> Kembali ke Pencarian
-        </a>
+    <!-- HEADER -->
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-user-circle me-2"></i> Detail Pembayaran SPP
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Kelola tagihan dan catat pembayaran untuk siswa ini.
+                </p>
+            </div>
+            <a href="{{ route('admin.spp.index') }}" class="btn btn-sm btn-glass btn-glass-white">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+        </div>
     </div>
 
     <div class="row">
@@ -123,21 +134,24 @@
 
         {{-- Kalender SPP --}}
         <div class="col-xl-8">
-            <div class="card sakti-card shadow-sm">
-                <div class="card-header pb-0 border-0 d-flex justify-content-between align-items-center bg-white">
-                    <h5 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-calendar-alt me-2"></i> Kalender SPP</h5>
-                    <span class="badge btn-sakti-primary">{{ $bills->first()->academic_year_name ?? '-' }}</span>
+            <div class="card dashboard-card shadow-sm">
+                <div class="card-header bg-white border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-calendar-alt me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Kalender SPP
+                    </h3>
+                    <span class="badge" style="background: rgba(45,206,137,.15); color: #2dce89; font-weight: 600; padding: 6px 12px; font-size: 0.8rem;">{{ $bills->first()->academic_year_name ?? '-' }}</span>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
-                            <thead class="thead-light">
+                        <table class="table letters-table align-items-center mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="ps-4 text-sakti-green text-xs font-weight-bold text-uppercase">Periode</th>
-                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Tagihan</th>
-                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Progres</th>
-                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Status</th>
-                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">Aksi</th>
+                                    <th class="text-center">Periode</th>
+                                    <th class="text-center">Tagihan</th>
+                                    <th class="text-center">Progres</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,12 +165,12 @@
                                     $pct = $bill->total_amount > 0 ? min(100, round($paidAmt / $bill->total_amount * 100)) : 0;
                                 @endphp
                                 <tr class="bill-row {{ $isCurrentMonth ? 'bg-light' : '' }}">
-                                    <td class="ps-4 align-middle">
+                                    <td class="text-center align-middle">
                                         <span class="text-sm font-weight-bold text-dark">
                                             {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
                                         </span>
                                         @if($isCurrentMonth)
-                                            <span class="badge bg-primary ms-1">Bulan Ini</span>
+                                            <span class="badge" style="background: rgba(94, 114, 228, 0.1); color: #5e72e4; font-weight: 600; font-size: 0.65rem; margin-left: 6px;">Bulan Ini</span>
                                         @endif
                                     </td>
                                     <td class="align-middle text-center text-sm">

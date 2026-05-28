@@ -8,18 +8,23 @@
 
 
     <div class="container-fluid mt--6">
-        <div class="card sakti-card mb-4">
-            <div class="card-header bg-white border-0 pb-0 pt-4 px-4">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h3 class="mb-1 text-sakti-green font-weight-bold">Matrix Pembayaran SPP</h3>
-                        <p class="text-sm text-muted mb-0">Rekap status lunas per bulan dalam satu tampilan grid.</p>
-                    </div>
+        <!-- HEADER -->
+        <div class="sakti-page-header mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+                <div>
+                    <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                        <i class="fas fa-th me-2"></i> Matrix Pembayaran SPP
+                    </h3>
+                    <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                        Rekap status lunas per bulan dalam satu tampilan grid.
+                    </p>
                 </div>
             </div>
+        </div>
 
+        <div class="card dashboard-card mb-4 border-0 shadow-sm">
             {{-- Filter --}}
-            <div class="card-body bg-white border-bottom py-4 px-4">
+            <div class="card-body p-4">
                 <form method="GET" action="{{ route('admin.spp.matrix') }}" class="row align-items-end">
                     <div class="col-md-5 mb-3 mb-md-0">
                         <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Pilih Kelas</label>
@@ -52,16 +57,26 @@
                     </div>
                 </form>
             </div>
+        </div>
+
+        <div class="card dashboard-card">
+            <div class="card-header bg-white border-0 pt-4 pb-2 px-4">
+                <h3 class="section-title mb-0">
+                    <i class="fas fa-list-ul me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                    Grid Status SPP
+                </h3>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
 
             @if ($data)
-                <div class="table-responsive">
-                    <table class="table align-items-center table-flush table-bordered">
-                        <thead class="thead-light">
+                <div class="table-responsive p-0">
+                    <table class="table letters-table align-items-center mb-0">
+                        <thead>
                             <tr>
-                                <th style="width: 60px" class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">No</th>
-                                <th style="min-width: 250px" class="text-sakti-green text-xs font-weight-bold text-uppercase">Nama Siswa</th>
+                                <th style="width: 60px" class="text-center">No</th>
+                                <th style="min-width: 200px" class="text-center">Nama Siswa</th>
                                 @foreach ($data['months'] as $m)
-                                    <th class="text-center text-sakti-green text-xs font-weight-bold text-uppercase">
+                                    <th class="text-center">
                                         {{ \Carbon\Carbon::createFromDate($m['year'], $m['month'], 1)->translatedFormat('M Y') }}
                                     </th>
                                 @endforeach
@@ -70,10 +85,10 @@
                         <tbody>
                             @foreach ($data['students'] as $index => $student)
                                 <tr>
-                                    <td class="text-center">{{ $index + 1 }}</td>
-                                    <td>
-                                        <div class="font-weight-bold text-dark">{{ $student->name }}</div>
-                                        <small class="text-muted">{{ $student->nisn }}</small>
+                                    <td class="text-center align-middle">{{ $index + 1 }}</td>
+                                    <td class="align-middle">
+                                        <div class="font-weight-bold text-dark ps-3">{{ $student->name }}</div>
+                                        <small class="text-muted ps-3">{{ $student->nisn }}</small>
                                     </td>
                                     @foreach ($data['months'] as $m)
                                         @php
@@ -81,7 +96,7 @@
                                                 ->get($student->id)
                                                 ?->firstWhere('month', $m['month']);
                                         @endphp
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             @if ($bill)
                                                 @if ($bill->status === 'paid')
                                                     <a href="{{ route('admin.spp.student', $student->id) }}" class="btn btn-sm btn-icon-only btn-success rounded-circle" title="Lunas">
@@ -113,7 +128,7 @@
                 </div>
 
                 {{-- Footer Legend & Action --}}
-                <div class="card-footer bg-white py-4 px-4">
+                <div class="card-footer bg-white border-0 py-4 px-4">
                     <div class="row align-items-center">
                         <div class="col-lg-9 mb-3 mb-lg-0">
                             <h5 class="text-uppercase text-muted tracking-wide text-xs mb-3 font-weight-bold">Keterangan Status:</h5>
@@ -165,6 +180,7 @@
                     </p>
                 </div>
             @endif
+            </div>
         </div>
     </div>
 @endsection
