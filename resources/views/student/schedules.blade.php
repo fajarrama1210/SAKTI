@@ -27,7 +27,8 @@
     <!-- Schedules Section -->
     <div class="row">
         @foreach($schedulesByDay as $dayName => $daySchedules)
-            <div class="col-lg-4 col-md-6 mb-4">
+            {{-- xs: full width, sm: 2 per row, md/lg: 3 per row --}}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4">
                 <div class="card dashboard-card h-100">
                     <div class="card-header border-0 p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #059669, #34d399); border-radius: var(--card-radius) var(--card-radius) 0 0;">
                         <h6 class="text-white mb-0 font-weight-bold">{{ $dayName }}</h6>

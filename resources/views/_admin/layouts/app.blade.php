@@ -18,6 +18,7 @@
     <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}?v=2.1.0" rel="stylesheet" />
+    <link href="{{ asset('assets/css/sakti-responsive.css') }}" rel="stylesheet" />
     @stack('styles')
 
     <style>
@@ -30,34 +31,53 @@
         /* Minimalist Modern Green Pagination */
         .pagination {
             gap: 6px;
+            display: flex;
+            align-items: center;
         }
 
-        .page-item .page-link {
+        .page-item .page-link,
+        .page-item span {
             border: none !important;
             border-radius: 8px !important;
             color: #67748e;
             font-weight: 600;
-            padding: 8px 16px;
+            padding: 8px 16px !important;
             transition: all 0.3s ease;
-            background-color: #f8f9fa;
+            background-color: #f8f9fa !important;
+            width: auto !important;
+            height: auto !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            white-space: nowrap !important;
+            margin: 0 !important;
+        }
+
+        /* Numbered pages (except first/last control buttons) can remain compact/square if desired, but making all auto is safer and cleaner */
+        .pagination .page-item:not(:first-child):not(:last-child) .page-link {
+            min-width: 38px;
+            padding: 8px 12px !important;
         }
 
         .page-item .page-link:hover {
-            background-color: #059669;
-            color: #ffffff;
-            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2) !important;
             transform: translateY(-1px);
         }
 
         .page-item.active .page-link {
-            background-color: #059669;
-            color: #ffffff;
-            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3);
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3) !important;
         }
 
-        .page-item.disabled .page-link {
-            color: #94a3b8;
-            background-color: transparent;
+        .page-item.disabled .page-link,
+        .page-item.disabled span {
+            color: #94a3b8 !important;
+            background-color: #f1f5f9 !important;
+            opacity: 0.6;
             pointer-events: none;
         }
 
@@ -245,6 +265,11 @@
                     }
                 });
             }
+            // ─── Global Dropdown Viewport Boundary ───────────────────
+            document.querySelectorAll('.table-responsive .dropdown [data-bs-toggle="dropdown"]').forEach(el => {
+                el.setAttribute('data-bs-boundary', 'viewport');
+            });
+
             // ─── Sidebar Scroll Persistence ─────────────────────────
             var sidebar = document.getElementById('sidenav-collapse-main');
             if (sidebar) {

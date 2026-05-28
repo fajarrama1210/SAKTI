@@ -23,21 +23,21 @@
 
     {{-- Info Siswa --}}
     <div class="row mb-4">
-        <div class="col-md-4 mb-3">
+        <div class="col-12 col-sm-6 col-md-4 mb-3">
             <div class="summary-card sc-blue h-100">
                 <div class="sc-icon"><i class="fas fa-user-graduate"></i></div>
                 <div class="sc-label">Nama Siswa</div>
                 <div class="sc-value" style="font-size: 1.1rem;">{{ $student->name }}</div>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-12 col-sm-6 col-md-4 mb-3">
             <div class="summary-card sc-purple h-100">
                 <div class="sc-icon"><i class="fas fa-id-card"></i></div>
                 <div class="sc-label">NISN</div>
                 <div class="sc-value">{{ $student->nisn }}</div>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-12 col-sm-12 col-md-4 mb-3">
             @php
                 $totalTunggakan = collect($bills)->filter(fn($b) => in_array($b->status, ['partial','unpaid']))->sum(fn($b) => $b->total_amount - $b->paid_amount);
             @endphp
@@ -78,7 +78,7 @@
                     @endphp
 
                     <div class="border-bottom">
-                        <div class="px-4 py-3 d-flex align-items-center gap-3 flex-wrap"
+                        <div class="px-3 px-md-4 py-3 d-flex align-items-center gap-2 gap-md-3 flex-wrap bill-row-inner"
                              style="cursor:pointer; transition:background .15s;"
                              onmouseover="this.style.background='#f8f9fa'"
                              onmouseout="this.style.background='#fff'"
@@ -129,7 +129,7 @@
                                 <div class="row g-4">
 
                                     {{-- Rincian --}}
-                                    <div class="col-lg-4">
+                                    <div class="col-12 col-lg-4">
                                         <p class="text-xs text-uppercase text-muted font-weight-bold mb-3" style="letter-spacing:.5px;">Rincian Tagihan</p>
                                         <div class="card border-0 shadow-xs" style="border-radius:8px;">
                                             <div class="card-body p-3">
@@ -152,7 +152,7 @@
                                     </div>
 
                                     {{-- Riwayat --}}
-                                    <div class="col-lg-4">
+                                    <div class="col-12 col-lg-4">
                                         <p class="text-xs text-uppercase text-muted font-weight-bold mb-3" style="letter-spacing:.5px;">Riwayat Pembayaran</p>
                                         @if(count($bill->payments) > 0)
                                              @foreach($bill->payments as $pay)
@@ -191,7 +191,7 @@
                                     </div>
 
                                     {{-- Aksi Bayar --}}
-                                    <div class="col-lg-4 d-flex flex-column align-items-center justify-content-center text-center">
+                                    <div class="col-12 col-lg-4 d-flex flex-column align-items-center justify-content-center text-center">
                                         @if($bill->status !== 'paid')
                                         <div class="card border-0 w-100" style="border-radius:10px; border: 1px solid #e9ecef;">
                                             <div class="card-body p-4">

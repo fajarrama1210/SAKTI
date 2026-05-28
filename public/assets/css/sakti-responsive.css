@@ -1,0 +1,503 @@
+/* ============================================================
+   SAKTI — Responsive Stylesheet
+   Centralized Bootstrap 5 Grid Breakpoints
+   xs(<576) | sm(576) | md(768) | lg(992) | xl(1200) | xxl(1400)
+   ============================================================ */
+
+
+/* ============================================================
+   1. SIDEBAR — Responsive
+   ============================================================ */
+
+/* xs & sm (<992px): sidebar hidden, triggered by Argon toggle */
+@media (max-width: 991.98px) {
+    .sidenav {
+        transform: translateX(-17.125rem);
+        transition: transform 0.3s ease;
+    }
+
+    /* When sidebar is open (Argon adds g-sidenav-pinned) */
+    .g-sidenav-pinned .sidenav {
+        transform: translateX(0);
+    }
+
+    /* Main content takes full width */
+    .main-content {
+        margin-left: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    /* Remove green header bar push */
+    .min-height-300 {
+        min-height: 200px !important;
+    }
+}
+
+/* lg+ (992px+): sidebar always visible */
+@media (min-width: 992px) {
+    .sidenav {
+        transform: translateX(0) !important;
+    }
+
+    .main-content {
+        margin-left: 17.125rem !important;
+    }
+}
+
+
+/* ============================================================
+   3. LAYOUT — Container & Main Content
+   ============================================================ */
+
+/* xs */
+@media (max-width: 575.98px) {
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Disable hover lift animations on touch devices */
+    .dashboard-card:hover,
+    .stats-card:hover,
+    .quick-action:hover,
+    .summary-card:hover {
+        transform: none !important;
+        box-shadow: inherit !important;
+    }
+}
+
+/* sm */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container-fluid {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+}
+
+
+/* ============================================================
+   4. PAGE HEADER (.sakti-page-header) — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .sakti-page-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 16px !important;
+    }
+
+    .sakti-page-header h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .sakti-page-header p {
+        font-size: 0.78rem !important;
+    }
+
+    /* Show action buttons and stack them nicely on mobile */
+    .sakti-page-header .btn-glass-white,
+    .sakti-page-header .btn-glass-warning,
+    .sakti-page-header .btn-glass {
+        display: inline-flex !important;
+        width: 100% !important;
+        justify-content: center !important;
+        margin-top: 0.25rem !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .sakti-page-header .d-none-xs {
+        display: none !important;
+    }
+
+    /* Stack flex containers on header */
+    .sakti-page-header .d-flex.justify-content-between {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .sakti-page-header .d-flex.gap-2,
+    .sakti-page-header .d-flex.gap-3 {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        gap: 0.25rem !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .sakti-page-header {
+        padding: 1.25rem 1.5rem !important;
+        border-radius: 18px !important;
+    }
+
+    .sakti-page-header h3 {
+        font-size: 1.1rem !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .sakti-page-header {
+        padding: 1.5rem 1.75rem !important;
+    }
+
+    .sakti-page-header h3 {
+        font-size: 1.2rem !important;
+    }
+}
+
+
+/* ============================================================
+   5. STATS CARDS — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .stats-value {
+        font-size: 1.15rem !important;
+        letter-spacing: -0.3px !important;
+    }
+
+    .stats-title {
+        font-size: 0.65rem !important;
+    }
+
+    .stats-sub {
+        font-size: 0.72rem !important;
+    }
+
+    .stats-icon {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 13px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .stats-card .card-body {
+        padding: 0.875rem !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .stats-value {
+        font-size: 1.3rem !important;
+    }
+
+    .stats-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .stats-value {
+        font-size: 1.45rem !important;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .stats-value {
+        font-size: 1.55rem !important;
+    }
+}
+
+
+/* ============================================================
+   6. SUMMARY CARDS (.summary-card) — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .summary-card {
+        padding: 14px 16px !important;
+    }
+
+    .summary-card .sc-value {
+        font-size: 1.05rem !important;
+    }
+
+    .summary-card .sc-icon {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 10px !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .summary-card .sc-value {
+        font-size: 1.2rem !important;
+    }
+}
+
+
+/* ============================================================
+   7. TABLES — Responsive (horizontal scroll + compact)
+   ============================================================ */
+
+@media (max-width: 767.98px) {
+    .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        min-height: auto !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .custom-table th,
+    .custom-table td,
+    .letters-table th,
+    .letters-table td {
+        padding: 10px 12px !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap;
+    }
+}
+
+
+/* ============================================================
+   8. DASHBOARD CARD (.dashboard-card) — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .dashboard-card .card-body {
+        padding: 1rem !important;
+    }
+
+    .dashboard-card .card-header {
+        padding: 0.875rem 1rem !important;
+    }
+
+    .main-card .card-body {
+        padding: 0.875rem !important;
+    }
+}
+
+
+/* ============================================================
+   9. WELCOME CARD (Student Dashboard) — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .welcome-card {
+        border-radius: 18px !important;
+    }
+
+    .welcome-card .card-body {
+        padding: 1.25rem !important;
+    }
+
+    .student-badge {
+        white-space: normal !important;
+        text-align: center !important;
+        font-size: 0.78rem !important;
+        display: block !important;
+        width: 100% !important;
+        margin-top: 0.75rem !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .welcome-card {
+        border-radius: 22px !important;
+    }
+
+    .student-badge {
+        white-space: normal !important;
+        text-align: center !important;
+        font-size: 0.82rem !important;
+    }
+}
+
+
+/* ============================================================
+   10. QR CARD (Student Dashboard & Profile) — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .qr-box {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .qr-wrapper {
+        padding: 10px !important;
+    }
+
+    /* Profile: avatar circle */
+    .profile-avatar-circle {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .profile-avatar-circle span {
+        font-size: 2rem !important;
+    }
+
+    /* Profile: QR code wrapper */
+    #qrcode-wrapper {
+        width: 110px !important;
+        height: 110px !important;
+    }
+
+    /* Profile: info label/value stack */
+    .profile-info-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.25rem;
+    }
+
+    /* Schedules: timeline block */
+    .timeline-block {
+        margin-bottom: 0.75rem !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .qr-box {
+        width: 140px !important;
+        height: 140px !important;
+    }
+
+    /* Profile: avatar circle */
+    .profile-avatar-circle {
+        width: 88px !important;
+        height: 88px !important;
+    }
+}
+
+
+/* ============================================================
+   11. BILLS PAGE — Bill Row Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    /* Bill list row: stack items vertically */
+    .bill-row-inner {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+
+    .bill-row-inner .ms-auto {
+        margin-left: 0 !important;
+        align-self: flex-end;
+    }
+
+    /* Progress bar: hide on xs (takes up too much space) */
+    .bill-progress-col {
+        display: none !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .bill-row-inner {
+        flex-wrap: wrap;
+        gap: 0.5rem !important;
+    }
+}
+
+
+/* ============================================================
+   12. CHARTS — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .chart-container {
+        height: 220px !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .chart-container {
+        height: 260px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .chart-container {
+        height: 300px !important;
+    }
+}
+
+
+/* ============================================================
+   13. FOOTER — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .footer.pt-4 {
+        padding-top: 1.5rem !important;
+    }
+
+    .footer .copyright {
+        font-size: 0.8rem !important;
+        text-align: center !important;
+    }
+
+    .footer .col-lg-6 {
+        margin-bottom: 0 !important;
+    }
+}
+
+
+/* ============================================================
+   14. SECTION TITLE & UTILITY — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .section-title {
+        font-size: 0.95rem !important;
+    }
+
+    /* Stack flex items on xs when needed */
+    .d-flex.flex-nowrap {
+        flex-wrap: wrap !important;
+    }
+
+    /* Text size helper override on xs */
+    .text-sm { font-size: 0.8rem !important; }
+    .text-xs { font-size: 0.7rem !important; }
+}
+
+
+/* ============================================================
+   15. MODAL — Responsive
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    .modal-dialog {
+        margin: 0.5rem !important;
+        max-width: calc(100vw - 1rem) !important;
+    }
+
+    /* QRIS modal QR code */
+    #qrCodeContainer {
+        width: 180px !important;
+        height: 180px !important;
+    }
+}
+
+/* ============================================================
+   16. PAGINATION — Responsive
+   ============================================================ */
+@media (max-width: 575.98px) {
+    .pagination {
+        width: 100% !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+    }
+
+    .pagination .page-item {
+        flex: 1 !important;
+        display: flex !important;
+    }
+
+    .pagination .page-item .page-link,
+    .pagination .page-item span {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 10px 12px !important;
+        font-size: 0.85rem !important;
+    }
+}
+

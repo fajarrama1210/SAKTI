@@ -29,6 +29,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -174,6 +175,7 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/schedules', [App\Http\Controllers\Student\StudentController::class, 'schedules'])->name('schedules');
     Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
     Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/avatar', [App\Http\Controllers\Student\StudentController::class, 'updateAvatar'])->name('profile.avatar');
     Route::get('/letters', [App\Http\Controllers\Student\LetterController::class, 'index'])->name('letters.index');
     Route::post('/letters', [App\Http\Controllers\Student\LetterController::class, 'store'])->name('letters.store');
 

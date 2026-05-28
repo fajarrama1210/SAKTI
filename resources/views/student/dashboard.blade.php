@@ -260,38 +260,6 @@
         }
 
         /* =========================================
-                                    RESPONSIVE
-                                ========================================= */
-
-        @media(max-width:768px) {
-
-            .stats-title,
-            .stats-value,
-            .stats-sub {
-                min-height: auto;
-            }
-
-            .stats-value {
-                font-size: 1.3rem;
-            }
-
-            .welcome-card {
-                border-radius: 22px;
-            }
-
-            .student-badge {
-                white-space: normal;
-                text-align: center;
-                font-size: 0.82rem;
-            }
-
-            .qr-box {
-                width: 140px;
-                height: 140px;
-            }
-        }
-
-        /* =========================================
                                 PATTERN / CORAK CARD
                             ========================================= */
 
@@ -582,7 +550,8 @@
             <div class="row stats-wrapper">
 
                 <!-- TOTAL TAGIHAN -->
-                <div class="col-xl-3 col-md-6 stats-col">
+                <!-- xs:full(col-12), sm:half(col-sm-6), md:half(col-md-6), xl:quarter(col-xl-3) -->
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 stats-col">
 
                     <div class="card stats-card">
 
@@ -622,7 +591,7 @@
                 </div>
 
                 <!-- TUNGGAKAN -->
-                <div class="col-xl-3 col-md-6 stats-col">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 stats-col">
 
                     <div class="card stats-card">
                         <div class="glow-danger"></div>
@@ -659,7 +628,7 @@
                 </div>
 
                 <!-- TERBAYAR -->
-                <div class="col-xl-3 col-md-6 stats-col">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 stats-col">
 
                     <div class="card stats-card">
                         <div class="pattern-dots"></div>
@@ -697,7 +666,7 @@
                 </div>
 
                 <!-- JURUSAN -->
-                <div class="col-xl-3 col-md-6 stats-col">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 stats-col">
 
                     <div class="card stats-card">
                         <div class="pattern-dots"></div>
@@ -742,8 +711,8 @@
 
             <div class="row mt-2">
 
-                <!-- PROFILE -->
-                <div class="col-lg-4 mb-4">
+                <!-- PROFILE CARD: xs/sm full-width, md/lg 5-cols -->
+                <div class="col-12 col-md-5 col-lg-4 mb-4">
 
                     <div class="card main-card h-100">
 
@@ -823,8 +792,8 @@
 
                 </div>
 
-                <!-- TABLE -->
-                <div class="col-lg-8 mb-4">
+                <!-- TABLE: xs/sm full-width, md/lg 7-cols -->
+                <div class="col-12 col-md-7 col-lg-8 mb-4">
 
                     <div class="card main-card h-100">
 

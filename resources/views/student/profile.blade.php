@@ -8,6 +8,7 @@
             max-height: 100%;
             height: auto;
         }
+
     </style>
 @endpush
 
@@ -28,16 +29,47 @@
         </div>
     </div>
 
+    @php
+        $avatarUrl = null;
+        if ($user->avatar && $user->avatar !== '0') {
+            try {
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
+                    $avatarUrl = asset('storage/' . $user->avatar);
+                } else {
+                    $avatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url($user->avatar);
+                }
+            } catch (\Exception $e) {
+                $avatarUrl = asset('storage/' . $user->avatar);
+            }
+        }
+    @endphp
+
     <div class="row">
-        <!-- Student Card Overview -->
-        <div class="col-lg-4 mb-4">
+        <!-- Student Card Overview: xs full-width, md 5-col, lg 4-col -->
+        <div class="col-12 col-md-5 col-lg-4 mb-4">
             <div class="card dashboard-card h-100">
                 <div class="card-body text-center p-4">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 100px; height: 100px; background: linear-gradient(135deg, #059669, #34d399); box-shadow: 0 8px 20px rgba(5,150,105,.3);">
-                        <span class="text-white font-weight-bold" style="font-size: 2.5rem;">
-                            {{ strtoupper(substr($student->name, 0, 1)) }}
-                        </span>
+                    <div class="position-relative d-inline-block mb-3">
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="Foto Profil" class="rounded-circle img-thumbnail" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #059669; box-shadow: 0 8px 20px rgba(5,150,105,.2);">
+                        @else
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 100px; height: 100px; background: linear-gradient(135deg, #059669, #34d399); box-shadow: 0 8px 20px rgba(5,150,105,.3);">
+                                <span class="text-white font-weight-bold" style="font-size: 2.5rem;">
+                                    {{ strtoupper(substr($student->name, 0, 1)) }}
+                                </span>
+                            </div>
+                        @endif
+                        <!-- Upload Button Overlay -->
+                        <button type="button" class="btn btn-sm btn-dark rounded-circle position-absolute bottom-0 end-0 m-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding: 0; border: 2px solid #fff; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,.1);" onclick="document.getElementById('avatarInput').click();">
+                            <i class="fas fa-camera text-white" style="font-size: 0.75rem;"></i>
+                        </button>
                     </div>
+
+                    <form id="avatarForm" action="{{ route('student.profile.avatar') }}" method="POST" enctype="multipart/form-data" class="d-none">
+                        @csrf
+                        <input type="file" name="avatar" id="avatarInput" accept=".jpg,.jpeg,.png" onchange="document.getElementById('avatarForm').submit();">
+                    </form>
+
                     <h5 class="font-weight-bold mb-1" style="color: var(--dark-text);">{{ $student->name }}</h5>
                     <p class="text-xs mb-3" style="color: var(--muted-text);">Siswa Terdaftar ({{ $student->status }})</p>
                     <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 16px;">
@@ -52,8 +84,8 @@
             </div>
         </div>
 
-        <!-- Detailed Profile Information -->
-        <div class="col-lg-8 mb-4">
+        <!-- Detailed Profile Information: xs full-width, md 7-col, lg 8-col -->
+        <div class="col-12 col-md-7 col-lg-8 mb-4">
             <div class="card dashboard-card">
                 <div class="card-header bg-white border-0 pt-4 pb-2 px-4">
                     <h3 class="section-title mb-0">
@@ -64,27 +96,27 @@
                 <div class="card-body p-4">
                     <h6 class="text-uppercase text-xxs font-weight-bold mb-3" style="color: var(--muted-text); letter-spacing: .7px;">Detail Akademik & Kependudukan</h6>
                     <div class="row mb-4">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Nama Lengkap</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->name }}</div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">NISN</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->nisn }}</div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">NIK/KIP</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->id_number ?? '-' }}</div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">No. Kartu Keluarga</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->family_card_number }}</div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Jurusan</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->major_name }}</div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Kelas Aktif</label>
                             <div class="p-2 text-sm font-weight-bold" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $student->classroom_name }} (Tingkat {{ $student->grade_level }})</div>
                         </div>
@@ -126,7 +158,7 @@
                         @method('PUT')
 
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-12 mb-3">
                                 <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Password Saat Ini</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-lock" style="color: var(--muted-text);"></i></span>
@@ -139,7 +171,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Password Baru</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-key" style="color: var(--muted-text);"></i></span>
@@ -152,7 +184,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="text-xs font-weight-bold d-block mb-1" style="color: var(--muted-text);">Konfirmasi Password Baru</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-0"><i class="fas fa-key" style="color: var(--muted-text);"></i></span>
@@ -202,7 +234,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         Swal.fire({
             icon: "error",
-            title: "Gagal Memperbarui Password",
+            title: "Gagal Memperbarui Data",
             text: "{{ $errors->first() }}"
         });
     });
