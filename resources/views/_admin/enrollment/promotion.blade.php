@@ -6,15 +6,29 @@
 
 @section('content')
 <div class="container-fluid mt--6">
-    <div class="card sakti-card">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2 bg-white">
-            <h3 class="mb-0 text-sakti-green font-weight-bold"><i class="fas fa-angle-double-up text-sakti-green mr-2"></i> Kenaikan Kelas Massal</h3>
-            <a href="{{ route('admin.enrollments.index') }}" class="btn btn-sm btn-secondary">
-                <i class="fas fa-arrow-left"></i> Kembali
+
+    <div class="sakti-page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-angle-double-up me-2"></i> Kenaikan Kelas Massal
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">Proses kenaikan kelas siswa ke tahun ajaran baru.</p>
+            </div>
+            <a href="{{ route('admin.enrollments.index') }}" class="btn btn-sm btn-glass btn-glass-white">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
         </div>
+    </div>
 
-        <div class="card-body pt-2">
+    <div class="sakti-form-card">
+        <div class="form-card-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="header-icon"><i class="fas fa-angle-double-up"></i></div>
+                <div><h3>Formulir Kenaikan Kelas Massal</h3><p>Tentukan asal, tujuan, dan pilih siswa</p></div>
+            </div>
+        </div>
+        <div class="form-card-body pt-2">
             {{-- Info Banner --}}
             <div class="alert alert-info border-0 shadow-sm" role="alert">
                 <div class="d-flex align-items-center">
