@@ -80,6 +80,8 @@
                 <th>Tanggal</th>
                 <th>Tipe</th>
                 <th>Kategori</th>
+                <th>Metode</th>
+                <th>Ref</th>
                 <th>Keterangan</th>
                 <th>Uang Masuk (Rp)</th>
                 <th>Uang Keluar (Rp)</th>
@@ -93,6 +95,22 @@
                 <td>{{ \Carbon\Carbon::parse($trx->date)->format('d/m/Y') }}</td>
                 <td>{{ $trx->type === 'income' ? 'Masuk' : 'Keluar' }}</td>
                 <td>{{ $trx->category ?? '-' }}</td>
+                <td>
+                    @if($trx->payment_method)
+                        @if($trx->payment_method === 'cash')
+                            Tunai
+                        @elseif($trx->payment_method === 'qris')
+                            QRIS
+                        @elseif($trx->payment_method === 'transfer')
+                            Transfer
+                        @else
+                            {{ ucfirst($trx->payment_method) }}
+                        @endif
+                    @else
+                        {{ $trx->type === 'expense' ? 'Tunai' : '-' }}
+                    @endif
+                </td>
+                <td>{{ $trx->reference_number ?? '-' }}</td>
                 <td>{{ $trx->description }}</td>
                 <td class="text-right">{{ $trx->type === 'income' ? number_format($trx->amount, 0, ',', '.') : '-' }}</td>
                 <td class="text-right">{{ $trx->type === 'expense' ? number_format($trx->amount, 0, ',', '.') : '-' }}</td>
@@ -102,7 +120,7 @@
         </tbody>
         <tfoot>
             <tr style="font-weight: bold; background: #f0f0f0;">
-                <td colspan="5" class="text-right">TOTAL</td>
+                <td colspan="7" class="text-right">TOTAL</td>
                 <td class="text-right text-green">{{ number_format($totalIncome, 0, ',', '.') }}</td>
                 <td class="text-right text-red">{{ number_format($totalExpense, 0, ',', '.') }}</td>
                 <td></td>

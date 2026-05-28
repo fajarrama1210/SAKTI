@@ -348,7 +348,8 @@ class BillUseCase
         try {
             $bill = DB::table(DatabaseEntity::TBL_BILLS . ' as b')
                 ->join(DatabaseEntity::TBL_STUDENTS . ' as s', 'b.student_id', '=', 's.id')
-                ->select('b.*', 's.family_card_number')
+                ->leftJoin(DatabaseEntity::TBL_CLASSROOMS . ' as c', 's.classroom_id', '=', 'c.id')
+                ->select('b.*', 's.name as student_name', 's.family_card_number', 'c.name as classroom_name')
                 ->where('b.id', $billId)
                 ->first();
 
@@ -426,11 +427,14 @@ class BillUseCase
             ]);
 
             // 6. Auto-insert ke jurnal transaksi (Buku Kas)
+            $studentInfo = $bill->student_name . ' (' . ($bill->classroom_name ?? 'Tanpa Kelas') . ')';
+            $monthName = Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y');
+            
             DB::table(DatabaseEntity::TBL_TRANSACTIONS)->insert([
                 'date'        => $data['payment_date'] ?? now()->toDateString(),
                 'type'        => 'income',
                 'category'    => 'SPP',
-                'description' => 'Pemb. SPP ' . Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') . ' - KK: ' . $bill->family_card_number,
+                'description' => 'Pembayaran SPP ' . $monthName . ' - ' . $studentInfo,
                 'amount'      => $payAmount,
                 'payment_id'  => $paymentId,
                 'recorded_by' => $data['verified_by'] ?? null,

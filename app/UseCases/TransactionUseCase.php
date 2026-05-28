@@ -13,7 +13,8 @@ class TransactionUseCase
     {
         return DB::table(DatabaseEntity::TBL_TRANSACTIONS . ' as t')
             ->leftJoin(DatabaseEntity::TBL_USERS . ' as u', 't.recorded_by', '=', 'u.id')
-            ->select('t.*', 'u.name as recorded_by_name')
+            ->leftJoin(DatabaseEntity::TBL_PAYMENTS . ' as p', 't.payment_id', '=', 'p.id')
+            ->select('t.*', 'u.name as recorded_by_name', 'p.payment_method', 'p.reference_number')
             ->orderBy('t.date', 'desc')
             ->orderBy('t.id', 'desc')
             ->paginate($perPage);
@@ -23,7 +24,8 @@ class TransactionUseCase
     {
         return DB::table(DatabaseEntity::TBL_TRANSACTIONS . ' as t')
             ->leftJoin(DatabaseEntity::TBL_USERS . ' as u', 't.recorded_by', '=', 'u.id')
-            ->select('t.*', 'u.name as recorded_by_name')
+            ->leftJoin(DatabaseEntity::TBL_PAYMENTS . ' as p', 't.payment_id', '=', 'p.id')
+            ->select('t.*', 'u.name as recorded_by_name', 'p.payment_method', 'p.reference_number')
             ->where('t.id', $id)
             ->first();
     }
@@ -108,7 +110,8 @@ class TransactionUseCase
     {
         $query = DB::table(DatabaseEntity::TBL_TRANSACTIONS . ' as t')
             ->leftJoin(DatabaseEntity::TBL_USERS . ' as u', 't.recorded_by', '=', 'u.id')
-            ->select('t.*', 'u.name as recorded_by_name');
+            ->leftJoin(DatabaseEntity::TBL_PAYMENTS . ' as p', 't.payment_id', '=', 'p.id')
+            ->select('t.*', 'u.name as recorded_by_name', 'p.payment_method', 'p.reference_number');
 
         if (!empty($filters['type'])) {
             $query->where('t.type', $filters['type']);

@@ -372,10 +372,10 @@
                             <th>Tanggal</th>
                             <th>Tipe</th>
                             <th>Kategori</th>
-                            <th>Keterangan</th>
                             <th class="text-right">Uang Masuk</th>
                             <th class="text-right">Uang Keluar</th>
                             <th>Dicatat Oleh</th>
+                            <th class="text-center" style="width:100px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -424,13 +424,6 @@
                                 @endif
                             </td>
 
-                            {{-- Keterangan --}}
-                            <td style="max-width: 220px;">
-                                <div style="font-weight:500; color:#334155; word-break:break-word;">
-                                    {{ \Illuminate\Support\Str::limit($trx->description, 65) }}
-                                </div>
-                            </td>
-
                             {{-- Uang Masuk --}}
                             <td class="text-right">
                                 @if($trx->type === 'income')
@@ -463,6 +456,25 @@
                                 @else
                                 <div style="font-size:.72rem; color:#94a3b8;">Manual</div>
                                 @endif
+                            </td>
+
+                            {{-- Aksi --}}
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm btn-detail-trx mb-0" 
+                                    style="background:#f1f5f9; color:#475569; border-radius:8px; font-weight:600; padding: 5px 12px;"
+                                    data-id="{{ $trx->id }}"
+                                    data-date="{{ \Carbon\Carbon::parse($trx->date)->translatedFormat('d F Y') }}"
+                                    data-type="{{ $trx->type }}"
+                                    data-category="{{ $trx->category }}"
+                                    data-method="{{ $trx->payment_method }}"
+                                    data-reference="{{ $trx->reference_number }}"
+                                    data-description="{{ $trx->description }}"
+                                    data-amount="Rp {{ number_format($trx->amount, 0, ',', '.') }}"
+                                    data-recorded="{{ $trx->recorded_by_name }}"
+                                    data-automated="{{ $trx->payment_id ? '1' : '0' }}"
+                                    data-payment-id="{{ $trx->payment_id }}">
+                                    <i class="fas fa-eye"></i> Detail
+                                </button>
                             </td>
                         </tr>
                         @empty
@@ -510,6 +522,60 @@
 
 </div>
 
+<!-- Modal Detail Transaksi -->
+<div class="modal fade" id="detailTransactionModal" tabindex="-1" role="dialog" aria-labelledby="detailTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+            <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; background: #f8fafc; border-top-left-radius: 16px; border-top-right-radius: 16px; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <h5 class="modal-title" id="detailTransactionModalLabel" style="font-weight: 700; color: #1e293b; margin: 0;">
+                    <i class="fas fa-receipt text-success mr-2"></i> Detail Transaksi
+                </h5>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; color: #94a3b8; outline: none; border: none; background: transparent; padding: 0; margin: 0; line-height: 1; cursor: pointer;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="padding: 24px;">
+                <div class="text-center mb-4">
+                    <div id="modal-type-badge" class="mb-2"></div>
+                    <h3 id="modal-amount" style="font-weight: 800; color: #1e293b; font-size: 1.8rem; margin: 0;"></h3>
+                    <p id="modal-category" style="margin: 4px 0 0; font-size: 0.85rem; font-weight: 600; color: #7c3aed;"></p>
+                </div>
+                
+                <hr style="border: none; border-top: 1px dashed #e2e8f0; margin: 16px 0;">
+                
+                <div class="row style-details" style="font-size: 0.88rem; color: #334155;">
+                    <div class="col-5 text-muted mb-3 font-weight-600">Tanggal</div>
+                    <div class="col-7 text-right mb-3 font-weight-bold" id="modal-date"></div>
+                    
+                    <div class="col-5 text-muted mb-3 font-weight-600">Metode Pembayaran</div>
+                    <div class="col-7 text-right mb-3" id="modal-method"></div>
+                    
+                    <div class="col-5 text-muted mb-3 font-weight-600">Nomor Referensi</div>
+                    <div class="col-7 text-right mb-3 font-weight-bold" id="modal-reference" style="font-family: monospace;"></div>
+                    
+                    <div class="col-5 text-muted mb-3 font-weight-600">Dicatat Oleh</div>
+                    <div class="col-7 text-right mb-3" id="modal-recorded"></div>
+                    
+                    <div class="col-5 text-muted mb-3 font-weight-600">Sifat Pencatatan</div>
+                    <div class="col-7 text-right mb-3" id="modal-automation"></div>
+                    
+                    <div class="col-12 mt-2">
+                        <label class="text-muted font-weight-600 mb-1" style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;">Keterangan</label>
+                        <div class="p-3 bg-light rounded" id="modal-description" style="word-break: break-word; font-weight: 500; font-size: 0.85rem; line-height: 1.5; color: #475569; border-left: 4px solid #059669;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #f1f5f9; background: #f8fafc; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; padding: 12px 24px; display: flex; justify-content: space-between;">
+                <div id="modal-invoice-container">
+                    <!-- Dynamic Invoice Button -->
+                </div>
+                <button type="button" class="btn btn-secondary mb-0" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 600; font-size: 0.8rem; padding: 8px 20px;">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.getElementById('academic_year_select')?.addEventListener('change', function () {
         const ayId = this.value;
@@ -527,6 +593,95 @@
                     });
                 });
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const detailButtons = document.querySelectorAll('.btn-detail-trx');
+        const modalElement = document.getElementById('detailTransactionModal');
+        // Initialize the Bootstrap 5 Modal
+        const myModal = new bootstrap.Modal(modalElement);
+        
+        detailButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const date = this.getAttribute('data-date');
+                const type = this.getAttribute('data-type');
+                const category = this.getAttribute('data-category') || 'Lainnya';
+                const method = this.getAttribute('data-method');
+                const reference = this.getAttribute('data-reference') || '—';
+                const description = this.getAttribute('data-description');
+                const amount = this.getAttribute('data-amount');
+                const recorded = this.getAttribute('data-recorded') || '—';
+                const paymentId = this.getAttribute('data-payment-id');
+                const isAutomated = this.getAttribute('data-automated') === '1';
+
+                // Populate text content
+                document.getElementById('modal-date').textContent = date;
+                document.getElementById('modal-amount').textContent = amount;
+                document.getElementById('modal-category').textContent = category;
+                document.getElementById('modal-reference').textContent = reference;
+                
+                let cleanDescription = description;
+                if (cleanDescription && cleanDescription.includes('Pemb.')) {
+                    cleanDescription = cleanDescription.replace(/Pemb\./g, 'Pembayaran');
+                }
+                document.getElementById('modal-description').textContent = cleanDescription;
+                document.getElementById('modal-recorded').textContent = recorded;
+
+                // Type Badge
+                let badgeHtml = '';
+                if (type === 'income') {
+                    badgeHtml = `<span class="badge" style="font-size: 0.78rem; font-weight:700; padding: 6px 16px; border-radius: 50px; background-color: #059669; color: #ffffff;"><i class="fas fa-arrow-down mr-1"></i> Pemasukan (Masuk)</span>`;
+                    document.getElementById('modal-amount').style.color = '#059669';
+                } else {
+                    badgeHtml = `<span class="badge" style="font-size: 0.78rem; font-weight:700; padding: 6px 16px; border-radius: 50px; background-color: #dc2626; color: #ffffff;"><i class="fas fa-arrow-up mr-1"></i> Pengeluaran (Keluar)</span>`;
+                    document.getElementById('modal-amount').style.color = '#dc2626';
+                }
+                document.getElementById('modal-type-badge').innerHTML = badgeHtml;
+
+                // Method Badge
+                let methodHtml = '';
+                if (method === 'cash') {
+                    methodHtml = `<span class="badge text-white" style="font-weight: 600; background-color: #0284c7; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-money-bill-wave mr-1"></i> Tunai</span>`;
+                } else if (method === 'qris') {
+                    methodHtml = `<span class="badge text-white" style="font-weight: 600; background-color: #be185d; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-qrcode mr-1"></i> QRIS</span>`;
+                } else if (method === 'transfer') {
+                    methodHtml = `<span class="badge text-white" style="font-weight: 600; background-color: #059669; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-university mr-1"></i> Transfer</span>`;
+                } else if (method === 'other') {
+                    methodHtml = `<span class="badge text-white" style="font-weight: 600; background-color: #64748b; padding: 4px 10px; border-radius: 6px;">Lainnya</span>`;
+                } else {
+                    methodHtml = type === 'expense' 
+                        ? `<span class="badge text-white" style="font-weight: 600; background-color: #0284c7; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-money-bill-wave mr-1"></i> Tunai</span>` 
+                        : '<span style="color:#94a3b8;">—</span>';
+                }
+                document.getElementById('modal-method').innerHTML = methodHtml;
+
+                // Automation Badge
+                let autoHtml = '';
+                if (isAutomated) {
+                    autoHtml = `<span class="badge text-white" style="font-weight:600; background-color: #7c3aed; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-robot mr-1"></i> Otomatis (Sistem)</span>`;
+                } else {
+                    autoHtml = `<span class="badge text-white" style="font-weight:600; background-color: #64748b; padding: 4px 10px; border-radius: 6px;"><i class="fas fa-user-edit mr-1"></i> Manual (Admin)</span>`;
+                }
+                document.getElementById('modal-automation').innerHTML = autoHtml;
+
+                // Invoice Button
+                const invoiceContainer = document.getElementById('modal-invoice-container');
+                if (paymentId) {
+                    const invoiceUrl = `/admin/spp/invoice/${paymentId}`;
+                    invoiceContainer.innerHTML = `
+                        <a href="${invoiceUrl}" target="_blank" class="btn btn-success mb-0" style="border-radius: 10px; font-weight: 600; font-size: 0.8rem; padding: 8px 16px; background-color: #059669; border-color: #059669;">
+                            <i class="fas fa-print mr-1"></i> Cetak Invoice
+                        </a>
+                    `;
+                } else {
+                    invoiceContainer.innerHTML = '';
+                }
+
+                // Show the modal via Bootstrap 5 API
+                myModal.show();
+            });
+        });
     });
 </script>
 @endsection
