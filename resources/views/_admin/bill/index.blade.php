@@ -10,6 +10,7 @@
     <div class="card sakti-card mb-4">
         <div class="card-header border-0 bg-white">
             <div class="row align-items-center">
+                
                 <div class="col">
                     <h3 class="mb-0 text-sakti-green font-weight-bold">
                         <i class="fas fa-money-bill-wave mr-2"></i> Pembayaran SPP

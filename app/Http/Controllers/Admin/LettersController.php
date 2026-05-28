@@ -20,6 +20,15 @@ class LettersController extends Controller
     }
 
     /**
+     * Display the specified letter detail.
+     */
+    public function show($id)
+    {
+        $letter = Letter::with('student')->findOrFail($id);
+        return view('_admin.letters.show', compact('letter'));
+    }
+
+    /**
      * Update the status of the specified resource in storage.
      */
     public function updateStatus(Request $request, $id)

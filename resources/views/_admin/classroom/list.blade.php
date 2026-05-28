@@ -6,35 +6,57 @@
 
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card sakti-card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
-                <h3 class="mb-0 text-sakti-green font-weight-bold">Master Kelas</h3>
-                <a href="{{ route('admin.classrooms.create') }}" class="btn btn-sm btn-sakti-primary">
-                    <i class="fas fa-plus mr-2"></i> Tambah Kelas
-                </a>
+    <!-- HEADER -->
+    <div class="letters-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-school me-2"></i> Master Kelas
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Kelola data kelas dan tingkatan.
+                </p>
             </div>
+            <a href="{{ route('admin.classrooms.create') }}" class="btn btn-sm" style="background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <i class="fas fa-plus me-1"></i> Tambah Kelas
+            </a>
+        </div>
+    </div>
 
-
-            <div class="table-responsive">
-                <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Kelas</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Tingkat</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jurusan</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
-                        </tr>
-                    </thead>
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-list-ul me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Daftar Kelas
+                    </h3>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table letters-table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 50px;">No</th>
+                                    <th class="text-center">Nama Kelas</th>
+                                    <th class="text-center">Tingkat</th>
+                                    <th class="text-center">Jurusan</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
                     <tbody>
                         @forelse($classrooms as $index => $classroom)
                             <tr>
-                                <td scope="col" class="text-center">{{ $classrooms->firstItem() + $index }}</td>
-                                <td scope="col" class="text-center"><b>{{ $classroom->name }}</b></td>
-                                <td scope="col" class="text-center">Kelas {{ $classroom->grade_level }}</td>
+                                <td class="text-center align-middle">{{ $classrooms->firstItem() + $index }}</td>
+                                <td class="text-center align-middle">
+                                    <span style="font-weight: 700; color: var(--dark-text);">
+                                        <i class="fas fa-school me-1" style="color: var(--primary-green); opacity: .7;"></i> {{ $classroom->name }}
+                                    </span>
+                                </td>
+                                <td class="text-center align-middle">Kelas {{ $classroom->grade_level }}</td>
                                 {{-- major_name didapat dari hasil JOIN di UseCase --}}
-                                <td scope="col" class="text-center">{{ $classroom->major_name }}</td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle">{{ $classroom->major_name }}</td>
+                                <td class="text-center align-middle">
                                     <div class="dropdown">
                                         <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $classroom->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
@@ -67,8 +89,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer py-4">
-                {{ $classrooms->links() }}
+                </div>
+                <div class="card-footer bg-white border-0 py-4 px-4">
+                    {{ $classrooms->links() }}
+                </div>
             </div>
         </div>
     </div>

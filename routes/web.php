@@ -159,6 +159,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
     Route::prefix('letters')->name('letters.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\LettersController::class, 'index'])->name('index');
+        Route::get('/{id}', [\App\Http\Controllers\Admin\LettersController::class, 'show'])->name('show')->where('id', '[0-9]+');
         Route::put('/{id}/status', [\App\Http\Controllers\Admin\LettersController::class, 'updateStatus'])->name('update-status');
     });
 });

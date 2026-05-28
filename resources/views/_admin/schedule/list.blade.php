@@ -6,29 +6,48 @@
 
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card sakti-card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-white">
-                <h3 class="mb-0 text-sakti-green font-weight-bold">Jadwal Pelajaran</h3>
-                <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm btn-sakti-primary">
-                    <i class="fas fa-plus mr-2"></i> Tambah Jadwal
-                </a>
+    <!-- HEADER -->
+    <div class="letters-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-calendar-alt me-2"></i> Jadwal Pelajaran
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Kelola jadwal pelajaran untuk semua kelas.
+                </p>
             </div>
+            <a href="{{ route('admin.schedules.create') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                <i class="fas fa-plus me-1"></i> Tambah Jadwal
+            </a>
+        </div>
+    </div>
 
-            <div class="table-responsive">
-                <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center" style="width: 50px;">No</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Hari</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Jam</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Durasi</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Mata Pelajaran</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Ruang</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Guru Pengajar</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
-                        </tr>
-                    </thead>
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h3 class="section-title mb-0">
+                        <i class="fas fa-list-ul me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                        Daftar Jadwal
+                    </h3>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table letters-table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 50px;">No</th>
+                                    <th class="text-center">Kelas</th>
+                                    <th class="text-center">Hari</th>
+                                    <th class="text-center">Jam</th>
+                                    <th class="text-center">Durasi</th>
+                                    <th class="text-center">Mata Pelajaran</th>
+                                    <th class="text-center">Ruang</th>
+                                    <th class="text-center">Guru Pengajar</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
                     <tbody>
                         @php
                             $daysMapping = [
@@ -42,42 +61,47 @@
                         @endphp
                         @forelse($schedules as $index => $schedule)
                             <tr @if($schedule->subject === 'Istirahat') style="background-color: #f8f9fe;" @endif>
-                                <td scope="col" class="text-center">{{ $schedules->firstItem() + $index }}</td>
-                                <td scope="col" class="text-center"><b>{{ $schedule->classroom_name }}</b></td>
-                                <td scope="col" class="text-center">
-                                    <span class="badge bg-gradient-success">
-                                        {{ $daysMapping[$schedule->day] ?? $schedule->day }}
+                                <td class="text-center align-middle">{{ $schedules->firstItem() + $index }}</td>
+                                <td class="text-center align-middle">
+                                    <span style="font-weight: 700; color: var(--dark-text);">{{ $schedule->classroom_name }}</span>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <span class="badge bg-gradient-success px-3 py-2" style="border-radius: 50px;">
+                                        <i class="fas fa-calendar-day me-1"></i> {{ $daysMapping[$schedule->day] ?? $schedule->day }}
                                     </span>
                                 </td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle" style="font-weight: 600; color: var(--dark-text);">
+                                    <i class="fas fa-clock me-1 text-muted"></i> 
                                     {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }} - 
                                     {{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
                                 </td>
-                                <td scope="col" class="text-center">{{ $schedule->duration }} Jam</td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle" style="color: var(--muted-text);">{{ $schedule->duration }} Jam</td>
+                                <td class="text-center align-middle" style="font-weight: 600; color: var(--dark-text);">
                                     @if($schedule->subject === 'Istirahat')
-                                        <span class="badge bg-gradient-warning text-xxs px-3 py-2">
+                                        <span class="badge px-3 py-2" style="background: #fef3c7; color: #d97706; border-radius: 50px;">
                                             <i class="fas fa-coffee me-1"></i> Istirahat
                                         </span>
                                     @else
                                         {{ $schedule->subject }}
                                     @endif
                                 </td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle">
                                     @if($schedule->subject === 'Istirahat')
                                         <span class="text-muted">-</span>
                                     @else
-                                        <span class="badge bg-gradient-info">{{ $schedule->room }}</span>
+                                        <span class="badge" style="background: rgba(14, 165, 233, 0.1); color: #0284c7; font-weight: 600;">
+                                            <i class="fas fa-door-open me-1"></i> {{ $schedule->room }}
+                                        </span>
                                     @endif
                                 </td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle" style="color: var(--dark-text);">
                                     @if($schedule->subject === 'Istirahat')
                                         <span class="text-muted">-</span>
                                     @else
-                                        {{ $schedule->teacher_name }}
+                                        <i class="fas fa-chalkboard-teacher me-1 text-muted"></i> {{ $schedule->teacher_name }}
                                     @endif
                                 </td>
-                                <td scope="col" class="text-center">
+                                <td class="text-center align-middle">
                                     <div class="dropdown">
                                         <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $schedule->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
@@ -110,8 +134,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer py-4">
-                {{ $schedules->links() }}
+                </div>
+                <div class="card-footer bg-white border-0 py-4 px-4">
+                    {{ $schedules->links() }}
+                </div>
             </div>
         </div>
     </div>

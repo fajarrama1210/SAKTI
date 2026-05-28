@@ -27,8 +27,8 @@
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
             <div class="card dashboard-card stats-card border-students w-100">
                 <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
+                        <div style="min-width: 0; flex: 1;">
                             <div class="stats-title mb-1">TOTAL SISWA</div>
                             <div class="stats-value">{{ $totalStudents }}</div>
                         </div>
@@ -44,8 +44,8 @@
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
             <div class="card dashboard-card stats-card border-class w-100">
                 <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
+                        <div style="min-width: 0; flex: 1;">
                             <div class="stats-title mb-1">KELAS & JURUSAN</div>
                             <div class="stats-value">
                                 {{ $totalClassrooms }}
@@ -64,8 +64,8 @@
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
             <div class="card dashboard-card stats-card border-income w-100">
                 <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
+                        <div style="min-width: 0; flex: 1;">
                             <div class="stats-title mb-1">PEMASUKAN</div>
                             <div class="stats-nominal" style="color: #059669;">
                                 Rp {{ number_format($incomeThisMonth, 0, ',', '.') }}
@@ -83,8 +83,8 @@
         <div class="col-xl-3 col-md-6 col-sm-6 mb-4 mb-xl-0">
             <div class="card dashboard-card stats-card border-expense w-100">
                 <div class="card-body py-3 px-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div class="d-flex justify-content-between align-items-center" style="gap: 12px;">
+                        <div style="min-width: 0; flex: 1;">
                             <div class="stats-title mb-1">PENGELUARAN</div>
                             <div class="stats-nominal" style="color: #ef4444;">
                                 Rp {{ number_format($expenseThisMonth, 0, ',', '.') }}
@@ -132,39 +132,57 @@
                 <div class="card-body px-4 pb-4">
                     <div class="row g-3">
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <a href="{{ route('admin.students.create') }}"
                                 class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
                                 style="color: #6366f1;">
                                 <i class="fas fa-user-plus fa-lg mb-2"></i>
-                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Siswa Baru</span>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Siswa Baru</span>
                             </a>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <a href="{{ route('admin.transactions.create') }}"
                                 class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
                                 style="color: #059669;">
                                 <i class="fas fa-wallet fa-lg mb-2"></i>
-                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Transaksi</span>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Transaksi</span>
                             </a>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <a href="{{ route('admin.reports.payment') }}"
                                 class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
                                 style="color: #0ea5e9;">
                                 <i class="fas fa-chart-line fa-lg mb-2"></i>
-                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Laporan</span>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Laporan</span>
                             </a>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <a href="{{ route('admin.spp.index') }}"
                                 class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
                                 style="color: #f59e0b;">
                                 <i class="fas fa-file-invoice-dollar fa-lg mb-2"></i>
-                                <span class="font-weight-bold text-center" style="font-size: .82rem;">Tagihan SPP</span>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Tagihan SPP</span>
+                            </a>
+                        </div>
+
+                        <div class="col-4">
+                            <a href="{{ route('admin.letters.index') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #ec4899;">
+                                <i class="fas fa-envelope fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Kelola Surat</span>
+                            </a>
+                        </div>
+
+                        <div class="col-4">
+                            <a href="{{ route('admin.schedules.index') }}"
+                                class="quick-action d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none h-100"
+                                style="color: #8b5cf6;">
+                                <i class="fas fa-calendar-alt fa-lg mb-2"></i>
+                                <span class="font-weight-bold text-center" style="font-size: .78rem;">Jadwal</span>
                             </a>
                         </div>
 
@@ -193,6 +211,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Tanggal</th>
+                                <th class="text-center">Nama Siswa</th>
                                 <th class="text-center">No KK</th>
                                 <th class="text-center">Metode</th>
                                 <th class="text-center">Nominal</th>
@@ -210,6 +229,9 @@
                                                 {{ \Carbon\Carbon::parse($pay->payment_date)->format('d M Y') }}
                                             </div>
                                         </div>
+                                    </td>
+                                    <td class="align-middle text-center font-weight-bold" style="color: var(--dark-text); font-size: .88rem;">
+                                        {{ $pay->student_name }}
                                     </td>
                                     <td class="align-middle text-center font-weight-bold" style="color: var(--muted-text);">
                                         {{ $pay->family_card_number }}
@@ -236,7 +258,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-5" style="color: var(--muted-text);">
+                                    <td colspan="5" class="text-center py-5" style="color: var(--muted-text);">
                                         <i class="fas fa-receipt fa-2x mb-3 d-block" style="opacity: .4;"></i>
                                         Belum ada pembayaran terbaru
                                     </td>

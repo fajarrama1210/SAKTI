@@ -295,6 +295,9 @@
             border-radius: 50px;
 
             font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.88rem;
 
             box-shadow:
                 0 8px 20px rgba(0, 0, 0, .08);
@@ -318,6 +321,12 @@
 
             .welcome-card {
                 border-radius: 22px;
+            }
+
+            .student-badge {
+                white-space: normal;
+                text-align: center;
+                font-size: 0.82rem;
             }
 
             .qr-box {
@@ -925,7 +934,7 @@
                                                 <td class="align-middle text-center">
 
                                                     @php
-                                                        $method = strtolower(trim($pay->payment_method ?? 'cash'));
+                                                        $method = strtolower(trim($payment->payment_method ?? 'cash'));
                                                     @endphp
 
                                                     @if ($method == 'qris')
@@ -942,7 +951,7 @@
                                                         </span>
                                                     @else
                                                         <span class="badge bg-secondary text-white px-3 py-2">
-                                                            {{ strtoupper($pay->payment_method ?? 'CASH') }}
+                                                            {{ strtoupper($payment->payment_method ?? 'CASH') }}
                                                         </span>
                                                     @endif
 

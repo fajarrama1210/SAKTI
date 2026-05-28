@@ -34,12 +34,11 @@
                         <table class="table letters-table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th>Siswa</th>
-                                    <th>Tanggal</th>
-                                    <th>Kategori</th>
-                                    <th>Keterangan</th>
-                                    <th>Status</th>
-                                    <th class="text-center">Aksi / File</th>
+                                    <th class="text-center">Siswa</th>
+                                    <th class="text-center">Tanggal</th>
+                                    <th class="text-center">Kategori</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,14 +62,14 @@
                                     </td>
 
                                     <!-- TANGGAL -->
-                                    <td>
+                                    <td class="text-center align-middle">
                                         <span style="font-weight: 600; color: var(--dark-text); font-size: .88rem;">
                                             {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y') }}
                                         </span>
                                     </td>
 
                                     <!-- KATEGORI -->
-                                    <td>
+                                    <td class="text-center align-middle">
                                         @if($letter->type == 'sick')
                                             <span class="badge px-3 py-2" style="background: #fef2f2; color: #ef4444; font-weight: 600; border-radius: 50px; font-size: .76rem;">
                                                 <i class="fas fa-thermometer-half me-1"></i> Sakit
@@ -82,15 +81,9 @@
                                         @endif
                                     </td>
 
-                                    <!-- KETERANGAN -->
-                                    <td>
-                                        <p class="mb-0" style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .85rem; color: var(--muted-text);" title="{{ $letter->description }}">
-                                            {{ $letter->description }}
-                                        </p>
-                                    </td>
 
                                     <!-- STATUS -->
-                                    <td>
+                                    <td class="text-center align-middle">
                                         @if($letter->status == 'pending')
                                             <span class="badge-status-pending">
                                                 <i class="fas fa-clock me-1"></i> Pending
@@ -109,8 +102,8 @@
                                     <!-- AKSI -->
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ asset('storage/' . $letter->file_path) }}" target="_blank" class="btn btn-action-view mb-0" title="Lihat Surat">
-                                                <i class="fas fa-file-alt me-1"></i> Lihat
+                                            <a href="{{ route('admin.letters.show', $letter->id) }}" class="btn btn-action-view mb-0" title="Detail Surat">
+                                                <i class="fas fa-eye me-1"></i> Detail
                                             </a>
 
                                             @if($letter->status == 'pending')
@@ -136,7 +129,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5">
+                                    <td colspan="5" class="text-center py-5">
                                         <i class="fas fa-envelope-open fa-2x d-block mb-3" style="color: var(--muted-text); opacity: .3;"></i>
                                         <span style="color: var(--muted-text); font-size: .88rem;">Belum ada pengajuan surat.</span>
                                     </td>

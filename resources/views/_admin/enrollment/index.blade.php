@@ -6,21 +6,33 @@
 
 @section('content')
     <div class="container-fluid mt--6">
-        <div class="card sakti-card">
-            <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-2 bg-white">
-                <h3 class="mb-0 text-sakti-green font-weight-bold">Penempatan Siswa (Per Tahun Ajaran)</h3>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm btn-info me-2">
-                        <i class="fas fa-angle-double-up text-xs me-1"></i> Kenaikan Kelas Massal
-                    </a>
-                    <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm btn-sakti-primary">
-                        <i class="fas fa-graduation-cap text-xs me-1"></i> Kelulusan Massal
-                    </a>
-                </div>
+    <!-- HEADER -->
+    <div class="letters-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
+            <div>
+                <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
+                    <i class="fas fa-user-check me-2"></i> Penempatan Siswa
+                </h3>
+                <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
+                    Kelola penempatan siswa per tahun ajaran.
+                </p>
             </div>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.enrollments.promotion') }}" class="btn btn-sm" style="background: rgba(14, 165, 233, 0.2); border: 1px solid rgba(14, 165, 233, 0.5); color: #bae6fd; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                    <i class="fas fa-angle-double-up me-1"></i> Kenaikan Kelas Massal
+                </a>
+                <a href="{{ route('admin.enrollments.graduation') }}" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; border-radius: 12px; font-weight: 600; backdrop-filter: blur(4px);">
+                    <i class="fas fa-graduation-cap me-1"></i> Kelulusan Massal
+                </a>
+            </div>
+        </div>
+    </div>
 
-            <div class="card-body border-bottom">
-                <form action="{{ route('admin.enrollments.index') }}" method="GET" class="row">
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-body border-bottom pt-4 pb-3 px-4">
+                    <form action="{{ route('admin.enrollments.index') }}" method="GET" class="row">
 
                     <div class="col-lg-3 col-md-6">
                         <div class="form-group">
@@ -83,27 +95,36 @@
 
                 </form>
             </div>
-
-            <div class="table-responsive">
-                <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">No</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">NISN</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Nama Siswa</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Kelas</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Status</th>
-                            <th class="text-sakti-green text-xs font-weight-bold text-uppercase text-center">Aksi</th>
-                        </tr>
-                    </thead>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table letters-table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 50px;">No</th>
+                                    <th class="text-center">NISN</th>
+                                    <th class="text-center">Nama Siswa</th>
+                                    <th class="text-center">Kelas</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
                     <tbody>
                         @forelse($enrollments as $index => $row)
                             <tr>
-                                <td class="text-center">{{ $enrollments->firstItem() + $index }}</td>
-                                <td class="text-center">{{ $row->nisn }}</td>
-                                <td class="text-center" ><b>{{ $row->student_name }}</b></td>
-                                <td class="text-center">{{ $row->classroom_name }}</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">{{ $enrollments->firstItem() + $index }}</td>
+                                <td class="text-center align-middle"><b style="color: var(--dark-text);">{{ $row->nisn }}</b></td>
+                                <td class="text-start align-middle">
+                                    <div class="d-flex align-items-center px-2">
+                                        <div class="trx-detail-icon icon-user me-3" style="width: 32px; height: 32px; font-size: .75rem;">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </div>
+                                        <h6 class="mb-0" style="font-size: .88rem; font-weight: 700; color: var(--dark-text);">
+                                            {{ $row->student_name }}
+                                        </h6>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">{{ $row->classroom_name }}</td>
+                                <td class="text-center align-middle">
                                     @if ($row->status == 'aktif')
                                         <span class="badge badge-sm bg-gradient-success">Aktif</span>
                                     @elseif($row->status == 'lulus')
@@ -116,7 +137,7 @@
                                         <span class="badge badge-sm bg-gradient-secondary">{{ $row->status }}</span>
                                     @endif
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     <div class="dropdown">
                                         <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $row->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
@@ -227,8 +248,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer py-4">
-                {{ $enrollments->links() }}
+                </div>
+                <div class="card-footer bg-white border-0 py-4 px-4">
+                    {{ $enrollments->links() }}
+                </div>
             </div>
         </div>
     </div>
