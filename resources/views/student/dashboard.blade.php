@@ -898,6 +898,7 @@
                                                 <th class="text-center">Metode</th>
                                                 <th class="text-center">Jumlah</th>
                                                 <th class="text-center">Referensi</th>
+                                                <th class="text-center">Aksi</th>
                                             </tr>
 
                                         </thead>
@@ -925,24 +926,24 @@
                                                 <td class="align-middle text-center">
 
                                                     @php
-                                                        $method = strtolower(trim($pay->payment_method ?? 'cash'));
+                                                        $method = strtolower(trim($payment->payment_method ?? 'cash'));
                                                     @endphp
 
                                                     @if ($method == 'qris')
                                                         <span class="badge bg-info text-white px-3 py-2">
-                                                            QRIS
+                                                            <i class="fas fa-qrcode me-1"></i> QRIS
                                                         </span>
                                                     @elseif($method == 'cash')
                                                         <span class="badge bg-success text-white px-3 py-2">
-                                                            CASH
+                                                            <i class="fas fa-money-bill me-1"></i> CASH
                                                         </span>
                                                     @elseif($method == 'transfer')
                                                         <span class="badge bg-primary text-white px-3 py-2">
-                                                            TRANSFER
+                                                            <i class="fas fa-exchange-alt me-1"></i> TRANSFER
                                                         </span>
                                                     @else
                                                         <span class="badge bg-secondary text-white px-3 py-2">
-                                                            {{ strtoupper($pay->payment_method ?? 'CASH') }}
+                                                            {{ strtoupper($payment->payment_method ?? '-') }}
                                                         </span>
                                                     @endif
 
@@ -959,6 +960,15 @@
                                                     <span class="text-muted font-weight-bold text-sm">
                                                         {{ $payment->reference_number ?? '-' }}
                                                     </span>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <a href="{{ route('student.invoice.show', $payment->payment_id) }}"
+                                                       class="btn btn-sm btn-outline-primary"
+                                                       style="border-radius:8px; font-size:11px; padding:4px 10px;"
+                                                       target="_blank">
+                                                        <i class="fas fa-file-invoice"></i> Invoice
+                                                    </a>
                                                 </td>
 
                                             </tr>

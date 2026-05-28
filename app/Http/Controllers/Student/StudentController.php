@@ -50,7 +50,7 @@ class StudentController extends Controller
         // Histori pembayaran terbaru
         $recentPayments = DB::table('payments as p')
             ->join('bills as b', 'p.bill_id', '=', 'b.id')
-            ->select('p.*', 'b.month', 'b.year')
+            ->select('p.*', 'p.id as payment_id', 'b.month', 'b.year')
             ->where('b.student_id', $studentId)
             ->orderBy('p.payment_date', 'desc')
             ->limit(5)

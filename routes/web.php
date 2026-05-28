@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\LettersController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -133,6 +135,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::put('/{billId}/due-date', [BillController::class, 'updateDueDate'])->name('due-date');
         Route::delete('/{id}', [BillController::class, 'destroy'])->name('destroy');
         Route::post('/sync', [BillController::class, 'sync'])->name('sync');
+        // Invoice admin
+        Route::get('/invoice/{paymentId}', [InvoiceController::class, 'show'])->name('invoice')->where('paymentId', '[0-9]+');
     });
 
     Route::prefix('transactions')->name('transactions.')->group(function () {
@@ -179,6 +183,11 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/bills/{billId}/payment-status', [App\Http\Controllers\Student\PaymentController::class, 'checkPaymentStatus'])
         ->name('bills.payment-status')
         ->where('billId', '[0-9]+');
+
+    // ===== INVOICE =====
+    Route::get('/invoice/{paymentId}', [InvoiceController::class, 'show'])
+        ->name('invoice.show')
+        ->where('paymentId', '[0-9]+');
 });
 
 Route::prefix('kepala-sekolah')->name('kepala-sekolah.')->middleware(['auth', 'role:kepala_sekolah'])->group(function () {
