@@ -2,6 +2,13 @@
 
 @push('styles')
     @include('_admin.layouts.sakti-custom')
+    <style>
+        #qrcode img, #qrcode canvas {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -34,9 +41,8 @@
                     <h5 class="font-weight-bold mb-1" style="color: var(--dark-text);">{{ $student->name }}</h5>
                     <p class="text-xs mb-3" style="color: var(--muted-text);">Siswa Terdaftar ({{ $student->status }})</p>
                     <div class="p-3 mb-3" style="background: #f8fafc; border-radius: 16px;">
-                        <div class="d-flex flex-column align-items-center justify-content-center p-3" style="background: #fff; border-radius: 12px; border: 1px dashed #d1d5db;">
-                            <i class="fas fa-qrcode fa-4x" style="color: var(--dark-text);"></i>
-                            <span class="text-xxs font-weight-bold mt-2" style="color: var(--muted-text);">{{ $student->qr_code }}</span>
+                        <div class="d-flex flex-column align-items-center justify-content-center p-3" style="background: #fff; border-radius: 12px; border: 1px dashed #d1d5db; width: 140px; height: 140px; margin: 0 auto; padding: 10px !important;">
+                            <div id="qrcode" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"></div>
                         </div>
                     </div>
                     <span class="badge px-3 py-2" style="background: #ecfdf5; color: #059669; font-weight: 700; font-size: .78rem;">
@@ -204,3 +210,19 @@
 @endif
 @endpush
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new QRCode(document.getElementById("qrcode"), {
+            text: "{{ $student->nisn }}",
+            width: 120,
+            height: 120,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    });
+</script>
+@endpush

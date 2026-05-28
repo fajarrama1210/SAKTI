@@ -204,7 +204,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
+            padding: 12px;
+        }
+
+        #qrcode img, #qrcode canvas {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
         }
 
         /* =========================================
@@ -755,11 +761,7 @@
 
                                 <div class="qr-box mx-auto">
 
-                                    <i class="fas fa-qrcode fa-5x text-dark"></i>
-
-                                    <span class="text-xs font-weight-bold text-muted mt-3">
-                                        {{ $student->qr_code }}
-                                    </span>
+                                    <div id="qrcode" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;"></div>
 
                                 </div>
 
@@ -964,3 +966,19 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new QRCode(document.getElementById("qrcode"), {
+            text: "{{ $student->nisn }}",
+            width: 150,
+            height: 150,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    });
+</script>
+@endpush
