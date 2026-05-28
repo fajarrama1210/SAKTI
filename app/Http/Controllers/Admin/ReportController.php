@@ -39,22 +39,18 @@ class ReportController extends Controller
         $academicYears = $this->academicYearUseCase->getAll();
         $semesters = collect();
         $data = collect();
-        $filters = request()->only(['academic_year_id', 'semester_id', 'month']);
+        $filters = request()->only(['academic_year_id', 'semester_id', 'month', 'search', 'per_page']);
         $filtered = false;
 
         if (!empty($filters['academic_year_id'])) {
             $semesters = $this->semesterUseCase->getByAcademicYear($filters['academic_year_id']);
             $filtered = true;
 
-            $reportFilters = ['academic_year_id' => $filters['academic_year_id']];
+            $reportFilters = $filters; // Include search and per_page
 
             if (!empty($filters['semester_id'])) {
                 $months = $this->semesterUseCase->getMonthRange($filters['semester_id']);
                 $reportFilters['months'] = $months;
-            }
-
-            if (!empty($filters['month'])) {
-                $reportFilters['month'] = $filters['month'];
             }
 
             $data = $this->reportUseCase->getPaymentReport($reportFilters);
@@ -94,12 +90,14 @@ class ReportController extends Controller
         $academicYears = $this->academicYearUseCase->getAll();
         $semesters = collect();
         $data = collect();
-        $filters = request()->only(['academic_year_id', 'semester_id', 'month', 'year', 'type']);
+        $filters = request()->only(['academic_year_id', 'semester_id', 'month', 'year', 'type', 'search', 'per_page']);
         $filtered = false;
+        $totalIncome = 0;
+        $totalExpense = 0;
 
-        if (!empty($filters['year']) || !empty($filters['month']) || !empty($filters['semester_id'])) {
+        if (!empty($filters['year']) || !empty($filters['month']) || !empty($filters['semester_id']) || !empty($filters['type']) || !empty($filters['search'])) {
             $filtered = true;
-            $reportFilters = [];
+            $reportFilters = $filters;
 
             if (!empty($filters['academic_year_id'])) {
                 $semesters = $this->semesterUseCase->getByAcademicYear($filters['academic_year_id']);
@@ -110,23 +108,11 @@ class ReportController extends Controller
                 $reportFilters['months'] = $months;
             }
 
-            if (!empty($filters['month'])) {
-                $reportFilters['month'] = $filters['month'];
-            }
-
-            if (!empty($filters['year'])) {
-                $reportFilters['year'] = $filters['year'];
-            }
-
-            if (!empty($filters['type'])) {
-                $reportFilters['type'] = $filters['type'];
-            }
-
             $data = $this->transactionUseCase->getReport($reportFilters);
+            $totals = $this->transactionUseCase->getReportTotals($reportFilters);
+            $totalIncome = $totals['income'];
+            $totalExpense = $totals['expense'];
         }
-
-        $totalIncome = $data instanceof \Illuminate\Support\Collection ? $data->where('type', 'income')->sum('amount') : 0;
-        $totalExpense = $data instanceof \Illuminate\Support\Collection ? $data->where('type', 'expense')->sum('amount') : 0;
 
         return view('_admin.report.transaction', compact(
             'academicYears',
@@ -169,38 +155,27 @@ class ReportController extends Controller
 
     private function buildPaymentFilters(): array
     {
-        $input = request()->only(['academic_year_id', 'semester_id', 'month']);
-        $filters = [];
+        $input = request()->only(['academic_year_id', 'semester_id', 'month', 'search']);
+        $filters = $input;
+        $filters['is_export'] = true;
 
-        if (!empty($input['academic_year_id'])) {
-            $filters['academic_year_id'] = $input['academic_year_id'];
-        }
         if (!empty($input['semester_id'])) {
             $filters['months'] = $this->semesterUseCase->getMonthRange($input['semester_id']);
         }
-        if (!empty($input['month'])) {
-            $filters['month'] = $input['month'];
-        }
+        
         return $filters;
     }
 
     private function buildTransactionFilters(): array
     {
-        $input = request()->only(['semester_id', 'month', 'year', 'type']);
-        $filters = [];
+        $input = request()->only(['semester_id', 'month', 'year', 'type', 'search']);
+        $filters = $input;
+        $filters['is_export'] = true;
 
         if (!empty($input['semester_id'])) {
             $filters['months'] = $this->semesterUseCase->getMonthRange($input['semester_id']);
         }
-        if (!empty($input['month'])) {
-            $filters['month'] = $input['month'];
-        }
-        if (!empty($input['year'])) {
-            $filters['year'] = $input['year'];
-        }
-        if (!empty($input['type'])) {
-            $filters['type'] = $input['type'];
-        }
+        
         return $filters;
     }
 }

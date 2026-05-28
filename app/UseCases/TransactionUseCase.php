@@ -104,10 +104,7 @@ class TransactionUseCase
         }
     }
 
-    /**
-     * Ambil data transaksi untuk laporan (dengan filter)
-     */
-    public function getReport(array $filters)
+    private function buildReportQuery(array $filters)
     {
         $query = DB::table(DatabaseEntity::TBL_TRANSACTIONS . ' as t')
             ->leftJoin(DatabaseEntity::TBL_USERS . ' as u', 't.recorded_by', '=', 'u.id')
@@ -133,6 +130,43 @@ class TransactionUseCase
             $query->whereYear('t.date', $filters['year']);
         }
 
-        return $query->orderBy('t.date', 'asc')->orderBy('t.id', 'asc')->get();
+        if (!empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('t.description', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('t.category', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('u.name', 'like', '%' . $filters['search'] . '%');
+            });
+        }
+
+        return $query;
+    }
+
+    /**
+     * Ambil data transaksi untuk laporan (dengan filter)
+     */
+    public function getReport(array $filters)
+    {
+        $query = $this->buildReportQuery($filters);
+        $query->orderBy('t.date', 'asc')->orderBy('t.id', 'asc');
+
+        if (!empty($filters['is_export'])) {
+            return $query->get();
+        }
+
+        $perPage = $filters['per_page'] ?? 50;
+        return $query->paginate($perPage);
+    }
+
+    public function getReportTotals(array $filters)
+    {
+        $query = $this->buildReportQuery($filters);
+        
+        $income = (clone $query)->where('t.type', 'income')->sum('t.amount');
+        $expense = (clone $query)->where('t.type', 'expense')->sum('t.amount');
+        
+        return [
+            'income' => $income,
+            'expense' => $expense,
+        ];
     }
 }
