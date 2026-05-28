@@ -308,65 +308,6 @@
             </div>
         </div>
     </div>
-
-                    </div>
-
-                    <!-- PENGATURAN SURAT IZIN WIDGET -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="card dashboard-card">
-                                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-                                    <h3 class="section-title mb-0">
-                                        Pengajuan Izin/Sakit Pending
-                                    </h3>
-                                    <a href="{{ route('admin.letters.index') }}" class="btn btn-warning view-btn">
-                                        Kelola Pengajuan ({{ $pendingLettersCount }})
-                                    </a>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table custom-table align-items-center mb-0 text-center">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Tanggal</th>
-                                                <th class="text-center">Siswa</th>
-                                                <th class="text-center">Kategori</th>
-                                                <th class="text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($pendingLetters as $letter)
-                                                <tr>
-                                                    <td class="align-middle text-center font-weight-bold">
-                                                        {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d M Y') }}
-                                                    </td>
-                                                    <td class="align-middle text-center text-muted font-weight-bold">
-                                                        {{ $letter->student_name }}
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span class="badge bg-info text-white px-3 py-2">
-                                                            {{ $letter->type == 'sick' ? 'Sakit' : 'Izin' }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <a href="{{ route('admin.letters.index') }}" class="btn btn-sm btn-outline-primary mb-0">
-                                                            Tinjau
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="4" class="text-center py-4 text-muted">
-                                                        Belum ada pengajuan izin pending.
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- CHART -->
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
