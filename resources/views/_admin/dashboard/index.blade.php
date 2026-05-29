@@ -221,12 +221,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-5" style="color: var(--muted-text);">
-                                        <i class="fas fa-receipt fa-2x mb-3 d-block" style="opacity: .4;"></i>
-                                        Belum ada pembayaran terbaru
-                                    </td>
-                                </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>
@@ -281,12 +276,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="4" class="text-center py-4" style="color: var(--muted-text);">
-                                        <i class="fas fa-check-circle mb-2 d-block" style="font-size: 1.5rem; opacity: .3;"></i>
-                                        Belum ada pengajuan izin pending.
-                                    </td>
-                                </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>

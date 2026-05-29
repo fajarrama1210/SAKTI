@@ -128,12 +128,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-5">
-                                        <i class="fas fa-envelope-open fa-2x d-block mb-3" style="color: var(--muted-text); opacity: .3;"></i>
-                                        <span style="color: var(--muted-text); font-size: .88rem;">Belum ada pengajuan surat.</span>
-                                    </td>
-                                </tr>
+                                    <x-empty-state />
                                 @endforelse
                             </tbody>
                         </table>

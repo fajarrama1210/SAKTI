@@ -276,9 +276,7 @@
                                     <td class="text-sm font-weight-bold text-success">+ Rp {{ number_format($pay->amount, 0, ',', '.') }}</td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">Belum ada transaksi pembayaran masuk.</td>
-                                </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>
@@ -319,9 +317,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="text-center py-4 text-muted">Belum ada pengajuan izin pending.</td>
-                                </tr>
+                                <x-empty-state />
                             @endforelse
                         </tbody>
                     </table>

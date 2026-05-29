@@ -475,27 +475,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5">
-                            <div class="spp-empty">
-                                <div class="empty-icon">
-                                    <i class="fas fa-search-minus"></i>
-                                </div>
-                                <h6>Tidak Ada Data Tagihan</h6>
-                                <p>
-                                    @if($search || $status)
-                                        Tidak ada tagihan yang cocok dengan filter yang dipilih.
-                                        <br>
-                                        <a href="{{ route('kepala-sekolah.bills') }}" class="text-success font-weight-bold mt-1 d-inline-block">
-                                            <i class="fas fa-redo me-1"></i>Reset Filter
-                                        </a>
-                                    @else
-                                        Belum ada data tagihan SPP yang tersedia.
-                                    @endif
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

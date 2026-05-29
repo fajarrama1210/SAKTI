@@ -923,7 +923,7 @@
                                                 <td class="text-center"><a href="{{ route('student.invoice.show', $payment->payment_id) }}" class="btn btn-sm btn-outline-primary" style="border-radius:8px;font-size:11px;padding:4px 10px;" target="_blank"><i class="fas fa-file-invoice"></i> Invoice</a></td>
                                             </tr>
                                         @empty
-                                            <tr><td colspan="6" class="text-center py-5"><i class="fas fa-receipt fa-3x text-muted mb-3"></i><p class="text-muted mb-0">Belum ada riwayat pembayaran.</p></td></tr>
+                                            <x-empty-state />
                                         @endforelse
                                     </tbody>
                                 </table>

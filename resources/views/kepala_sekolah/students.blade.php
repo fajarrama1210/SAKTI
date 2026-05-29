@@ -438,25 +438,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="st-empty">
-                                <div class="e-icon"><i class="fas fa-user-slash"></i></div>
-                                <h6>Tidak Ada Data Siswa</h6>
-                                <p>
-                                    @if($activeFilters > 0)
-                                        Tidak ada siswa yang cocok dengan filter yang dipilih.
-                                        <br>
-                                        <a href="{{ route('kepala-sekolah.students') }}" class="text-success font-weight-bold mt-1 d-inline-block">
-                                            <i class="fas fa-redo me-1"></i>Reset Filter
-                                        </a>
-                                    @else
-                                        Belum ada data siswa yang tersedia dalam sistem.
-                                    @endif
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

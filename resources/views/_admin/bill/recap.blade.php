@@ -134,6 +134,8 @@
                             </div>
                         </td>
                     </tr>
+                    @empty
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>

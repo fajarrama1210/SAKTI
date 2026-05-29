@@ -260,14 +260,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5">
-                                            <div class="alert alert-light text-center border m-3">
-                                                <i class="fas fa-info-circle text-muted mb-2 fa-lg"></i>
-                                                <p class="text-sm text-muted mb-0">Belum ada tagihan untuk siswa ini.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <x-empty-state />
                                 @endforelse
                             </tbody>
                         </table>

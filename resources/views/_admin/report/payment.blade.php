@@ -461,15 +461,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr>
-                            <td colspan="10">
-                                <div class="empty-state-wrapper">
-                                    <div class="empty-icon"><i class="fas fa-search"></i></div>
-                                    <h6>Tidak Ada Data</h6>
-                                    <p>Tidak ada data pembayaran yang sesuai dengan filter yang dipilih.</p>
-                                </div>
-                            </td>
-                        </tr>
+                            <x-empty-state />
                         @endforelse
                     </tbody>
                 </table>

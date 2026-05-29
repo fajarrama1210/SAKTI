@@ -395,27 +395,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="tx-empty">
-                                <div class="empty-icon">
-                                    <i class="fas fa-search-minus"></i>
-                                </div>
-                                <h6>Tidak Ada Data Transaksi</h6>
-                                <p>
-                                    @if($search || $type || $month)
-                                        Tidak ada transaksi yang cocok dengan filter yang dipilih.
-                                        <br>
-                                        <a href="{{ route('kepala-sekolah.transactions') }}" class="text-success font-weight-bold mt-1 d-inline-block">
-                                            <i class="fas fa-redo me-1"></i>Reset Filter
-                                        </a>
-                                    @else
-                                        Belum ada data transaksi yang tersedia.
-                                    @endif
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
+                        <x-empty-state />
                     @endforelse
                 </tbody>
             </table>
