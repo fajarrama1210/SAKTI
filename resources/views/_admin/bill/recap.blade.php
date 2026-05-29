@@ -114,23 +114,33 @@
                         </td>
                         <td class="text-center align-middle">
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <a href="#" class="cursor-pointer text-secondary px-2" id="dropdownAksi{{ $bill->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right shadow">
-                                    <a class="dropdown-item" href="{{ route('admin.spp.student', $bill->id) }}">
-                                        <i class="fas fa-eye text-info"></i> Lihat Detail Siswa
-                                    </a>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="dropdownAksi{{ $bill->id }}">
+                                    <li>
+                                        <a class="dropdown-item border-radius-md" href="{{ route('admin.spp.student', $bill->student_id) }}">
+                                            <i class="fas fa-eye text-info me-2"></i> Lihat Detail Siswa
+                                        </a>
+                                    </li>
                                     @if($bill->status !== 'paid')
-                                    <form action="{{ route('admin.spp.destroy', $bill->id) }}" method="POST" class="delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fas fa-trash"></i> Hapus Tagihan
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <button type="button" class="dropdown-item border-radius-md text-danger btn-delete-bill" 
+                                                data-id="{{ $bill->id }}" 
+                                                data-name="{{ $bill->student_name }}" 
+                                                data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}">
+                                            <i class="fas fa-trash me-2"></i> Hapus Tagihan
                                         </button>
-                                    </form>
+                                        <form id="deleteForm{{ $bill->id }}" action="{{ route('admin.spp.destroy', $bill->id) }}" method="POST" class="d-none">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </li>
                                     @endif
-                                </div>
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -147,3 +157,54 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ── Flash success toast ──
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        timer: 3500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end',
+    });
+    @endif
+
+    @if(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+    });
+    @endif
+
+    // ── Delete Bill confirmation ──
+    document.querySelectorAll('.btn-delete-bill').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const period = this.getAttribute('data-period');
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Hapus Tagihan SPP?',
+                html: `Tagihan SPP siswa <strong>${name}</strong> untuk periode <strong>${period}</strong> akan dihapus permanen.`,
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: '<i class="fas fa-trash me-1"></i> Ya, Hapus',
+                cancelButtonText: 'Batal',
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + id).submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endpush

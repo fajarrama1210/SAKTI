@@ -30,6 +30,7 @@ class BillUseCase
             ->join(DatabaseEntity::TBL_ACADEMIC_YEARS . ' as ay', 'b.academic_year_id', '=', 'ay.id')
             ->select(
                 'b.id',
+                'b.student_id',
                 's.name as student_name',
                 's.nisn',
                 's.family_card_number',
