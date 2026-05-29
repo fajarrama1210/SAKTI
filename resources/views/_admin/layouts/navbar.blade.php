@@ -340,8 +340,8 @@
                 </ul>
             </div>
 
-            {{-- Sidenav Toggle (mobile, hidden on xl+) --}}
-            <div class="d-xl-none">
+            {{-- Sidenav Toggle (mobile, hidden on lg+) --}}
+            <div class="d-lg-none">
                 <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
                     <div class="sidenav-toggler-inner">
                         <i class="sidenav-toggler-line bg-white"></i>

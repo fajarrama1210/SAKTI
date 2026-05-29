@@ -725,7 +725,7 @@ box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
 
 .letters-table th {
     border-top: none !important;
-    font-size: .72rem;
+    font-size: 1rem;
     letter-spacing: .6px;
     text-transform: uppercase;
     color: var(--muted-text);
@@ -737,7 +737,7 @@ box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
     vertical-align: middle;
     border-color: #f1f5f9;
     padding: 16px 20px;
-    font-size: 0.88rem;
+    font-size: 1rem;
 }
 
 .letters-table tbody tr {

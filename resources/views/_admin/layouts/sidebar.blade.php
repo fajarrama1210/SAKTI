@@ -1,7 +1,7 @@
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4"
     id="sidenav-main" style="overflow: hidden !important;">
     <div class="sidenav-header">
-        <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+        <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-lg-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0 d-flex align-items-center" href="{{ url('/') }}">
             <img src="{{ asset('assets/img/SAKTI.png') }}" class="navbar-brand-img" alt="SAKTI Logo" style="max-height: 36px;">
