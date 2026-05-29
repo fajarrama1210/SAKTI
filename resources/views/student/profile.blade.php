@@ -135,9 +135,24 @@
                             <div class="p-2 text-sm font-weight-bold text-capitalize" style="background: #f8fafc; border-radius: 8px; color: var(--dark-text);">{{ $user->role }}</div>
                         </div>
                         <div class="col-md-12">
-                            <div class="p-3" style="background: linear-gradient(135deg, #059669, #34d399); border-radius: 12px; color: #fff;">
+                            {{-- Default password info --}}
+                            <div class="p-3 mb-3" style="background: linear-gradient(135deg, #059669, #34d399); border-radius: 12px; color: #fff;">
                                 <i class="fas fa-info-circle me-2"></i>
                                 <span class="text-xs">Password default akun Anda adalah <strong>NISN</strong> Anda. Hubungi administrator sekolah jika Anda ingin mengubah email atau data kependudukan Anda.</span>
+                            </div>
+                            {{-- Forgot password reminder banner --}}
+                            <div class="p-3" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fde68a; border-radius: 12px; color: #92400e;">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div style="width:36px; height:36px; border-radius:10px; background:#fcd34d; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                        <i class="fas fa-key" style="color:#92400e; font-size:.9rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-weight-bold mb-1" style="color:#92400e;">Lupa Password?</div>
+                                        <div class="text-xs" style="color:#78350f; line-height:1.5;">
+                                            Jika Anda lupa password dan tidak bisa login, <strong>hubungi admin/tata usaha sekolah</strong> untuk melakukan <strong>reset password</strong>. Password Anda akan dikembalikan ke <strong>NISN</strong> sebagai password default.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

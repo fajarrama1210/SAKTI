@@ -69,6 +69,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit');
         Route::put('/{id}', [StudentController::class, 'update'])->name('update');
         Route::delete('/{id}', [StudentController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/reset-password', [StudentController::class, 'resetPassword'])->name('reset-password');
         Route::get('/template', [StudentController::class, 'downloadTemplate'])->name('template');
         Route::get('/import', [StudentController::class, 'import'])->name('import.view'); // New route for the page
         Route::post('/import', [StudentController::class, 'importExcel'])->name('import');
