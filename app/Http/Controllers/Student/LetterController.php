@@ -33,13 +33,14 @@ class LetterController extends Controller
 
         $request->validate([
             'type' => 'required|in:sick,permission',
-            'description' => 'required|string',
+            'description' => 'required|string|max:300',
             'file' => 'required|file|mimes:pdf,png,jpg,jpeg|max:2048',
             'submission_date' => 'required|date'
         ], [
             'type.required' => 'Kategori surat wajib dipilih.',
             'type.in' => 'Kategori surat tidak valid.',
             'description.required' => 'Keterangan/deskripsi wajib diisi.',
+            'description.max' => 'Keterangan/deskripsi tidak boleh lebih dari 300 karakter.',
             'file.required' => 'File surat wajib diunggah.',
             'file.file' => 'File yang diunggah tidak valid.',
             'file.mimes' => 'Format file harus berupa PDF, PNG, JPG, atau JPEG.',

@@ -102,12 +102,35 @@
                                         <hr class="dropdown-divider my-1">
                                     </li>
                                     <li>
-                                        <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST" class="delete-form m-0">
+                                        <button type="button"
+                                            class="dropdown-item border-radius-md text-warning btn-reset-password"
+                                            data-id="{{ $student->id }}"
+                                            data-name="{{ $student->name }}"
+                                            data-nisn="{{ $student->nisn }}">
+                                            <i class="fas fa-key me-2"></i> Reset Password
+                                        </button>
+                                        {{-- Hidden form for reset --}}
+                                        <form id="resetForm{{ $student->id }}"
+                                            action="{{ route('admin.students.reset-password', $student->id) }}"
+                                            method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider my-1">
+                                    </li>
+                                    <li>
+                                        <button type="button"
+                                            class="dropdown-item border-radius-md text-danger btn-delete-student"
+                                            data-id="{{ $student->id }}"
+                                            data-name="{{ $student->name }}">
+                                            <i class="fas fa-trash me-2"></i> Hapus
+                                        </button>
+                                        <form id="deleteForm{{ $student->id }}"
+                                            action="{{ route('admin.students.destroy', $student->id) }}"
+                                            method="POST" class="d-none">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item border-radius-md text-danger">
-                                                <i class="fas fa-trash me-2"></i> Hapus
-                                            </button>
                                         </form>
                                     </li>
                                 </ul>
@@ -127,4 +150,81 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ── Flash success toast ──
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        timer: 3500,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end',
+    });
+    @endif
+
+    @if(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+    });
+    @endif
+
+    // ── Reset Password confirmation ──
+    document.querySelectorAll('.btn-reset-password').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id   = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const nisn = this.getAttribute('data-nisn');
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Reset Password Siswa?',
+                html: `Password akun <strong>${name}</strong> akan direset kembali ke password default:<br>
+                       <code style="font-size:1.1rem; background:#f1f5f9; padding:4px 10px; border-radius:8px; color:#059669;">${nisn}</code><br><br>
+                       <small class="text-muted">Siswa perlu login ulang setelah ini.</small>`,
+                showCancelButton: true,
+                confirmButtonColor: '#059669',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: '<i class="fas fa-key me-1"></i> Ya, Reset Sekarang',
+                cancelButtonText: 'Batal',
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    document.getElementById('resetForm' + id).submit();
+                }
+            });
+        });
+    });
+
+    // ── Delete Student confirmation ──
+    document.querySelectorAll('.btn-delete-student').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id   = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Hapus Siswa?',
+                html: `Data siswa <strong>${name}</strong> beserta akun loginnya akan <strong>dihapus permanen</strong> dan tidak bisa dikembalikan.`,
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: '<i class="fas fa-trash me-1"></i> Ya, Hapus',
+                cancelButtonText: 'Batal',
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + id).submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endpush
 @endsection

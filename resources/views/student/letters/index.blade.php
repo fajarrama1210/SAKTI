@@ -163,8 +163,22 @@
                   @enderror
               </div>
               <div class="mb-3">
-                  <label for="description" class="form-label">Keterangan / Deskripsi</label>
-                  <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
+                  <label for="description" class="form-label d-flex justify-content-between align-items-center">
+                      <span>Keterangan / Deskripsi <span class="text-danger">*</span></span>
+                      <span id="desc-counter" class="badge" style="font-size:.75rem; background:#ecfdf5; color:#059669; font-weight:700; transition:all .2s ease;">300 / 300</span>
+                  </label>
+                  <textarea
+                      class="form-control @error('description') is-invalid @enderror"
+                      id="description"
+                      name="description"
+                      rows="3"
+                      maxlength="300"
+                      placeholder="Tuliskan alasan izin atau sakit secara singkat..."
+                      required
+                  >{{ old('description') }}</textarea>
+                  <div id="desc-limit-warning" class="text-danger mt-1" style="font-size:.78rem; display:none;">
+                      <i class="fas fa-exclamation-circle me-1"></i> Keterangan tidak boleh lebih dari 300 karakter.
+                  </div>
                   @error('description')
                       <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
@@ -190,10 +204,65 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // ── Re-open modal on validation errors ──
         @if($errors->any())
             var addLetterModal = new bootstrap.Modal(document.getElementById('addLetterModal'));
             addLetterModal.show();
         @endif
+
+        // ── Character counter for description ──
+        const MAX_CHARS = 300;
+        const textarea  = document.getElementById('description');
+        const counter   = document.getElementById('desc-counter');
+        const warning   = document.getElementById('desc-limit-warning');
+
+        function updateCounter() {
+            const used      = textarea.value.length;
+            const remaining = MAX_CHARS - used;
+
+            counter.textContent = remaining + ' / ' + MAX_CHARS;
+
+            if (remaining <= 0) {
+                // Over limit – red badge, show warning
+                counter.style.background = '#fef2f2';
+                counter.style.color      = '#ef4444';
+                warning.style.display    = 'block';
+                textarea.classList.add('is-invalid');
+            } else if (remaining <= 50) {
+                // Approaching limit – orange badge
+                counter.style.background = '#fffbeb';
+                counter.style.color      = '#d97706';
+                warning.style.display    = 'none';
+                textarea.classList.remove('is-invalid');
+            } else {
+                // Safe – green badge
+                counter.style.background = '#ecfdf5';
+                counter.style.color      = '#059669';
+                warning.style.display    = 'none';
+                textarea.classList.remove('is-invalid');
+            }
+        }
+
+        if (textarea) {
+            textarea.addEventListener('input', updateCounter);
+            // Init on page load (e.g. after validation error refill)
+            updateCounter();
+        }
+
+        // ── Block form submit if description exceeds limit ──
+        const letterForm = document.querySelector('#addLetterModal form');
+        if (letterForm) {
+            letterForm.addEventListener('submit', function(e) {
+                if (textarea && textarea.value.length > MAX_CHARS) {
+                    e.preventDefault();
+                    textarea.classList.add('is-invalid');
+                    warning.style.display = 'block';
+                    textarea.focus();
+                    // Scroll warning into view
+                    warning.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
     });
 </script>
 @endpush

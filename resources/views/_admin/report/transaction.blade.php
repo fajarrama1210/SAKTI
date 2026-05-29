@@ -389,11 +389,11 @@
                             <td>
                                 <div style="font-weight:700; color:#1e293b;">
                                     {{ \Carbon\Carbon::parse($trx->date)->format('d') }}
-                                    {{ ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'][\Carbon\Carbon::parse($trx->date)->month - 1] }}
+                                    {{ ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][\Carbon\Carbon::parse($trx->date)->month - 1] }}
                                     {{ \Carbon\Carbon::parse($trx->date)->format('Y') }}
                                 </div>
                                 <div style="font-size:.74rem; color:#94a3b8;">
-                                    {{ \Carbon\Carbon::parse($trx->date)->translatedFormat('l') ?? \Carbon\Carbon::parse($trx->date)->format('D') }}
+                                    {{ \Carbon\Carbon::parse($trx->date)->translatedFormat('l') }}
                                 </div>
                             </td>
 

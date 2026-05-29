@@ -85,6 +85,18 @@ class StudentController extends Controller
         return redirect()->route('admin.students.index')->with('success', 'Siswa dan akun loginnya berhasil dihapus!');
     }
 
+    public function resetPassword($id)
+    {
+        $result = $this->studentUseCase->resetPassword($id);
+
+        if (!$result['status']) {
+            return redirect()->back()->with('error', $result['message'] ?? ResponseEntity::MSG_ERROR_SERVER);
+        }
+
+        return redirect()->route('admin.students.index')
+            ->with('success', 'Password siswa berhasil direset ke NISN: ' . $result['nisn']);
+    }
+
     public function downloadTemplate()
     {
         return Excel::download(new StudentTemplateExport, 'Template_Import_Siswa.xlsx');

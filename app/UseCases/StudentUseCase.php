@@ -195,4 +195,35 @@ class StudentUseCase
             return ['status' => false, 'message' => \App\Entities\ResponseEntity::MSG_ERROR_SERVER];
         }
     }
+
+    /**
+     * Reset password siswa ke NISN (password default).
+     */
+    public function resetPassword($id): array
+    {
+        try {
+            $student = DB::table(DatabaseEntity::TBL_STUDENTS)->where('id', $id)->first();
+
+            if (!$student) {
+                return ['status' => false, 'message' => 'Data siswa tidak ditemukan.'];
+            }
+
+            $updated = DB::table('users')
+                ->where('student_id', $id)
+                ->update([
+                    'password'   => bcrypt($student->nisn),
+                    'updated_at' => now(),
+                ]);
+
+            if (!$updated) {
+                return ['status' => false, 'message' => 'Akun siswa tidak ditemukan atau gagal diperbarui.'];
+            }
+
+            return ['status' => true, 'nisn' => $student->nisn];
+        } catch (Exception $e) {
+            Log::error('StudentResetPassword Error: ' . $e->getMessage());
+            return ['status' => false, 'message' => \App\Entities\ResponseEntity::MSG_ERROR_SERVER];
+        }
+    }
 }
+
