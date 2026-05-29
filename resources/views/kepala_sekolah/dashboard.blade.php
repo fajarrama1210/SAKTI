@@ -1,175 +1,65 @@
 @extends('_admin.layouts.app')
 
+@push('styles')
+    @include('_admin.layouts.sakti-custom')
+@endpush
+
 @section('content')
-<style>
-    :root {
-        --primary-green: #1a8a5c;
-        --secondary-green: #2dce89;
-        --soft-green: #e9fff5;
-        --dark-text: #344767;
-        --muted-text: #8392ab;
-        --card-radius: 20px;
-    }
-
-    body {
-        background: #f8fafc;
-    }
-
-    .dashboard-header {
-        background: linear-gradient(135deg, #0f766e 0%, #115e59 40%, #134e4a 100%);
-        position: relative;
-        overflow: hidden;
-        border-radius: 25px;
-        margin: 18px;
-        padding: 40px 24px 120px;
-        box-shadow: 0 20px 45px rgba(15, 118, 110, 0.25);
-    }
-
-    .dashboard-header::before {
-        content: '';
-        position: absolute;
-        width: 300px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 50%;
-        top: -100px;
-        right: -80px;
-    }
-
-    .dashboard-card {
-        border: none;
-        border-radius: var(--card-radius);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: #ffffff;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, .04);
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, .08) !important;
-    }
-
-    .stats-card {
-        position: relative;
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
-        border-left: 5px solid var(--primary-green);
-    }
-
-    .stats-icon {
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 16px;
-        font-size: 1.25rem;
-    }
-
-    .stats-title {
-        font-size: .75rem;
-        font-weight: 700;
-        color: var(--muted-text);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .stats-value {
-        font-size: 1.25rem;
-        font-weight: 800;
-        color: var(--dark-text);
-    }
-
-    .chart-container {
-        position: relative;
-        height: 320px;
-        width: 100%;
-    }
-
-    .section-title {
-        font-weight: 700;
-        color: var(--dark-text);
-    }
-</style>
 
 <!-- HEADER -->
-<div class="header py-6 mb-2 dashboard-header">
+<div class="sakti-page-header mb-4">
     <div class="container-fluid">
-        <div class="header-body">
-            <div class="row align-items-center py-4">
-                <div class="col">
-                    <h2 class="text-white font-weight-bold mb-1">
-                        Monitoring Kepala Sekolah
-                    </h2>
-                    <p class="text-white mb-0 opacity-8">
-                        Laporan pemantauan data akademik, tagihan SPP, dan perkembangan finansial sekolah secara realtime.
-                    </p>
-                </div>
-            </div>
-
-            <!-- STATS CARDS -->
-            <div class="row mt-4">
-                <!-- TOTAL SISWA -->
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card dashboard-card stats-card shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="stats-title mb-2">Total Siswa</div>
-                                    <div class="stats-value">{{ $totalStudents }} Siswa</div>
-                                    <small class="text-muted">{{ $totalClassrooms }} Kelas / {{ $totalMajors }} Jurusan</small>
-                                </div>
-                                <div class="stats-icon bg-gradient-info text-white">
-                                    <i class="fas fa-user-graduate"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOTAL PENERIMAAN -->
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card dashboard-card stats-card shadow-sm" style="border-left-color: #2dce89;">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="stats-title mb-2">Penerimaan SPP (Terbayar)</div>
-                                    <div class="stats-value text-success">Rp {{ number_format($totalPaid, 0, ',', '.') }}</div>
-                                    <small class="text-muted">Dari total tagihan Rp {{ number_format($totalBilled, 0, ',', '.') }}</small>
-                                </div>
-                                <div class="stats-icon bg-gradient-success text-white">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SISA TAGIHAN -->
-                <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card dashboard-card stats-card shadow-sm" style="border-left-color: #f5365c;">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="stats-title mb-2">Tunggakan SPP (Belum Bayar)</div>
-                                    <div class="stats-value text-danger">Rp {{ number_format($totalOutstanding, 0, ',', '.') }}</div>
-                                    <small class="text-muted">Harus ditagihkan ke siswa</small>
-                                </div>
-                                <div class="stats-icon bg-gradient-danger text-white">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="header-body position-relative" style="z-index: 1;">
+            <h2 class="text-white font-weight-bold mb-1" style="font-size: 1.6rem; letter-spacing: -0.02em;">
+                Monitoring Kepala Sekolah
+            </h2>
+            <p class="text-white mb-0" style="opacity: .75; font-size: 0.9rem;">
+                Laporan pemantauan data akademik, tagihan SPP, dan perkembangan finansial sekolah secara realtime.
+            </p>
         </div>
     </div>
 </div>
 
 <!-- CONTENT -->
-<div class="container-fluid mt--6">
+<div class="container-fluid">
+    <!-- STATS CARDS -->
+    <div class="row mb-4">
+        <!-- TOTAL SISWA -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="summary-card sc-blue h-100">
+                <div class="sc-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="sc-label">Total Siswa</div>
+                <div class="sc-value">{{ $totalStudents }} Siswa</div>
+                <div class="mt-2" style="font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                    {{ $totalClassrooms }} Kelas / {{ $totalMajors }} Jurusan
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL PENERIMAAN -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="summary-card sc-green h-100">
+                <div class="sc-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="sc-label">Penerimaan SPP (Terbayar)</div>
+                <div class="sc-value">Rp {{ number_format($totalPaid, 0, ',', '.') }}</div>
+                <div class="mt-2" style="font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                    Dari total tagihan Rp {{ number_format($totalBilled, 0, ',', '.') }}
+                </div>
+            </div>
+        </div>
+
+        <!-- SISA TAGIHAN -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="summary-card sc-red h-100">
+                <div class="sc-icon"><i class="fas fa-exclamation-circle"></i></div>
+                <div class="sc-label">Tunggakan SPP (Belum Bayar)</div>
+                <div class="sc-value">Rp {{ number_format($totalOutstanding, 0, ',', '.') }}</div>
+                <div class="mt-2" style="font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                    Harus ditagihkan ke siswa
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <!-- CHART 1: FINANCIAL COMPARISON -->
         <div class="col-xl-8 mb-4">
@@ -241,39 +131,42 @@
     <!-- TABLE: RECENT PAYMENTS -->
     <div class="row">
         <div class="col-12 mb-4">
-            <div class="card dashboard-card shadow-sm">
-                <div class="card-header bg-white border-0 pt-4 d-flex justify-content-between align-items-center">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="section-title mb-0">Histori Pembayaran SPP Terbaru</h5>
+                        <h5 class="section-title mb-0">
+                            <i class="fas fa-receipt me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                            Histori Pembayaran SPP Terbaru
+                        </h5>
                         <p class="text-sm text-muted mb-0">Daftar transaksi pembayaran SPP terakhir masuk.</p>
                     </div>
-                    <a href="{{ route('kepala-sekolah.bills') }}" class="btn btn-sm btn-outline-success border-0 px-3">
+                    <a href="{{ route('kepala-sekolah.bills') }}" class="btn btn-sm btn-success view-btn">
                         Lihat Semua Tagihan <i class="fas fa-chevron-right ms-1"></i>
                     </a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
-                        <thead class="thead-light">
+                    <table class="table custom-table align-items-center mb-0">
+                        <thead>
                             <tr>
-                                <th class="text-xs font-weight-bold">Tanggal</th>
-                                <th class="text-xs font-weight-bold">Nama Siswa</th>
-                                <th class="text-xs font-weight-bold">No. Kartu Keluarga</th>
-                                <th class="text-xs font-weight-bold">Metode</th>
-                                <th class="text-xs font-weight-bold">Jumlah</th>
+                                <th>Tanggal</th>
+                                <th>Nama Siswa</th>
+                                <th>No. Kartu Keluarga</th>
+                                <th>Metode</th>
+                                <th>Jumlah</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($recentPayments as $pay)
                                 <tr>
-                                    <td class="text-sm font-weight-bold">
+                                    <td class="font-weight-bold">
                                         {{ \Carbon\Carbon::parse($pay->payment_date)->translatedFormat('d F Y') }}
                                     </td>
-                                    <td class="text-sm font-weight-bold text-dark">{{ $pay->student_name }}</td>
-                                    <td class="text-sm text-muted">{{ $pay->family_card_number }}</td>
+                                    <td class="font-weight-bold text-dark">{{ $pay->student_name }}</td>
+                                    <td class="text-muted">{{ $pay->family_card_number }}</td>
                                     <td>
                                         <span class="badge bg-light text-success px-3 py-2 font-weight-bold text-xs">{{ $pay->payment_method }}</span>
                                     </td>
-                                    <td class="text-sm font-weight-bold text-success">+ Rp {{ number_format($pay->amount, 0, ',', '.') }}</td>
+                                    <td class="font-weight-bold text-success">+ Rp {{ number_format($pay->amount, 0, ',', '.') }}</td>
                                 </tr>
                             @empty
                                 <x-empty-state />
@@ -284,34 +177,36 @@
             </div>
         </div>
     </div>
-    </div>
 
     <!-- PENGATURAN SURAT IZIN WIDGET -->
     <div class="row">
         <div class="col-12 mb-4">
-            <div class="card dashboard-card shadow-sm">
-                <div class="card-header bg-white border-0 pt-4 d-flex justify-content-between align-items-center">
+            <div class="card dashboard-card">
+                <div class="card-header bg-white border-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="section-title mb-0">Pengajuan Izin/Sakit Siswa</h5>
+                        <h5 class="section-title mb-0">
+                            <i class="fas fa-envelope-open-text me-2" style="color: var(--primary-green); opacity: .7;"></i>
+                            Pengajuan Izin/Sakit Siswa
+                        </h5>
                         <p class="text-sm text-muted mb-0">Daftar pengajuan izin atau sakit yang belum disetujui.</p>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
-                        <thead class="thead-light">
+                    <table class="table custom-table align-items-center mb-0">
+                        <thead>
                             <tr>
-                                <th class="text-xs font-weight-bold">Tanggal</th>
-                                <th class="text-xs font-weight-bold">Nama Siswa</th>
-                                <th class="text-xs font-weight-bold">Kategori</th>
+                                <th>Tanggal</th>
+                                <th>Nama Siswa</th>
+                                <th>Kategori</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($pendingLetters as $letter)
                                 <tr>
-                                    <td class="text-sm font-weight-bold">
+                                    <td class="font-weight-bold">
                                         {{ \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y') }}
                                     </td>
-                                    <td class="text-sm font-weight-bold text-dark">{{ $letter->student_name }}</td>
+                                    <td class="font-weight-bold text-dark">{{ $letter->student_name }}</td>
                                     <td>
                                         <span class="badge bg-light text-info px-3 py-2 font-weight-bold text-xs">{{ $letter->type == 'sick' ? 'Sakit' : 'Izin' }}</span>
                                     </td>
