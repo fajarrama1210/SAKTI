@@ -371,8 +371,8 @@
             const seconds = String(now.getSeconds()).padStart(2, '0');
             timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
             
-            // Format date (Indonesian)
-            const days = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+            // Format tanggal (Indonesia)
+            const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
             
             const dayName = days[now.getDay()];
