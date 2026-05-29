@@ -63,58 +63,72 @@ class ProfileController extends Controller
     public function updateAvatar(Request $request): RedirectResponse
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ], [
             'avatar.required' => 'File foto profil wajib diunggah.',
             'avatar.image' => 'File harus berupa gambar.',
-            'avatar.mimes' => 'Format gambar yang diperbolehkan hanya JPEG, PNG, dan JPG.',
+            'avatar.mimes' => 'Format gambar yang diperbolehkan hanya JPEG, PNG, JPG, dan WebP.',
             'avatar.max' => 'Ukuran gambar maksimal adalah 2 MB.',
         ]);
 
         $user = Auth::user();
-        $disk = env('FILESYSTEM_DISK', 's3');
+
+        // Selalu gunakan disk 'public' agar file dapat diakses browser secara langsung.
+        // Jika FILESYSTEM_DISK=s3, gunakan S3; selainnya (local/public/dll) gunakan 'public'.
+        $configDisk = config('filesystems.default', 'local');
+        $disk = ($configDisk === 's3') ? 's3' : 'public';
 
         // Hapus foto profil lama jika ada
         if ($user->avatar) {
             try {
-                if (Storage::disk($disk)->exists($user->avatar)) {
-                    Storage::disk($disk)->delete($user->avatar);
+                Storage::disk($disk)->delete($user->avatar);
+                if ($disk !== 'public') {
+                    Storage::disk('public')->delete($user->avatar);
                 }
             } catch (\Exception $e) {
-                // Abaikan jika error saat menghapus (misal koneksi S3 gagal/file tidak ada)
+                // Abaikan error hapus
             }
         }
 
-        // Upload foto profil baru
+        // Upload foto profil baru — coba dengan kompresi dulu, fallback ke upload langsung
         $path = false;
+        $uploadedFile = $request->file('avatar');
+
+        // Langkah 1: Coba proses kompresi & resize
+        $processedFile = null;
         try {
-            $path = $request->file('avatar')->store('avatars', $disk);
+            $processedFile = $this->resizeAndCompressAvatar($uploadedFile);
         } catch (\Exception $e) {
-            // Abaikan/tangkap exception jika dilempar
+            $processedFile = null;
+        }
+
+        // Langkah 2: Upload file (hasil kompresi atau file asli)
+        try {
+            if ($processedFile instanceof \Illuminate\Http\File) {
+                $path = Storage::disk($disk)->putFile('avatars', $processedFile);
+                @unlink($processedFile->getRealPath());
+            } else {
+                $path = $uploadedFile->store('avatars', $disk);
+            }
+        } catch (\Exception $e) {
+            $path = false;
+        }
+
+        // Langkah 3: Jika S3 gagal, fallback ke disk public lokal
+        if ($path === false && $disk === 's3') {
+            try {
+                $path = $uploadedFile->store('avatars', 'public');
+                $disk = 'public';
+            } catch (\Exception $fallbackEx) {
+                return Redirect::back()->with('error', 'Gagal mengunggah foto profil. Silakan coba lagi.');
+            }
         }
 
         if ($path === false) {
-            // Jika disk s3 gagal, coba fallback ke public disk
-            if ($disk === 's3') {
-                try {
-                    $path = $request->file('avatar')->store('avatars', 'public');
-                    if ($path !== false) {
-                        DB::table('users')
-                            ->where('id', $user->id)
-                            ->update([
-                                'avatar' => $path,
-                                'updated_at' => now(),
-                            ]);
-                        return Redirect::route('profile.edit')->with('success', 'Foto profil Anda berhasil diperbarui!');
-                    }
-                } catch (\Exception $fallbackEx) {
-                    return Redirect::back()->with('error', 'Gagal mengunggah foto profil: ' . $fallbackEx->getMessage());
-                }
-            }
-            return Redirect::back()->with('error', 'Gagal mengunggah foto profil ke penyimpanan.');
+            return Redirect::back()->with('error', 'Gagal menyimpan foto profil ke storage. Silakan coba lagi.');
         }
 
-        // Update path di database
+        // Simpan path ke database
         DB::table('users')
             ->where('id', $user->id)
             ->update([
@@ -123,5 +137,67 @@ class ProfileController extends Controller
             ]);
 
         return Redirect::route('profile.edit')->with('success', 'Foto profil Anda berhasil diperbarui!');
+    }
+
+    /**
+     * Mengubah dimensi gambar menjadi maksimal 300x300 px dan melakukan kompresi ke format WebP (jika didukung) atau JPEG.
+     */
+    private function resizeAndCompressAvatar($file, $maxWidth = 300, $maxHeight = 300)
+    {
+        if (!extension_loaded('gd')) {
+            return $file;
+        }
+
+        list($width, $height, $type) = @getimagesize($file->getRealPath());
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $srcImage = @imagecreatefromjpeg($file->getRealPath());
+                break;
+            case IMAGETYPE_PNG:
+                $srcImage = @imagecreatefrompng($file->getRealPath());
+                break;
+            default:
+                return $file;
+        }
+
+        if (!$srcImage) {
+            return $file;
+        }
+
+        // Hitung rasio aspek baru
+        $ratio = $width / $height;
+        if ($width > $height) {
+            $newWidth = $maxWidth;
+            $newHeight = (int)($maxWidth / $ratio);
+        } else {
+            $newHeight = $maxHeight;
+            $newWidth = (int)($maxHeight * $ratio);
+        }
+
+        $dstImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Pertahankan transparansi untuk format PNG
+        if ($type == IMAGETYPE_PNG) {
+            imagealphablending($dstImage, false);
+            imagesavealpha($dstImage, true);
+            $transparent = imagecolorallocatealpha($dstImage, 255, 255, 255, 127);
+            imagefilledrectangle($dstImage, 0, 0, $newWidth, $newHeight, $transparent);
+        }
+
+        imagecopyresampled($dstImage, $srcImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        $tempPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'avatar_' . uniqid() . (function_exists('imagewebp') ? '.webp' : '.jpg');
+
+        if (function_exists('imagewebp')) {
+            @imagewebp($dstImage, $tempPath, 80);
+        } else {
+            @imagejpeg($dstImage, $tempPath, 80);
+        }
+
+        @imagedestroy($srcImage);
+        @imagedestroy($dstImage);
+
+        return new \Illuminate\Http\File($tempPath);
     }
 }

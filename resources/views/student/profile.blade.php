@@ -32,14 +32,20 @@
     @php
         $avatarUrl = null;
         if ($user->avatar && $user->avatar !== '0') {
+            // Cek disk public terlebih dahulu (penyimpanan utama)
             try {
                 if (\Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
                     $avatarUrl = asset('storage/' . $user->avatar);
-                } else {
-                    $avatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url($user->avatar);
                 }
-            } catch (\Exception $e) {
-                $avatarUrl = asset('storage/' . $user->avatar);
+            } catch (\Exception $e) {}
+
+            // Jika tidak ada di public, coba S3
+            if (!$avatarUrl) {
+                try {
+                    $avatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url($user->avatar);
+                } catch (\Exception $e) {
+                    $avatarUrl = null;
+                }
             }
         }
     @endphp
@@ -244,6 +250,30 @@
         });
     });
 </script>
+@if (session('success'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: "{{ session('success') }}",
+            timer: 2500,
+            showConfirmButton: false
+        });
+    });
+</script>
+@endif
+@if (session('error'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            icon: "error",
+            title: "Gagal!",
+            text: "{{ session('error') }}"
+        });
+    });
+</script>
+@endif
 @if ($errors->any())
 <script>
     document.addEventListener("DOMContentLoaded", function () {
