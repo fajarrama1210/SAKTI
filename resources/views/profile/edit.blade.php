@@ -24,14 +24,15 @@
     @php
         $avatarUrl = null;
         if ($user->avatar && $user->avatar !== '0') {
-            try {
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
-                    $avatarUrl = asset('storage/' . $user->avatar);
-                } else {
+            $configDisk = config('filesystems.default', 'local');
+            if ($configDisk === 's3') {
+                try {
                     $avatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url($user->avatar);
-                }
-            } catch (\Exception $e) {
-                $avatarUrl = asset('storage/' . $user->avatar);
+                } catch (\Exception $e) {}
+            }
+            if (!$avatarUrl) {
+                // Route PHP — tidak butuh symlink, bekerja di semua hosting
+                $avatarUrl = route('avatar.serve', ['filename' => basename($user->avatar)]);
             }
         }
     @endphp

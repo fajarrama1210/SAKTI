@@ -32,20 +32,16 @@
     @php
         $avatarUrl = null;
         if ($user->avatar && $user->avatar !== '0') {
-            // Cek disk public terlebih dahulu (penyimpanan utama)
-            try {
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
-                    $avatarUrl = asset('storage/' . $user->avatar);
-                }
-            } catch (\Exception $e) {}
-
-            // Jika tidak ada di public, coba S3
-            if (!$avatarUrl) {
+            $configDisk = config('filesystems.default', 'local');
+            if ($configDisk === 's3') {
+                // S3: gunakan URL langsung dari S3
                 try {
                     $avatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url($user->avatar);
-                } catch (\Exception $e) {
-                    $avatarUrl = null;
-                }
+                } catch (\Exception $e) {}
+            }
+            if (!$avatarUrl) {
+                // Lokal/Public: gunakan route PHP (tidak butuh symlink, bekerja di semua hosting)
+                $avatarUrl = route('avatar.serve', ['filename' => basename($user->avatar)]);
             }
         }
     @endphp

@@ -24,6 +24,35 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/**
+ * Route khusus untuk melayani file avatar secara langsung melalui PHP.
+ * Ini menghilangkan ketergantungan pada symlink public/storage yang
+ * sering bermasalah di shared hosting. Berlaku untuk semua environment.
+ */
+Route::get('/avatar/{filename}', function (string $filename) {
+    // Keamanan: hapus path traversal dan karakter berbahaya
+    $filename = basename($filename);
+
+    $path = storage_path('app/public/avatars/' . $filename);
+
+    if (!file_exists($path) || !is_file($path)) {
+        abort(404);
+    }
+
+    $mime = @mime_content_type($path) ?: 'image/jpeg';
+
+    // Hanya izinkan tipe file gambar
+    if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/gif'])) {
+        abort(403);
+    }
+
+    return response()->file($path, [
+        'Content-Type'  => $mime,
+        // Cache 30 hari di browser (gambar profil jarang berubah)
+        'Cache-Control' => 'public, max-age=2592000, immutable',
+    ]);
+})->name('avatar.serve')->where('filename', '[^/]+');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

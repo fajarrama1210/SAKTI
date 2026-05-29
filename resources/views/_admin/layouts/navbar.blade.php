@@ -25,20 +25,15 @@
 
     $navAvatarUrl = null;
     if (Auth::check() && Auth::user()->avatar && Auth::user()->avatar !== '0') {
-        // Cek disk public terlebih dahulu
-        try {
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists(Auth::user()->avatar)) {
-                $navAvatarUrl = asset('storage/' . Auth::user()->avatar);
-            }
-        } catch (\Exception $e) {}
-
-        // Jika tidak ada di public, coba S3
-        if (!$navAvatarUrl) {
+        $configDisk = config('filesystems.default', 'local');
+        if ($configDisk === 's3') {
             try {
                 $navAvatarUrl = \Illuminate\Support\Facades\Storage::disk('s3')->url(Auth::user()->avatar);
-            } catch (\Exception $e) {
-                $navAvatarUrl = null;
-            }
+            } catch (\Exception $e) {}
+        }
+        if (!$navAvatarUrl) {
+            // Route PHP — tidak butuh symlink, bekerja di semua hosting
+            $navAvatarUrl = route('avatar.serve', ['filename' => basename(Auth::user()->avatar)]);
         }
     }
 @endphp
