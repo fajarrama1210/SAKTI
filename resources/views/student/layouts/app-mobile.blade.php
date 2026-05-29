@@ -4,7 +4,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
-    <title>SAKTI | Portal Siswa</title>
+    @php
+        $segment = request()->segment(2) ?: 'dashboard';
+        $titleMap = [
+            'dashboard' => 'Dashboard',
+            'bills' => 'Tagihan Saya',
+            'letters' => 'Pengajuan Surat',
+        ];
+        $featureName = $titleMap[$segment] ?? ucwords(str_replace('-', ' ', $segment));
+        $yieldTitle = trim(View::yieldContent('title'));
+        $finalTitle = $yieldTitle ?: $featureName;
+    @endphp
+    <title>Sakti | {{ $finalTitle }}</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/sakti favicon/favicon-96x96.png') }}" sizes="96x96" />

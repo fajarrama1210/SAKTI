@@ -4,7 +4,33 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>SAKTI | </title>
+    @php
+        $segment = request()->segment(2) ?: request()->segment(1);
+        if (request()->is('kepala-sekolah*')) {
+            $segment = request()->segment(2) ?: 'dashboard';
+        }
+        $titleMap = [
+            'dashboard' => 'Dashboard',
+            'student' => 'Data Siswa',
+            'students' => 'Data Siswa',
+            'bill' => 'Data Tagihan',
+            'bills' => 'Data Tagihan',
+            'transaction' => 'Transaksi Kas',
+            'transactions' => 'Transaksi Kas',
+            'report' => 'Laporan',
+            'letters' => 'Pengajuan Surat',
+            'classroom' => 'Data Kelas',
+            'major' => 'Data Jurusan',
+            'academic-year' => 'Tahun Ajaran',
+            'payment-type' => 'Jenis Pembayaran',
+            'payment-rate' => 'Tarif Pembayaran',
+            'semester' => 'Data Semester',
+        ];
+        $featureName = $titleMap[$segment] ?? ucwords(str_replace('-', ' ', $segment ?: 'Dashboard'));
+        $yieldTitle = trim(View::yieldContent('title'));
+        $finalTitle = $yieldTitle ?: $featureName;
+    @endphp
+    <title>Sakti | {{ $finalTitle }}</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/sakti favicon/favicon-96x96.png') }}" sizes="96x96" />
