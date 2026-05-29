@@ -125,8 +125,8 @@ class BillController extends Controller
         // Ambil status terbaru untuk pesan yang sesuai
         $bill = $this->billUseCase->getById($billId);
         $message = ($bill->status === 'paid')
-            ? '✅ Pembayaran LUNAS berhasil dicatat! Saudara se-KK juga otomatis lunas.'
-            : '⏳ Cicilan berhasil dicatat! Sisa tagihan akan ditagih pada pembayaran berikutnya.';
+            ? 'Pembayaran LUNAS berhasil dicatat!'
+            : 'Cicilan berhasil dicatat! Sisa tagihan akan ditagih pada pembayaran berikutnya.';
 
         return redirect()->route('admin.spp.student', $bill->student_id)
             ->with('success', $message);

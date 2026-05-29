@@ -379,18 +379,39 @@ class BillUseCase
                 return ['status' => false, 'message' => 'Nominal bayar melebihi sisa tagihan. Sisa tagihan: ' . number_format($remainingAmount, 0, ',', '.')];
             }
 
+            $refNumber = $data['reference_number'] ?? null;
+
             // 3. Insert payment record
             $paymentId = DB::table(DatabaseEntity::TBL_PAYMENTS)->insertGetId([
                 'bill_id'          => $billId,
                 'amount'           => $payAmount,
                 'payment_method'   => $data['payment_method'],
                 'payment_date'     => $data['payment_date'] ?? now()->toDateString(),
-                'reference_number' => $data['reference_number'] ?? null,
+                'reference_number' => $refNumber,
                 'verified_by'      => $data['verified_by'] ?? null,
                 'notes'            => $data['notes'] ?? null,
                 'created_at'       => now(),
                 'updated_at'       => now(),
             ]);
+
+            // Jika nomor referensi dikosongkan, generate otomatis oleh sistem
+            if (empty($refNumber)) {
+                $payDate = $data['payment_date'] ?? now()->toDateString();
+                $datePrefix = date('Ymd', strtotime($payDate));
+                $paddedId = str_pad($paymentId, 5, '0', STR_PAD_LEFT);
+
+                if ($data['payment_method'] === 'cash') {
+                    $refNumber = 'KW-' . $datePrefix . '-' . $paddedId;
+                } elseif ($data['payment_method'] === 'transfer') {
+                    $refNumber = 'TRF-' . $datePrefix . '-' . $paddedId;
+                } else {
+                    $refNumber = 'PAY-' . $datePrefix . '-' . $paddedId;
+                }
+
+                DB::table(DatabaseEntity::TBL_PAYMENTS)->where('id', $paymentId)->update([
+                    'reference_number' => $refNumber
+                ]);
+            }
 
             // 4. Alokasi pembayaran ke rincian tagihan (bill_items)
             $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('bill_id', $billId)->get();
