@@ -1,4 +1,4 @@
-@extends('_admin.layouts.app')
+@extends('student.layouts.app-mobile')
 
 @section('content')
     <style>
@@ -471,41 +471,84 @@
                                 ========================================= --}}
 
             @if($reminderBills->isNotEmpty())
-            <div class="row mb-4">
+            @php
+                $reminderData = $reminderBills->map(function($rb) {
+                    $rb->paid_amount = $rb->paid_amount ?? 0;
+                    $rb->remaining = $rb->total_amount - $rb->paid_amount;
+                    $rb->pct = $rb->total_amount > 0 ? min(100, round($rb->paid_amount / $rb->total_amount * 100)) : 0;
+                    $rb->period_label = \Carbon\Carbon::createFromDate($rb->year, $rb->month, 1)->translatedFormat('F Y');
+                    $rb->due_label = \Carbon\Carbon::parse($rb->due_date)->translatedFormat('d M Y');
+                    $rb->is_overdue = \Carbon\Carbon::parse($rb->due_date)->isPast();
+                    return $rb;
+                });
+            @endphp
+
+            {{-- MOBILE: Compact reminder with horizontal scroll --}}
+            <div class="d-lg-none mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <div style="width:32px;height:32px;background:linear-gradient(135deg,#ff6b35,#f7931e);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                            <i class="fas fa-bell text-white" style="font-size:.8rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 font-weight-bold" style="font-size:.85rem;color:#1e293b;">Pengingat Tagihan</h6>
+                            <small style="color:#94a3b8;font-size:.7rem;">{{ $reminderBills->count() }} belum lunas</small>
+                        </div>
+                    </div>
+                    <a href="{{ route('student.bills') }}" style="font-size:.75rem;color:#059669;font-weight:600;">Semua →</a>
+                </div>
+                <div class="mobile-reminder-scroll">
+                    @foreach($reminderData as $rb)
+                    <div class="mobile-reminder-item" style="background:{{ $rb->status === 'partial' ? '#fffbeb' : '#fff5f5' }};border-color:{{ $rb->status === 'partial' ? '#fcd34d' : '#fca5a5' }};">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <div class="font-weight-bold" style="font-size:.85rem;color:#1e293b;">{{ $rb->period_label }}</div>
+                            </div>
+                            @if($rb->status === 'partial')
+                                <span class="badge" style="background:linear-gradient(135deg,#f7931e,#f5a623);color:#fff;border-radius:8px;font-size:.65rem;">Dicicil</span>
+                            @else
+                                <span class="badge" style="background:linear-gradient(135deg,#f5365c,#d63031);color:#fff;border-radius:8px;font-size:.65rem;">Belum Bayar</span>
+                            @endif
+                        </div>
+                        <div style="height:5px;border-radius:50px;background:#e9ecef;overflow:hidden;" class="mb-2">
+                            <div style="height:100%;width:{{ $rb->pct }}%;border-radius:50px;background:linear-gradient(90deg,#f7931e,#2dce89);"></div>
+                        </div>
+                        <div class="d-flex justify-content-between" style="font-size:.72rem;">
+                            <span style="color:#64748b;">Sisa: <b style="color:#ef4444;">Rp {{ number_format($rb->remaining,0,',','.') }}</b></span>
+                        </div>
+                        <div class="mt-1" style="font-size:.68rem;color:{{ $rb->is_overdue ? '#ef4444' : '#94a3b8' }};">
+                            <i class="fas fa-calendar-alt me-1"></i> {{ $rb->due_label }}
+                            @if($rb->is_overdue) <b>(Terlambat!)</b> @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- DESKTOP: Original reminder layout --}}
+            <div class="row mb-4 d-none d-lg-flex">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm" style="border-radius:20px;overflow:hidden;">
                         <div class="card-body p-0">
-                            {{-- Header Reminder --}}
                             <div class="d-flex align-items-center px-4 py-3" style="background:linear-gradient(135deg,#ff6b35,#f7931e);">
                                 <div class="me-3" style="width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
                                     <i class="fas fa-bell text-white fa-lg"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-0 text-white font-weight-bold">⚠️ Pengingat Pembayaran SPP</h6>
-                                    <small class="text-white" style="opacity:.85;">Anda memiliki <b>{{ $reminderBills->count() }}</b> tagihan yang belum lunas. Segera selesaikan pembayaran Anda.</small>
+                                    <small class="text-white" style="opacity:.85;">Anda memiliki <b>{{ $reminderBills->count() }}</b> tagihan yang belum lunas.</small>
                                 </div>
-                                <a href="{{ route('student.bills') }}" class="btn btn-sm text-white font-weight-bold" style="background:rgba(255,255,255,.2);border-radius:10px;border:1px solid rgba(255,255,255,.4);white-space:nowrap;">
-                                    Lihat Semua →
-                                </a>
+                                <a href="{{ route('student.bills') }}" class="btn btn-sm text-white font-weight-bold" style="background:rgba(255,255,255,.2);border-radius:10px;border:1px solid rgba(255,255,255,.4);white-space:nowrap;">Lihat Semua →</a>
                             </div>
-                            {{-- List Tagihan --}}
                             <div class="px-4 py-3">
                                 <div class="row g-3">
-                                    @foreach($reminderBills->take(3) as $rb)
-                                    @php
-                                        $rbPaid = $rb->paid_amount ?? 0;
-                                        $rbRemaining = $rb->total_amount - $rbPaid;
-                                        $rbPct = $rb->total_amount > 0 ? min(100, round($rbPaid / $rb->total_amount * 100)) : 0;
-                                        $rbPeriod = \Carbon\Carbon::createFromDate($rb->year, $rb->month, 1)->translatedFormat('F Y');
-                                        $rbDueDate = \Carbon\Carbon::parse($rb->due_date)->translatedFormat('d M Y');
-                                        $isOverdue = \Carbon\Carbon::parse($rb->due_date)->isPast();
-                                    @endphp
+                                    @foreach($reminderData->take(3) as $rb)
                                     <div class="col-md-4">
                                         <div class="p-3 rounded-3 h-100" style="background:{{ $rb->status === 'partial' ? '#fffbeb' : '#fff5f5' }};border:1px solid {{ $rb->status === 'partial' ? '#fcd34d' : '#fca5a5' }};">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <div>
                                                     <span class="text-xs font-weight-bold text-muted">Periode</span>
-                                                    <div class="font-weight-bold text-dark">{{ $rbPeriod }}</div>
+                                                    <div class="font-weight-bold text-dark">{{ $rb->period_label }}</div>
                                                 </div>
                                                 @if($rb->status === 'partial')
                                                     <span class="badge" style="background:linear-gradient(135deg,#f7931e,#f5a623);color:#fff;border-radius:8px;">Dicicil</span>
@@ -514,16 +557,15 @@
                                                 @endif
                                             </div>
                                             <div class="d-flex justify-content-between text-xs mb-1">
-                                                <span class="text-muted">Terbayar: <b class="text-success">Rp {{ number_format($rbPaid,0,',','.') }}</b></span>
-                                                <span class="text-muted">Sisa: <b class="text-danger">Rp {{ number_format($rbRemaining,0,',','.') }}</b></span>
+                                                <span class="text-muted">Terbayar: <b class="text-success">Rp {{ number_format($rb->paid_amount,0,',','.') }}</b></span>
+                                                <span class="text-muted">Sisa: <b class="text-danger">Rp {{ number_format($rb->remaining,0,',','.') }}</b></span>
                                             </div>
                                             <div style="height:6px;border-radius:50px;background:#e9ecef;overflow:hidden;" class="mb-2">
-                                                <div style="height:100%;width:{{ $rbPct }}%;border-radius:50px;background:linear-gradient(90deg,#f7931e,#2dce89);transition:width .6s;"></div>
+                                                <div style="height:100%;width:{{ $rb->pct }}%;border-radius:50px;background:linear-gradient(90deg,#f7931e,#2dce89);transition:width .6s;"></div>
                                             </div>
-                                            <small class="text-{{ $isOverdue ? 'danger' : 'muted' }}">
-                                                <i class="fas fa-calendar-alt me-1"></i>
-                                                Jatuh Tempo: {{ $rbDueDate }}
-                                                @if($isOverdue) <b class="text-danger">(Terlambat!)</b> @endif
+                                            <small class="text-{{ $rb->is_overdue ? 'danger' : 'muted' }}">
+                                                <i class="fas fa-calendar-alt me-1"></i> Jatuh Tempo: {{ $rb->due_label }}
+                                                @if($rb->is_overdue) <b class="text-danger">(Terlambat!)</b> @endif
                                             </small>
                                         </div>
                                     </div>
@@ -711,8 +753,8 @@
 
             <div class="row mt-2">
 
-                <!-- PROFILE CARD: xs/sm full-width, md/lg 5-cols -->
-                <div class="col-12 col-md-5 col-lg-4 mb-4">
+                <!-- PROFILE CARD: hidden on mobile (QR lives in Profile page), visible md+ -->
+                <div class="col-12 col-md-5 col-lg-4 mb-4 d-none d-md-block">
 
                     <div class="card main-card h-100">
 
@@ -812,14 +854,47 @@
 
                         <div class="card-body">
 
-                            <div class="table-responsive">
+                            {{-- MOBILE: Card list --}}
+                            <div class="d-lg-none">
+                                @forelse($recentPayments as $payment)
+                                    @php $method = strtolower(trim($payment->payment_method ?? 'cash')); @endphp
+                                    <div class="mobile-payment-card">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <div class="font-weight-bold" style="color:#1e293b;font-size:.88rem;">
+                                                    {{ \Carbon\Carbon::create()->month($payment->month)->translatedFormat('F') }} {{ $payment->year }}
+                                                </div>
+                                                <div style="font-size:.72rem;color:#94a3b8;">{{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d M Y H:i') }}</div>
+                                            </div>
+                                            <span class="font-weight-bold" style="color:#059669;font-size:.9rem;">Rp {{ number_format($payment->amount,0,',','.') }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            @if($method == 'qris')
+                                                <span class="badge bg-info text-white" style="font-size:.68rem;"><i class="fas fa-qrcode me-1"></i>QRIS</span>
+                                            @elseif($method == 'cash')
+                                                <span class="badge bg-success text-white" style="font-size:.68rem;"><i class="fas fa-money-bill me-1"></i>CASH</span>
+                                            @elseif($method == 'transfer')
+                                                <span class="badge bg-primary text-white" style="font-size:.68rem;"><i class="fas fa-exchange-alt me-1"></i>TRANSFER</span>
+                                            @else
+                                                <span class="badge bg-secondary text-white" style="font-size:.68rem;">{{ strtoupper($payment->payment_method ?? '-') }}</span>
+                                            @endif
+                                            <a href="{{ route('student.invoice.show', $payment->payment_id) }}" target="_blank" style="font-size:.75rem;color:#059669;font-weight:600;"><i class="fas fa-file-invoice me-1"></i>Invoice</a>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-receipt fa-2x mb-2" style="color:#cbd5e1;"></i>
+                                        <p class="mb-0" style="color:#94a3b8;font-size:.85rem;">Belum ada riwayat pembayaran.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            {{-- DESKTOP: Original table --}}
+                            <div class="table-responsive d-none d-lg-block">
 
                                 <table class="table custom-table align-items-center mb-0">
-
                                     <thead>
-
                                         <thead>
-
                                             <tr>
                                                 <th class="text-center">Periode Tagihan</th>
                                                 <th class="text-center">Tanggal Bayar</th>
@@ -828,98 +903,29 @@
                                                 <th class="text-center">Referensi</th>
                                                 <th class="text-center">Aksi</th>
                                             </tr>
-
                                         </thead>
-
                                     </thead>
-
                                     <tbody>
-
                                         @forelse($recentPayments as $payment)
                                             <tr>
-
-                                                <td class="text-center">
-                                                    <span class="font-weight-bold text-dark text-sm">
-                                                        {{ \Carbon\Carbon::create()->month($payment->month)->translatedFormat('F') }}
-                                                        {{ $payment->year }}
-                                                    </span>
-                                                </td>
-
-                                                <td class="text-center">
-                                                    <span class="text-muted text-sm">
-                                                        {{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d M Y H:i') }}
-                                                    </span>
-                                                </td>
-
+                                                <td class="text-center"><span class="font-weight-bold text-dark text-sm">{{ \Carbon\Carbon::create()->month($payment->month)->translatedFormat('F') }} {{ $payment->year }}</span></td>
+                                                <td class="text-center"><span class="text-muted text-sm">{{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d M Y H:i') }}</span></td>
                                                 <td class="align-middle text-center">
-
-                                                    @php
-                                                        $method = strtolower(trim($payment->payment_method ?? 'cash'));
-                                                    @endphp
-
-                                                    @if ($method == 'qris')
-                                                        <span class="badge bg-info text-white px-3 py-2">
-                                                            <i class="fas fa-qrcode me-1"></i> QRIS
-                                                        </span>
-                                                    @elseif($method == 'cash')
-                                                        <span class="badge bg-success text-white px-3 py-2">
-                                                            <i class="fas fa-money-bill me-1"></i> CASH
-                                                        </span>
-                                                    @elseif($method == 'transfer')
-                                                        <span class="badge bg-primary text-white px-3 py-2">
-                                                            <i class="fas fa-exchange-alt me-1"></i> TRANSFER
-                                                        </span>
-                                                    @else
-                                                        <span class="badge bg-secondary text-white px-3 py-2">
-                                                            {{ strtoupper($payment->payment_method ?? '-') }}
-                                                        </span>
+                                                    @php $method = strtolower(trim($payment->payment_method ?? 'cash')); @endphp
+                                                    @if($method == 'qris') <span class="badge bg-info text-white px-3 py-2"><i class="fas fa-qrcode me-1"></i>QRIS</span>
+                                                    @elseif($method == 'cash') <span class="badge bg-success text-white px-3 py-2"><i class="fas fa-money-bill me-1"></i>CASH</span>
+                                                    @elseif($method == 'transfer') <span class="badge bg-primary text-white px-3 py-2"><i class="fas fa-exchange-alt me-1"></i>TRANSFER</span>
+                                                    @else <span class="badge bg-secondary text-white px-3 py-2">{{ strtoupper($payment->payment_method ?? '-') }}</span>
                                                     @endif
-
                                                 </td>
-
-
-                                                <td class="text-center">
-                                                    <span class="font-weight-bold text-success text-sm">
-                                                        Rp {{ number_format($payment->amount, 0, ',', '.') }}
-                                                    </span>
-                                                </td>
-
-                                                <td class="text-center">
-                                                    <span class="text-muted font-weight-bold text-sm">
-                                                        {{ $payment->reference_number ?? '-' }}
-                                                    </span>
-                                                </td>
-
-                                                <td class="text-center">
-                                                    <a href="{{ route('student.invoice.show', $payment->payment_id) }}"
-                                                       class="btn btn-sm btn-outline-primary"
-                                                       style="border-radius:8px; font-size:11px; padding:4px 10px;"
-                                                       target="_blank">
-                                                        <i class="fas fa-file-invoice"></i> Invoice
-                                                    </a>
-                                                </td>
-
+                                                <td class="text-center"><span class="font-weight-bold text-success text-sm">Rp {{ number_format($payment->amount,0,',','.') }}</span></td>
+                                                <td class="text-center"><span class="text-muted font-weight-bold text-sm">{{ $payment->reference_number ?? '-' }}</span></td>
+                                                <td class="text-center"><a href="{{ route('student.invoice.show', $payment->payment_id) }}" class="btn btn-sm btn-outline-primary" style="border-radius:8px;font-size:11px;padding:4px 10px;" target="_blank"><i class="fas fa-file-invoice"></i> Invoice</a></td>
                                             </tr>
-
                                         @empty
-
-                                            <tr>
-
-                                                <td colspan="5" class="text-center py-5">
-
-                                                    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
-
-                                                    <p class="text-muted mb-0">
-                                                        Belum ada riwayat pembayaran yang tercatat.
-                                                    </p>
-
-                                                </td>
-
-                                            </tr>
+                                            <tr><td colspan="6" class="text-center py-5"><i class="fas fa-receipt fa-3x text-muted mb-3"></i><p class="text-muted mb-0">Belum ada riwayat pembayaran.</p></td></tr>
                                         @endforelse
-
                                     </tbody>
-
                                 </table>
 
                             </div>

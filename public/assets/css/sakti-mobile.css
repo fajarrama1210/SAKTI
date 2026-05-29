@@ -1,0 +1,664 @@
+/* ============================================================
+   SAKTI Mobile — Student Portal Mobile-First Stylesheet
+   
+   🎨 THEMING: Ubah warna di :root untuk mengatur seluruh tema.
+   Contoh: ganti --mobile-primary ke #3b82f6 untuk tema biru.
+   ============================================================ */
+
+:root {
+    /* ── Primary Colors (OOP — ubah di sini untuk ganti tema) ── */
+    --mobile-primary: #059669;
+    --mobile-primary-light: #34d399;
+    --mobile-primary-dark: #064e3b;
+    --mobile-primary-gradient: linear-gradient(135deg, var(--mobile-primary-dark) 0%, var(--mobile-primary) 50%, var(--mobile-primary-light) 100%);
+    --mobile-primary-glow: rgba(5, 150, 105, 0.25);
+
+    /* ── Accent Colors ── */
+    --mobile-accent-danger: #ef4444;
+    --mobile-accent-warning: #f59e0b;
+    --mobile-accent-info: #06b6d4;
+    --mobile-accent-success: #10b981;
+
+    /* ── Neutral Colors ── */
+    --mobile-bg: #f8f9fe;
+    --mobile-surface: #ffffff;
+    --mobile-text-primary: #1e293b;
+    --mobile-text-secondary: #64748b;
+    --mobile-text-muted: #94a3b8;
+    --mobile-border: #e2e8f0;
+
+    /* ── Layout Dimensions ── */
+    --mobile-topbar-height: 60px;
+    --mobile-bottomnav-height: 68px;
+    --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --mobile-nav-radius: 24px;
+}
+
+
+/* ============================================================
+   1. MOBILE BODY ADJUSTMENTS
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+    body.student-mobile {
+        background: var(--mobile-bg) !important;
+    }
+
+    body.student-mobile .min-height-300 {
+        display: none !important;
+    }
+
+    body.student-mobile .main-content {
+        margin-left: 0 !important;
+        padding-top: var(--mobile-topbar-height) !important;
+        padding-bottom: calc(var(--mobile-bottomnav-height) + var(--mobile-safe-bottom) + 16px) !important;
+    }
+
+    body.student-mobile .container-fluid.py-4 {
+        padding-top: 1rem !important;
+    }
+
+    /* Hide admin footer on mobile — bottom nav replaces it */
+    body.student-mobile .footer {
+        display: none !important;
+    }
+}
+
+
+/* ============================================================
+   2. TOP BAR — Mobile Only
+   ============================================================ */
+
+.mobile-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+    height: var(--mobile-topbar-height);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+    transition: box-shadow 0.3s ease;
+}
+
+.mobile-topbar.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Logo */
+.mobile-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.mobile-topbar-brand img {
+    height: 28px;
+    width: auto;
+}
+
+.mobile-topbar-brand span {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--mobile-primary);
+    letter-spacing: -0.03em;
+}
+
+/* User section */
+.mobile-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 4px 10px 4px 4px;
+    border-radius: 50px;
+    transition: background 0.2s;
+}
+
+.mobile-topbar-user:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.mobile-topbar-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--mobile-primary-gradient);
+    box-shadow: 0 3px 8px var(--mobile-primary-glow);
+    flex-shrink: 0;
+}
+
+.mobile-topbar-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.mobile-topbar-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--mobile-text-primary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.mobile-topbar-role {
+    font-size: 0.68rem;
+    color: var(--mobile-text-muted);
+    line-height: 1.2;
+}
+
+/* Top bar dropdown */
+.mobile-topbar-dropdown {
+    position: absolute;
+    top: calc(var(--mobile-topbar-height) - 4px);
+    right: 12px;
+    background: var(--mobile-surface);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.06);
+    padding: 8px;
+    min-width: 200px;
+    z-index: 1050;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-topbar-dropdown.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.mobile-topbar-dropdown a,
+.mobile-topbar-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--mobile-text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mobile-topbar-dropdown a:hover,
+.mobile-topbar-dropdown button:hover {
+    background: #f1f5f9;
+    color: var(--mobile-primary);
+}
+
+.mobile-topbar-dropdown .dropdown-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    color: var(--mobile-text-muted);
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.mobile-topbar-dropdown a:hover .dropdown-icon {
+    background: #ecfdf5;
+    color: var(--mobile-primary);
+}
+
+.mobile-topbar-dropdown .logout-item {
+    background: #fff1f2;
+    color: var(--mobile-accent-danger);
+    margin-top: 4px;
+}
+
+.mobile-topbar-dropdown .logout-item .dropdown-icon {
+    background: #fee2e2;
+    color: var(--mobile-accent-danger);
+}
+
+.mobile-topbar-dropdown .logout-item:hover {
+    background: #fee2e2;
+}
+
+
+/* ============================================================
+   3. BOTTOM NAVIGATION BAR
+   ============================================================ */
+
+.mobile-bottomnav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+
+    height: calc(var(--mobile-bottomnav-height) + var(--mobile-safe-bottom));
+    padding-bottom: var(--mobile-safe-bottom);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Nav Item */
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+
+    flex: 1;
+    height: 100%;
+    padding: 8px 0;
+
+    text-decoration: none;
+    color: var(--mobile-text-muted);
+    position: relative;
+
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-item:hover {
+    text-decoration: none;
+    color: var(--mobile-text-secondary);
+}
+
+/* Icon */
+.mobile-nav-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Label */
+.mobile-nav-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+}
+
+/* Active state */
+.mobile-nav-item.active {
+    color: var(--mobile-primary);
+}
+
+.mobile-nav-item.active .mobile-nav-icon {
+    transform: translateY(-2px) scale(1.15);
+    filter: drop-shadow(0 2px 6px var(--mobile-primary-glow));
+}
+
+.mobile-nav-item.active .mobile-nav-label {
+    font-weight: 700;
+    color: var(--mobile-primary);
+}
+
+/* Active indicator dot */
+.mobile-nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    border-radius: 100px;
+    background: var(--mobile-primary-gradient);
+    box-shadow: 0 1px 6px var(--mobile-primary-glow);
+    animation: navIndicatorIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes navIndicatorIn {
+    from { width: 0; opacity: 0; }
+    to { width: 24px; opacity: 1; }
+}
+
+/* Badge (notification) */
+.mobile-nav-badge {
+    position: absolute;
+    top: 4px;
+    right: calc(50% - 18px);
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+
+    font-size: 0.6rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+
+    color: #fff;
+    background: var(--mobile-accent-danger);
+    border-radius: 100px;
+    border: 2px solid var(--mobile-surface);
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Tap ripple effect */
+.mobile-nav-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: var(--mobile-primary);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.mobile-nav-item:active::after {
+    opacity: 0.06;
+}
+
+
+/* ============================================================
+   4. MOBILE PAGE TRANSITIONS
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+    body.student-mobile .container-fluid {
+        animation: mobileFadeIn 0.35s ease-out;
+    }
+
+    @keyframes mobileFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
+
+
+/* ============================================================
+   5. MOBILE CARD OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 575.98px) {
+    body.student-mobile .sakti-page-header {
+        border-radius: 18px !important;
+        padding: 16px 18px !important;
+        margin-left: -4px;
+        margin-right: -4px;
+    }
+
+    body.student-mobile .card {
+        border-radius: 18px !important;
+    }
+
+    body.student-mobile .dashboard-card {
+        border-radius: 18px !important;
+    }
+}
+
+
+/* ============================================================
+   6. MOBILE TOUCH OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+    /* Ensure all interactive elements have sufficient tap target size */
+    body.student-mobile .btn,
+    body.student-mobile a.nav-link,
+    body.student-mobile button {
+        min-height: 44px;
+    }
+
+    /* Smooth scroll for touch devices */
+    body.student-mobile {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Prevent text selection on nav elements */
+    .mobile-bottomnav,
+    .mobile-topbar {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
+
+/* ============================================================
+   7. DESKTOP: HIDE MOBILE COMPONENTS
+   ============================================================ */
+
+@media (min-width: 992px) {
+    .mobile-topbar,
+    .mobile-bottomnav {
+        display: none !important;
+    }
+
+    body.student-mobile .main-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    body.student-mobile .min-height-300 {
+        display: block !important;
+    }
+
+    body.student-mobile .footer {
+        display: block !important;
+    }
+}
+
+
+/* ============================================================
+   8. MOBILE SCHEDULE TABS
+   ============================================================ */
+
+.mobile-day-tabs {
+    overflow: hidden;
+}
+
+.mobile-day-tabs .d-flex {
+    scrollbar-width: none;
+}
+
+.mobile-day-tabs .d-flex::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-day-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 50px;
+    background: var(--mobile-surface);
+    color: var(--mobile-text-secondary);
+    font-weight: 600;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    min-height: 40px;
+}
+
+.mobile-day-tab:hover {
+    background: #f1f5f9;
+}
+
+.mobile-day-tab.active {
+    background: var(--mobile-primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--mobile-primary-glow);
+}
+
+.mobile-day-count {
+    background: rgba(0,0,0,0.08);
+    color: inherit;
+    padding: 1px 7px;
+    border-radius: 50px;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.mobile-day-tab.active .mobile-day-count {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+}
+
+.mobile-day-content {
+    display: none;
+}
+
+.mobile-day-content.active {
+    display: block;
+    animation: mobileFadeIn 0.3s ease-out;
+}
+
+.mobile-schedule-card {
+    background: var(--mobile-surface);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.mobile-schedule-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+    padding-top: 2px;
+}
+
+.mobile-schedule-time .time-start {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--mobile-primary);
+}
+
+.mobile-schedule-time .time-divider {
+    width: 2px;
+    height: 14px;
+    background: var(--mobile-border);
+    margin: 3px 0;
+    border-radius: 2px;
+}
+
+.mobile-schedule-time .time-end {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--mobile-text-muted);
+}
+
+
+/* ============================================================
+   9. MOBILE LETTER CARDS
+   ============================================================ */
+
+.mobile-letter-card {
+    background: var(--mobile-surface);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+
+/* ============================================================
+   10. MOBILE DASHBOARD OPTIMIZATIONS
+   ============================================================ */
+
+/* Compact welcome card on mobile */
+@media (max-width: 991.98px) {
+    body.student-mobile .welcome-card .card-body {
+        padding: 16px 18px !important;
+    }
+
+    body.student-mobile .welcome-card h2 {
+        font-size: 1.15rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    body.student-mobile .welcome-card p {
+        font-size: 0.78rem !important;
+        display: none;
+    }
+
+    body.student-mobile .welcome-card {
+        border-radius: 18px !important;
+    }
+}
+
+/* Reminder horizontal scroll */
+.mobile-reminder-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+
+.mobile-reminder-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-reminder-item {
+    min-width: 260px;
+    max-width: 280px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 1px solid;
+}
+
+/* Payment history card list (mobile) */
+.mobile-payment-card {
+    background: var(--mobile-surface);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+

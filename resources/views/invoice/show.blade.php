@@ -270,13 +270,188 @@
         .ref-box label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #93c5fd; display: block; margin-bottom: 4px; }
         .ref-box .ref-value { font-size: 13px; font-weight: 700; color: #1d4ed8; font-family: monospace; letter-spacing: .5px; }
 
+        /* NOTES BOX */
+        .notes-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 28px;
+        }
+        .notes-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+        .notes-content {
+            font-size: 13px;
+            color: #78350f;
+        }
+
         /* =========== PRINT =========== */
         @media print {
-            body { background: #fff; padding: 0; }
+            @page {
+                size: A4;
+                margin: 8mm 8mm;
+            }
+
+            body {
+                background: #fff !important;
+                padding: 0 !important;
+                min-height: auto !important;
+                display: block !important;
+            }
+
             .action-bar { display: none !important; }
-            .invoice-card { box-shadow: none; border-radius: 0; }
-            .invoice-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .summary-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            .invoice-wrapper {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            .invoice-card {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                border: none !important;
+            }
+
+            /* Compact Header */
+            .invoice-header {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                padding: 16px 20px 12px !important;
+            }
+            .invoice-header::before,
+            .invoice-header::after {
+                display: none !important;
+            }
+            .school-name { font-size: 15px !important; }
+            .school-sub { font-size: 10px !important; margin-top: 2px !important; }
+            .invoice-title { font-size: 20px !important; }
+            .invoice-number { font-size: 10px !important; }
+            .status-badge {
+                margin-top: 8px !important;
+                padding: 4px 10px !important;
+                font-size: 9px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Compact Body */
+            .invoice-body {
+                padding: 12px 20px !important;
+            }
+
+            .info-grid {
+                gap: 10px !important;
+                margin-bottom: 12px !important;
+            }
+            .info-block label {
+                font-size: 8px !important;
+                margin-bottom: 2px !important;
+            }
+            .info-block .value {
+                font-size: 11px !important;
+                line-height: 1.3 !important;
+            }
+            .info-block .value .sub {
+                font-size: 10px !important;
+            }
+            .info-block[style*="margin-top"] {
+                margin-top: 6px !important;
+            }
+            .method-badge {
+                padding: 2px 8px !important;
+                font-size: 9px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .divider {
+                margin: 0 0 10px !important;
+            }
+
+            /* Compact Reference */
+            .ref-box {
+                padding: 6px 12px !important;
+                margin-bottom: 10px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .ref-box label { font-size: 8px !important; margin-bottom: 2px !important; }
+            .ref-box .ref-value { font-size: 10px !important; }
+
+            /* Compact Table */
+            .items-table thead th {
+                padding: 6px 8px !important;
+                font-size: 8px !important;
+            }
+            .items-table tbody td {
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+            }
+
+            /* Compact Summary */
+            .summary-box {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                padding: 10px 14px !important;
+                margin-bottom: 10px !important;
+                border-radius: 6px !important;
+            }
+            .summary-row { padding: 4px 0 !important; }
+            .summary-row .label { font-size: 10px !important; }
+            .summary-row .amount { font-size: 10px !important; }
+            .summary-row.total { padding-top: 6px !important; margin-top: 2px !important; }
+            .summary-row.total .label { font-size: 12px !important; }
+            .summary-row.total .amount { font-size: 14px !important; }
+
+            /* Compact Notes */
+            .notes-box {
+                background: #fffbeb !important;
+                border: 1px solid #fde68a !important;
+                padding: 6px 12px !important;
+                margin-bottom: 10px !important;
+                border-radius: 6px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .notes-title {
+                font-size: 8px !important;
+                margin-bottom: 2px !important;
+            }
+            .notes-content {
+                font-size: 10px !important;
+            }
+
+            /* Compact Footer */
+            .invoice-footer {
+                padding: 10px 20px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .footer-note { font-size: 9px !important; }
+            .stamp-box {
+                width: 80px !important;
+                height: 40px !important;
+            }
+            .stamp-box span { font-size: 8px !important; }
+            .stamp-label { font-size: 8px !important; }
+
+            /* Prevent page breaks inside elements */
+            .invoice-header,
+            .invoice-body,
+            .invoice-footer,
+            .summary-box,
+            .items-table,
+            .notes-box,
+            .ref-box {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
         }
 
         @media (max-width: 600px) {
@@ -437,9 +612,9 @@
             </div>
 
             @if($payment->notes)
-            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:14px 18px; margin-bottom:28px;">
-                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:4px;">Catatan</div>
-                <div style="font-size:13px;color:#78350f;">{{ $payment->notes }}</div>
+            <div class="notes-box">
+                <div class="notes-title">Catatan</div>
+                <div class="notes-content">{{ $payment->notes }}</div>
             </div>
             @endif
 

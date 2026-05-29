@@ -1,4 +1,4 @@
-@extends('_admin.layouts.app')
+@extends('student.layouts.app-mobile')
 
 @push('styles')
     @include('_admin.layouts.sakti-custom')
