@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="SAKTI - Sistem Keuangan Terintegrasi untuk institusi pendidikan. Solusi cerdas kelola keuangan sekolah.">
 
-    <title>{{ config('app.name', 'SAKTI') }} | Sistem Keuangan Terintegrasi</title>
+    <title>Sakti | Sistem Keuangan Terintegrasi</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/sakti favicon/favicon-96x96.png') }}" sizes="96x96" />

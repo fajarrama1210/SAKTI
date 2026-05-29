@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Login ke Sistem Akademik Terpadu Informasi (SAKTI) untuk mengelola data akademik.">
 
-    <title>Login — {{ config('app.name', 'SAKTI') }}</title>
+    <title>Sakti | Login</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/sakti favicon/favicon-96x96.png') }}" sizes="96x96" />
