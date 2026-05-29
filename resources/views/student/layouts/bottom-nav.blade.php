@@ -18,7 +18,7 @@
     <a href="{{ route('student.dashboard') }}"
        class="mobile-nav-item {{ $currentRoute === 'student.dashboard' ? 'active' : '' }}">
         <i class="fas fa-home mobile-nav-icon"></i>
-        <span class="mobile-nav-label">Beranda</span>
+        <span class="mobile-nav-label">Dashboard</span>
     </a>
 
     {{-- Tagihan --}}

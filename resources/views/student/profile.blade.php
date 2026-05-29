@@ -60,8 +60,8 @@
                             </div>
                         @endif
                         <!-- Upload Button Overlay -->
-                        <button type="button" class="btn btn-sm btn-dark rounded-circle position-absolute bottom-0 end-0 m-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding: 0; border: 2px solid #fff; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,.1);" onclick="document.getElementById('avatarInput').click();">
-                            <i class="fas fa-camera text-white" style="font-size: 0.75rem;"></i>
+                        <button type="button" class="btn btn-dark rounded-circle position-absolute bottom-0 end-0 m-0 d-flex align-items-center justify-content-center" style="width: 32px !important; height: 32px !important; min-width: 32px !important; min-height: 32px !important; padding: 0 !important; border: 2px solid #fff; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,.1);" onclick="document.getElementById('avatarInput').click();">
+                            <i class="fas fa-camera text-white" style="font-size: 0.75rem; margin: 0; line-height: 1;"></i>
                         </button>
                     </div>
 
