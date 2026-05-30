@@ -1,67 +1,62 @@
 FROM php:8.4-cli
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    COMPOSER_MEMORY_LIMIT=-1 \
-    APP_ENV=production \
-    APP_DEBUG=false
-
+# 1. Set working directory
 WORKDIR /app
 
-# 1. Install System Dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git unzip curl ca-certificates libonig-dev libxml2-dev libzip-dev \
-        libpng-dev libjpeg-dev libfreetype6-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# 2. Install PHP Extensions
+# 2. Ambil mlocati/install-php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+# 3. Update & install perkakas sistem
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+    
+# 4. Install seluruh ekstensi PHP yang diwajibkan Laravel & Octane
 RUN install-php-extensions \
-        bcmath bz2 curl exif fileinfo gd intl mbstring opcache pcntl \
-        pdo_mysql redis simplexml tokenizer xml xmlreader xmlwriter zip openssl \
-    && rm -rf /tmp/pear
+        gd \
+        zip \
+        pcntl \
+        opcache \
+        pdo_mysql \
+        bcmath \
+        intl \
+        exif \
+        xml \
+        redis
 
-# 3. Install Composer
-COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
+# 5. Salin seluruh kode aplikasi (Ini akan membawa composer.json & composer.lock terbaru Anda)
+COPY --chown=www-data:www-data . /app
 
-# 4. Copy Composer Files
-COPY composer.json composer.lock ./
+# 6. Salin konfigurasi php.ini kustom
+RUN cp /app/Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini || cp /app/deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# 5. FIX: Force Update Lock & Install
-# Jika 'laravel/octane' belum ada di lock, command ini akan menambahkannya.
-# --ignore-platform-req=php mencegah error versi PHP saat update lock.
-RUN composer update --lock --no-scripts --no-interaction --ignore-platform-req=php \
-    && composer install \
+# 7. Ambil Composer resmi
+COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
+
+# 8. Jalankan instalasi dependensi vendor secara bersih
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
         --optimize-autoloader \
         --no-dev \
         --prefer-dist \
-        --no-interaction \
         --no-scripts \
-        --ignore-platform-req=php \
+        --ignore-platform-reqs \
     && rm -rf ~/.composer/cache
 
-# 6. Copy Source Code
-# PENTING: Folder 'vendor' TIDAK akan tercopy jika .dockerignore sudah benar.
-COPY --chown=www-data:www-data . /app
+# 9. Hapus file statis yang berpotensi bentrok dengan route
+RUN rm -f /app/public/robots.txt /app/public/sitemap.xml
 
-# 7. Copy PHP Config
-COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+# 10. Atur hak akses mutlak folder storage, cache, dan vendor agar dimiliki www-data
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor
 
-# 8. Final Permissions & Cleanup
-RUN rm -rf /app/bootstrap/cache/* /app/storage/framework/cache/* /app/storage/framework/sessions/* /app/storage/framework/views/* \
-    && mkdir -p /var/www/.octane \
-    && chown -R www-data:www-data /app/vendor /app/storage /app/bootstrap/cache /var/www/.octane
-
-# 9. Laravel Optimization (Build Time)
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache \
-    && (php artisan storage:link || true)
-
-# 10. Switch to Non-Root User
+# 11. Pindah ke user www-data
 USER www-data
 
+# 12. Generate Autoloader final
+RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload --optimize --no-dev --ignore-platform-reqs
+
+# 13. Expose port Octane
 EXPOSE 8000
 
-# 11. Start Command
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan optimize && php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --workers=14 --max-requests=500"]
+# 14. RUNTIME COMMAND: Bersihkan cache lama terlebih dahulu sebelum mengoptimasi ulang saat container menyala
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan storage:link || true && php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
