@@ -6,7 +6,11 @@ WORKDIR /app
 # 2. Gunakan mlocati/install-php-extensions - menangani semua dependensi otomatis
 #    Tidak perlu apt-get install manual → lebih stabil & tidak error nama paket
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+    
 RUN install-php-extensions \
         gd \
         zip \
@@ -16,10 +20,8 @@ RUN install-php-extensions \
         bcmath \
         intl \
         exif \
-        xmlwriter \
-        xmlreader \
+        xml \
         redis \
-    && apt-get update \
     && apt-get install -y --no-install-recommends git unzip \
     && rm -rf /var/lib/apt/lists/*
 
