@@ -3,8 +3,9 @@ FROM php:8.4-cli
 # 1. Set working directory
 WORKDIR /app
 
-# 2. Ambil mlocati/install-php-extensions
+# 2. Ambil mlocati/install-php-extensions dan frankenphp binary resmi
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=dunglas/frankenphp:1-php8.4-bookworm /usr/local/bin/frankenphp /usr/local/bin/frankenphp
 
 # 3. Update & install perkakas sistem
 RUN apt-get update && apt-get install -y --no-install-recommends \
