@@ -1,63 +1,43 @@
-# 1. Gunakan PHP 8.4 karena Laravel/dependensi Anda mewajibkannya
 FROM php:8.4-cli
 
-# 2. Set working directory di dalam container
 WORKDIR /app
 
-# 3. Ambil mlocati/install-php-extensions untuk menangani instalasi ekstensi PHP secara otomatis
+# 1. Install helper ekstensi & dependensi sistem
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-# 4. Update package manager & install perkakas sistem (Git & Unzip wajib untuk Composer)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-        unzip \
-    && rm -rf /var/lib/apt/lists/*
-    
-# 5. Install ekstensi PHP yang dibutuhkan oleh Laravel & Octane secara aman
-RUN install-php-extensions \
-        gd \
-        zip \
-        pcntl \
-        opcache \
-        pdo_mysql \
-        bcmath \
-        intl \
-        exif \
-        xml \
-        redis
+        git unzip curl ca-certificates \
+    && install-php-extensions \
+        gd zip pcntl opcache pdo_mysql bcmath intl exif redis \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 6. Salin seluruh kode aplikasi (termasuk composer.json yang sudah Anda tambahkan laravel/octane)
-COPY --chown=www-data:www-data . /app
+# 2. Composer versi terbaru (2.8+ wajib untuk PHP 8.4 & Laravel 11+)
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
-# 7. Salin konfigurasi php.ini kustom (Mendukung folder bernama 'Deploy' maupun 'deploy')
-RUN cp /app/Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini || cp /app/deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
-
-# 8. Ambil binary Composer resmi (Versi 2.2 sesuai konfigurasi awal Anda)
-COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
-
-# 9. Jalankan instalasi dependensi vendor secara bersih tanpa mengikutkan paket dev
+# 3. Cache layer: copy hanya file composer dulu
+COPY composer.json composer.lock ./
 RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
         --optimize-autoloader \
         --no-dev \
         --prefer-dist \
         --no-scripts \
-        --ignore-platform-reqs \
     && rm -rf ~/.composer/cache
 
-# 10. Hapus file statis yang berpotensi bentrok dengan sistem Route Laravel
-RUN rm -f /app/public/robots.txt /app/public/sitemap.xml
+# 4. Copy source code & konfigurasi PHP
+COPY --chown=www-data:www-data . /app
+COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# 11. Atur hak akses mutlak folder storage, cache, dan vendor agar dimiliki oleh www-data
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor
+# 5. Siapkan folder auto-download FrankenPHP (hindari error permission saat runtime)
+RUN mkdir -p /var/www/.octane && chown -R www-data:www-data /var/www/.octane
 
-# 12. Pindah ke user www-data demi keamanan container
+# 6. Optimasi Laravel & atur permission production
+RUN php artisan storage:link \
+    && php artisan optimize \
+    && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor
+
+# 7. Drop privilege ke non-root
 USER www-data
 
-# 13. Generate Autoloader final untuk mode produksi
-RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload --optimize --no-dev --ignore-platform-reqs
-
-# 14. Expose port yang digunakan oleh Laravel Octane
 EXPOSE 8000
 
-# 15. Jalankan optimasi Laravel dan startup Octane (FrankenPHP) dalam satu baris aman (Format JSON)
-CMD ["sh", "-c", "php artisan storage:link || true && php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
+# 8. Start Octane (FrankenPHP akan otomatis dipakai dari PATH jika tersedia)
+CMD ["php", "artisan", "octane:start", "--workers=14", "--server=frankenphp", "--host=0.0.0.0", "--port=8000"]
