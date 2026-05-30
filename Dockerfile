@@ -24,7 +24,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. Copy konfigurasi PHP kustom
-COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 5. Install PHP dependencies lewat Composer menggunakan image resmi Composer
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
