@@ -29,7 +29,7 @@ RUN install-php-extensions \
 COPY --chown=www-data:www-data . /app
 
 # 6. Salin konfigurasi php.ini kustom
-RUN cp /app/Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini || cp /app/deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+RUN cp /app/Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini || cp /app/Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 7. Ambil Composer resmi
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
