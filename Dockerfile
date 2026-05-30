@@ -60,4 +60,5 @@ EXPOSE 8000
 
 # 14. RUNTIME COMMAND: Bersihkan cache lama terlebih dahulu sebelum mengoptimasi ulang saat container menyala
 # 14. RUNTIME COMMAND: Diberikan tanda kurung ( ) pada storage:link agar tidak merusak rantai eksekusi Octane
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && (php artisan storage:link || true) && php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
+# 14. PAKSA registrasi Octane dengan menginjeksikan OCTANE_SERVER langsung di runtime command
+CMD ["sh", "-c", "rm -f bootstrap/cache/*.php && php artisan config:clear && php artisan route:clear && (php artisan storage:link || true) && OCTANE_SERVER=frankenphp php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
