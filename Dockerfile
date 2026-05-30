@@ -24,7 +24,7 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
 
 # 4. Copy source code & konfigurasi PHP
 COPY --chown=www-data:www-data . /app
-COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 5. Siapkan folder auto-download FrankenPHP (hindari error permission saat runtime)
 RUN mkdir -p /var/www/.octane && chown -R www-data:www-data /var/www/.octane
