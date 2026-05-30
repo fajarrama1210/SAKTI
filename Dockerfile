@@ -7,25 +7,30 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 WORKDIR /app
 
-# 1. System dependencies & apt update (FIX #3: Update sebelum install)
+# 1. Install System Dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip curl ca-certificates libonig-dev libxml2-dev libzip-dev \
         libpng-dev libjpeg-dev libfreetype6-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Install PHP extensions via helper
+# 2. Install PHP Extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
         bcmath bz2 curl exif fileinfo gd intl mbstring opcache pcntl \
         pdo_mysql redis simplexml tokenizer xml xmlreader xmlwriter zip openssl \
     && rm -rf /tmp/pear
 
-# 3. Composer binary (Versi terbaru untuk PHP 8.4)
+# 3. Install Composer
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
-# 4. Composer install (FIX Exit Code 4: Bypass platform check)
+# 4. Copy Composer Files
 COPY composer.json composer.lock ./
-RUN composer install \
+
+# 5. FIX: Update Lock File & Install Dependencies
+# Perintah ini akan menambahkan 'laravel/octane' ke lock file jika belum ada,
+# lalu menginstall semua dependensi dari nol di lingkungan Docker yang bersih.
+RUN composer update --lock --no-scripts --no-interaction --ignore-platform-req=php \
+    && composer install \
         --optimize-autoloader \
         --no-dev \
         --prefer-dist \
@@ -34,27 +39,29 @@ RUN composer install \
         --ignore-platform-req=php \
     && rm -rf ~/.composer/cache
 
-# 5. Copy app source code & php.ini
+# 6. Copy Source Code
+# Karena .dockerignore sudah dibuat, folder 'vendor' lokal TIDAK akan tercopy.
 COPY --chown=www-data:www-data . /app
+
+# 7. Copy PHP Config
 COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# 6. Fix Permissions & Clean Local Cache (FIX #1 & #4)
-# Hapus cache lokal yang mungkin ikut tercopy dari git, lalu chown vendor SEBELUM pindah user
+# 8. Final Permissions & Cleanup
 RUN rm -rf /app/bootstrap/cache/* /app/storage/framework/cache/* /app/storage/framework/sessions/* /app/storage/framework/views/* \
     && mkdir -p /var/www/.octane \
     && chown -R www-data:www-data /app/vendor /app/storage /app/bootstrap/cache /var/www/.octane
 
-# 7. Laravel Optimization (Build Time)
+# 9. Laravel Optimization (Build Time)
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache \
     && php artisan event:cache \
     && (php artisan storage:link || true)
 
-# 8. Switch to non-root user (FIX #1: Setelah chown vendor selesai)
+# 10. Switch to Non-Root User
 USER www-data
 
 EXPOSE 8000
 
-# 9. Start Command (FIX #5: JSON Array + Clear Cache Runtime)
+# 11. Start Command
 CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan optimize && php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --workers=14 --max-requests=500"]
