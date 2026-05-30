@@ -26,9 +26,9 @@ COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 # 4. Copy Composer Files
 COPY composer.json composer.lock ./
 
-# 5. FIX: Update Lock File & Install Dependencies
-# Perintah ini akan menambahkan 'laravel/octane' ke lock file jika belum ada,
-# lalu menginstall semua dependensi dari nol di lingkungan Docker yang bersih.
+# 5. FIX: Force Update Lock & Install
+# Jika 'laravel/octane' belum ada di lock, command ini akan menambahkannya.
+# --ignore-platform-req=php mencegah error versi PHP saat update lock.
 RUN composer update --lock --no-scripts --no-interaction --ignore-platform-req=php \
     && composer install \
         --optimize-autoloader \
@@ -40,11 +40,11 @@ RUN composer update --lock --no-scripts --no-interaction --ignore-platform-req=p
     && rm -rf ~/.composer/cache
 
 # 6. Copy Source Code
-# Karena .dockerignore sudah dibuat, folder 'vendor' lokal TIDAK akan tercopy.
+# PENTING: Folder 'vendor' TIDAK akan tercopy jika .dockerignore sudah benar.
 COPY --chown=www-data:www-data . /app
 
 # 7. Copy PHP Config
-COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 8. Final Permissions & Cleanup
 RUN rm -rf /app/bootstrap/cache/* /app/storage/framework/cache/* /app/storage/framework/sessions/* /app/storage/framework/views/* \
