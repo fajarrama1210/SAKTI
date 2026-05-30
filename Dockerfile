@@ -19,6 +19,7 @@ RUN install-php-extensions \
         xmlwriter \
         xmlreader \
         redis \
+    && apt-get update \
     && apt-get install -y --no-install-recommends git unzip \
     && rm -rf /var/lib/apt/lists/*
 
