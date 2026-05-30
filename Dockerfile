@@ -47,11 +47,10 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
 # 9. Hapus file statis yang berpotensi bentrok dengan Route Laravel
 RUN rm -f /app/public/robots.txt /app/public/sitemap.xml
 
-# 10. Atur hak akses awal folder storage & cache agar bisa ditulis oleh user www-data
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor
 
-# 11. Pindah ke user www-data sebelum menjalankan optimasi Artisan
-#     Ini mencegah file cache terkunci oleh user 'root'
+# 11. Tetap gunakan user root terlebih dahulu untuk menjalankan Composer dump-autoload & Artisan
+#     (Atau bisa dijalankan sekarang karena izin folder vendor sudah dibuka di atas)
 USER www-data
 
 # 12. Generate Autoloader final & lakukan optimasi Laravel
