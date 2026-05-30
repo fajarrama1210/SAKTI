@@ -59,4 +59,5 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload --optimize --no-dev --ignore
 EXPOSE 8000
 
 # 14. RUNTIME COMMAND: Bersihkan cache lama terlebih dahulu sebelum mengoptimasi ulang saat container menyala
-CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan storage:link || true && php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
+# 14. RUNTIME COMMAND: Diberikan tanda kurung ( ) pada storage:link agar tidak merusak rantai eksekusi Octane
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && (php artisan storage:link || true) && php artisan optimize && php artisan octane:start --workers=14 --server=frankenphp --host=0.0.0.0 --port=8000"]
