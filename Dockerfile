@@ -12,15 +12,14 @@ RUN rm -f /app/public/robots.txt /app/public/sitemap.xml
 # 3. Install OS libs, build tools & PHP extensions dalam satu layer (Efisiensi Cache)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    libzip4 libpng16-16 libjpeg62-turbo libfreetype6 \
-    libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     build-essential nano git unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) zip gd pcntl opcache pdo pdo_mysql \
     && pecl install redis \
     && docker-php-ext-enable redis \
     # Hapus kembali build dependencies untuk memperkecil ukuran image
-    && apt-get purge -y --auto-remove build-essential libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    && apt-get purge -y --auto-remove build-essential libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. Copy konfigurasi PHP kustom
