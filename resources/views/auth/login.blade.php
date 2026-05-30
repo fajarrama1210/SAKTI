@@ -4,7 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="Login ke Sistem Akademik Terpadu Informasi (SAKTI) untuk mengelola data akademik.">
+    <meta name="description" content="Login ke Sistem Akademik Terpadu Informasi (SAKTI) untuk mengelola data akademik, administrasi, dan keuangan sekolah Anda.">
+    <meta name="keywords" content="Login SAKTI, Portal SAKTI, Sistem Keuangan Terintegrasi, Aplikasi Sekolah, Manajemen Sekolah, Keuangan Sekolah">
+    <meta name="author" content="Bolo Tuhan">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Sakti | Login Portal">
+    <meta property="og:description" content="Login ke portal SAKTI untuk mengelola administrasi dan keuangan institusi pendidikan Anda.">
+    <meta property="og:image" content="{{ asset('assets/img/elemen login.webp') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="Sakti | Login Portal">
+    <meta property="twitter:description" content="Login ke portal SAKTI untuk mengelola administrasi dan keuangan institusi pendidikan Anda.">
+    <meta property="twitter:image" content="{{ asset('assets/img/elemen login.webp') }}">
 
     <title>Sakti | Login</title>
 
@@ -331,7 +348,7 @@
             <div class="particle"></div>
 
             <div class="illustration-wrapper">
-                <img src="{{ asset('assets/img/elemen login.png') }}" alt="SAKTI Analytics Illustration">
+                <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Analytics Illustration">
             </div>
         </div>
 

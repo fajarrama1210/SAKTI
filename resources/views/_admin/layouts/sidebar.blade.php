@@ -4,7 +4,7 @@
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-lg-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0 d-flex align-items-center" href="{{ url('/') }}">
-            <img src="{{ asset('assets/img/SAKTI.png') }}" class="navbar-brand-img" alt="SAKTI Logo" style="max-height: 36px;">
+            <img src="{{ asset('assets/img/SAKTI.svg') }}" class="navbar-brand-img" alt="SAKTI Logo" style="max-height: 36px;">
             <span class="ms-2 font-weight-bold" style="font-size: 1.5rem; color: #1a8a5c;">SAKTI</span>
         </a>
     </div>

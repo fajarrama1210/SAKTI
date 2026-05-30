@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="22.5214mm" height="26.0054mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 211.81 244.58"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:url(#id0)}
+   ]]>
+  </style>
+  <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="28.45" y1="207.51" x2="183.37" y2="37.06">
+   <stop offset="0" style="stop-opacity:1; stop-color:#192F84"/>
+   <stop offset="0.0117647" style="stop-opacity:1; stop-color:#1B458A"/>
+   <stop offset="0.121569" style="stop-opacity:1; stop-color:#1D5C90"/>
+   <stop offset="0.478431" style="stop-opacity:1; stop-color:#58C161"/>
+   <stop offset="0.729412" style="stop-opacity:1; stop-color:#76D347"/>
+   <stop offset="1" style="stop-opacity:1; stop-color:#299294"/>
+  </linearGradient>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <path class="fil0" d="M105.91 0l52.95 30.57 19.68 11.36c-18.92,0.46 -33.31,6.61 -43.18,18.45l-29.45 -17 -34.17 19.73 -34.17 19.73 0 10.34 -37.57 -22.31 0 -9.72 52.95 -30.57 52.95 -30.57zm67.68 53.35l22.3 0c2.63,0 4.78,2.15 4.78,4.78l0 64.37c-8.77,8.9 -19.38,17.74 -31.85,26.5l0 -90.87c0,-2.63 2.15,-4.78 4.78,-4.78zm-47.78 30.26l22.3 0c2.63,0 4.78,2.15 4.78,4.78l0 71.15c-9.72,6.07 -20.34,12.1 -31.85,18.11l0 -89.25c0,-2.63 2.15,-4.78 4.78,-4.78zm-46.11 27.64l22.3 0c2.63,0 4.78,2.15 4.78,4.78l0 68.8 -31.85 -17.73 0 -51.07c0,-2.63 2.15,-4.78 4.78,-4.78zm-42.13 -1.41l0 12.45 0 39.45 24.97 14.41 0.04 0.23 10.36 5.77 32.98 19.04 3.37 -1.95c23.21,-10.62 43.91,-22.57 62.08,-35.84l2.88 -1.66 0 -0.47c14.08,-10.55 26.6,-21.92 37.57,-34.11l0 56.27 -52.95 30.57 -52.95 30.57 -52.95 -30.57 -52.95 -30.57 0 -61.15 0 -34.76 37.57 22.31z"/>
+ </g>
+</svg>

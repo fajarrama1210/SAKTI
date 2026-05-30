@@ -22,7 +22,7 @@
 <div class="mobile-topbar" id="mobileTopbar">
     {{-- Logo --}}
     <a href="{{ route('student.dashboard') }}" class="mobile-topbar-brand">
-        <img src="{{ asset('assets/img/SAKTI.png') }}" alt="SAKTI">
+        <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI">
         <span>SAKTI</span>
     </a>
 

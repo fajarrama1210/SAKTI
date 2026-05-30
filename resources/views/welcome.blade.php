@@ -3,10 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="SAKTI - Sistem Keuangan Terintegrasi untuk institusi pendidikan. Solusi cerdas kelola keuangan sekolah.">
+    <meta name="description" content="SAKTI - Sistem Manajemen Akademik Terpadu Informasi. Platform modern untuk mengelola keuangan dan administrasi sekolah yang efisien, transparan, dan akuntabel.">
+    <meta name="keywords" content="SAKTI, Sistem Keuangan Terintegrasi, Aplikasi Sekolah, Manajemen Sekolah, Keuangan Sekolah, SPP Online, Administrasi Akademik, Software Pendidikan">
+    <meta name="author" content="Bolo Tuhan">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:title" content="Sakti | Sistem Keuangan Terintegrasi">
+    <meta property="og:description" content="Platform manajemen akademik modern untuk efisiensi administrasi dan keuangan institusi pendidikan Anda.">
+    <meta property="og:image" content="{{ asset('assets/img/elemen login.webp') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url('/') }}">
+    <meta property="twitter:title" content="Sakti | Sistem Keuangan Terintegrasi">
+    <meta property="twitter:description" content="Platform manajemen akademik modern untuk efisiensi administrasi dan keuangan institusi pendidikan Anda.">
+    <meta property="twitter:image" content="{{ asset('assets/img/elemen login.webp') }}">
 
     <title>Sakti | Sistem Keuangan Terintegrasi</title>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/sakti favicon/favicon-96x96.png') }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/sakti favicon/favicon.svg') }}" />
@@ -372,7 +388,7 @@
         <div class="container">
             <div class="d-flex align-items-center justify-content-between w-100">
                 <a href="/" class="navbar-brand-custom" id="brand-logo">
-                    <img src="{{ asset('assets/img/SAKTI.png') }}" alt="SAKTI Logo">
+                    <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo">
                     <span>SAKTI</span>
                 </a>
 
@@ -489,7 +505,7 @@
                 {{-- Hero Image: shows on sm+, hidden on xs (replaced by hero-mobile-visual) --}}
                 <div class="col-12 col-sm-8 col-md-7 col-lg-6 order-2 mx-auto mx-lg-0 hero-image-col">
                     <div class="hero-image">
-                        <img src="{{ asset('assets/img/elemen login.png') }}" alt="SAKTI Financial Dashboard Illustration">
+                        <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Financial Dashboard Illustration">
                     </div>
                 </div>
 
@@ -551,7 +567,7 @@
                     {{-- Brand: full width on xs/sm, 4 cols on md, 4 cols on lg --}}
                     <div class="col-12 col-md-12 col-lg-4">
                         <div class="footer-brand-row">
-                            <img src="{{ asset('assets/img/SAKTI.png') }}" alt="SAKTI Logo">
+                            <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo">
                             <span>SAKTI</span>
                         </div>
                         <p class="footer-desc">
