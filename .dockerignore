@@ -1,1 +1,31 @@
 
+# Abaikan folder vendor lokal (PENTING!)
+vendor/
+
+# Abaikan node_modules
+node_modules/
+
+# Abaikan file environment lokal
+.env
+.env.local
+.env.*.local
+
+# Abaikan cache & log lokal
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*
+
+# Abaikan file IDE & Git
+.git/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Abaikan file dokumentasi
+README.md
+LICENSE
+phpunit.xml
+.phpunit.result.cache
