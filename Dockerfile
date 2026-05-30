@@ -1,95 +1,58 @@
-# =============================================================================
-# Dockerfile Final: PHP 8.4 + Laravel 12 + Octane + FrankenPHP
-# Optimized for Dockploy / Production - FIXED VERSION
-# =============================================================================
-
 FROM php:8.4-cli
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    COMPOSER_VERSION=2.8 \
     COMPOSER_MEMORY_LIMIT=-1 \
     APP_ENV=production \
     APP_DEBUG=false
 
 WORKDIR /app
 
-# Install extension helper
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
+# [FIX 3] Layer terpisah: apt-get update + install system deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-        unzip \
-        curl \
-        ca-certificates \
-        libonig-dev \
-        libxml2-dev \
-        libzip-dev \
-        libpng-dev \
-        libjpeg-dev \
-        libfreetype6-dev \
-    && install-php-extensions \
-        @composer \
-        bcmath \
-        bz2 \
-        curl \
-        exif \
-        fileinfo \
-        gd \
-        intl \
-        mbstring \
-        opcache \
-        pcntl \
-        pdo_mysql \
-        redis \
-        simplexml \
-        tokenizer \
-        xml \
-        xmlreader \
-        xmlwriter \
-        zip \
-        openssl \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+        git unzip curl ca-certificates libonig-dev libxml2-dev libzip-dev \
+        libpng-dev libjpeg-dev libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Composer install dengan layer caching
+# Install PHP extensions helper
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions \
+        bcmath bz2 curl exif fileinfo gd intl mbstring opcache pcntl \
+        pdo_mysql redis simplexml tokenizer xml xmlreader xmlwriter zip openssl \
+    && rm -rf /tmp/pear
+
+# Install Composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
+
+# Composer install (dijalankan sebagai ROOT)
 COPY composer.json composer.lock ./
-
 RUN composer install \
         --optimize-autoloader \
         --no-dev \
         --prefer-dist \
         --no-interaction \
-        --no-progress \
         --no-scripts \
     && rm -rf ~/.composer/cache
 
-# Copy source code & konfigurasi
+# Copy aplikasi & config PHP
 COPY --chown=www-data:www-data . /app
 COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# Pre-setup folder & permissions
-RUN mkdir -p /var/www/.octane /app/storage /app/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/.octane /app/storage /app/bootstrap/cache /app/vendor
+# [FIX 1 & 4] Hapus cache lokal yang ikut tercopy, siapkan folder, & set permission vendor sebelum pindah user
+RUN rm -rf /app/bootstrap/cache/* /app/storage/framework/cache/* /app/storage/framework/sessions/* /app/storage/framework/views/* \
+    && mkdir -p /var/www/.octane \
+    && chown -R www-data:www-data /app/vendor /app/storage /app/bootstrap/cache /var/www/.octane
 
-# Laravel optimization (build time)
+# Build-time optimization (aman karena dijalankan sekali saat image dibuat)
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache \
     && php artisan event:cache \
-    && (php artisan storage:link || true) \
-    && chown -R www-data:www-data /app/storage
+    && php artisan storage:link || true
 
-# Security: non-root user
+# [FIX 1] Pindah ke non-root user setelah permission vendor beres
 USER www-data
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
-
-CMD ["php", "artisan", "octane:start", \
-     "--server=frankenphp", \
-     "--host=0.0.0.0", \
-     "--port=8000", \
-     "--workers=14", \
-     "--max-requests=500"]
+# [FIX 4 & 5] CMD format JSON Array + clear cache sebelum optimize/start
+CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan optimize && php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --workers=14 --max-requests=500"]
