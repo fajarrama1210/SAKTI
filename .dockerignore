@@ -1,1 +1,29 @@
 
+# JANGAN COPY VENDOR LOKAL KE DOCKER (Ini penyebab utama error Anda)
+vendor/
+
+# JANGAN COPY NODE_MODULES
+node_modules/
+
+# JANGAN COPY FILE ENV LOKAL
+.env
+.env.local
+.env.*.local
+
+# JANGAN COPY CACHE & LOG LOKAL
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*
+
+# FILE LAIN YANG TIDAK PERLU
+.git/
+.idea/
+.vscode/
+README.md
+LICENSE
+phpunit.xml
+.phpunit.result.cache
+Dockerfile
+.dockerignore
