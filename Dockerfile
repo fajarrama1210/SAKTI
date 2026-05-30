@@ -35,7 +35,7 @@ RUN composer install \
 
 # Copy aplikasi & config PHP
 COPY --chown=www-data:www-data . /app
-COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # [FIX 1 & 4] Hapus cache lokal yang ikut tercopy, siapkan folder, & set permission vendor sebelum pindah user
 RUN rm -rf /app/bootstrap/cache/* /app/storage/framework/cache/* /app/storage/framework/sessions/* /app/storage/framework/views/* \
