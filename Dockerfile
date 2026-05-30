@@ -36,7 +36,7 @@ RUN composer install \
 
 # 5. Copy app source code & php.ini
 COPY --chown=www-data:www-data . /app
-COPY ./deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 6. Fix Permissions & Clean Local Cache (FIX #1 & #4)
 # Hapus cache lokal yang mungkin ikut tercopy dari git, lalu chown vendor SEBELUM pindah user
