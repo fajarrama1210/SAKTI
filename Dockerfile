@@ -19,6 +19,7 @@ RUN install-php-extensions \
         xmlwriter \
         xmlreader \
         redis \
+    && apt-get install -y --no-install-recommends git unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Copy konfigurasi PHP kustom
@@ -29,8 +30,7 @@ COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
 
-RUN apt-get install -y --no-install-recommends git unzip \
-    && COMPOSER_MEMORY_LIMIT=-1 composer install \
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
         --optimize-autoloader \
         --no-dev \
         --prefer-dist \
