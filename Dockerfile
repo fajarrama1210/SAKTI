@@ -27,7 +27,7 @@ COPY ./Deploy/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # 5. Install PHP dependencies lewat Composer menggunakan image resmi Composer
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
-RUN composer install --optimize-autoloader --no-dev --prefer-dist \
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader --no-dev --prefer-dist \
     && rm -rf ~/.composer/cache
 
 # 6. Jalankan Artisan tasks & Inisialisasi FrankenPHP
