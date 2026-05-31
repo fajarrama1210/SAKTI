@@ -45,7 +45,7 @@
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style">
     
     <!-- Preload LCP Image only for Desktop/Tablet (screen width >= 576px) -->
-    <link rel="preload" href="{{ asset('assets/img/elemen login.webp') }}" as="image" type="image/webp" media="(min-width: 576px)">
+    <link rel="preload" href="{{ asset('assets/img/elemen login.webp') }}" as="image" type="image/webp" media="(min-width: 576px)" fetchpriority="high">
 
     <!-- Google Fonts (Asynchronous to prevent render blocking) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
@@ -53,8 +53,11 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     </noscript>
 
-    <!-- Bootstrap 5 CSS (Critical Stylesheet) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS (Deferred to prevent render blocking) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </noscript>
 
     <!-- Font Awesome (Asynchronous to prevent render blocking) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
@@ -92,6 +95,35 @@
             overflow-x: hidden;
         }
 
+        /* ===== CRITICAL BOOTSTRAP GRID & UTILS ===== */
+        *, *::before, *::after { box-sizing: border-box; }
+        .container { width: 100%; padding-right: 0.75rem; padding-left: 0.75rem; margin-right: auto; margin-left: auto; }
+        .row { display: flex; flex-wrap: wrap; margin-top: calc(-1 * var(--bs-gutter-y, 0)); margin-right: calc(-.5 * var(--bs-gutter-x, 1.5rem)); margin-left: calc(-.5 * var(--bs-gutter-x, 1.5rem)); }
+        .row > * { flex-shrink: 0; width: 100%; max-width: 100%; padding-right: calc(var(--bs-gutter-x, 1.5rem) * .5); padding-left: calc(var(--bs-gutter-x, 1.5rem) * .5); margin-top: var(--bs-gutter-y, 0); }
+        .col-12 { flex: 0 0 auto; width: 100%; } .col-6 { flex: 0 0 auto; width: 50%; }
+        .g-3 { --bs-gutter-x: 1rem; --bs-gutter-y: 1rem; } .g-4 { --bs-gutter-x: 1.5rem; --bs-gutter-y: 1.5rem; }
+        .d-flex { display: flex !important; } .d-none { display: none !important; } .d-inline-block { display: inline-block !important; }
+        .align-items-center { align-items: center !important; } .align-items-flex-start { align-items: flex-start !important; }
+        .justify-content-center { justify-content: center !important; } .justify-content-between { justify-content: space-between !important; } .justify-content-start { justify-content: flex-start !important; }
+        .flex-wrap { flex-wrap: wrap !important; } .flex-shrink-0 { flex-shrink: 0 !important; }
+        .w-100 { width: 100% !important; } .mx-auto { margin-right: auto !important; margin-left: auto !important; } .ms-auto { margin-left: auto !important; }
+        .mb-3 { margin-bottom: 1rem !important; } .mb-4 { margin-bottom: 1.5rem !important; } .mt-2 { margin-top: 0.5rem !important; }
+        .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; } .py-3 { padding-top: 1rem !important; padding-bottom: 1rem !important; } .py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+        .px-2 { padding-right: 0.5rem !important; padding-left: 0.5rem !important; } .px-3 { padding-right: 1rem !important; padding-left: 1rem !important; }
+        .gap-2 { gap: 0.5rem !important; } .gap-3 { gap: 1rem !important; } .gap-4 { gap: 1.5rem !important; }
+        .text-center { text-align: center !important; } .text-white { color: #fff !important; }
+        .position-relative { position: relative !important; }
+        .rounded-3 { border-radius: 0.5rem !important; } .rounded-4 { border-radius: 1rem !important; } .rounded-pill { border-radius: 50rem !important; }
+        .border-top { border-top: 1px solid #dee2e6 !important; }
+        .collapse:not(.show) { display: none; }
+        .order-1 { order: 1 !important; } .order-2 { order: 2 !important; }
+        
+        @media (min-width: 576px) { .container { max-width: 540px; } .col-sm-6 { flex: 0 0 auto; width: 50%; } .col-sm-8 { flex: 0 0 auto; width: 66.66666667%; } .d-sm-flex { display: flex !important; } .d-sm-inline-flex { display: inline-flex !important; } .mx-sm-0 { margin-right: 0 !important; margin-left: 0 !important; } }
+        @media (min-width: 768px) { .container { max-width: 720px; } .col-md-4 { flex: 0 0 auto; width: 33.33333333%; } .col-md-7 { flex: 0 0 auto; width: 58.33333333%; } .col-md-12 { flex: 0 0 auto; width: 100%; } .d-md-none { display: none !important; } .mb-md-5 { margin-bottom: 3rem !important; } .g-md-4 { --bs-gutter-x: 1.5rem; --bs-gutter-y: 1.5rem; } }
+        @media (min-width: 992px) { .container { max-width: 960px; } .col-lg-2 { flex: 0 0 auto; width: 16.66666667%; } .col-lg-4 { flex: 0 0 auto; width: 33.33333333%; } .col-lg-6 { flex: 0 0 auto; width: 50%; } .d-lg-none { display: none !important; } .d-lg-flex { display: flex !important; } .mx-lg-0 { margin-right: 0 !important; margin-left: 0 !important; } }
+        @media (min-width: 1200px) { .container { max-width: 1140px; } }
+        @media (min-width: 1400px) { .container { max-width: 1320px; } }
+
         /* ===== NAVBAR ===== */
         .sakti-navbar {
             position: fixed;
@@ -109,7 +141,7 @@
         .sakti-navbar .navbar-brand-custom {
             display: flex; align-items: center; gap: 0.6rem; text-decoration: none;
         }
-        .sakti-navbar .navbar-brand-custom img { height: 32px; width: auto; }
+        .sakti-navbar .navbar-brand-custom img { height: 32px; width: 120px; object-fit: contain; }
         .sakti-navbar .navbar-brand-custom span {
             font-size: 1.25rem; font-weight: 800;
             color: var(--gray-900); letter-spacing: 1px;
@@ -162,7 +194,7 @@
 
         .hero-badge {
             display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.4rem 1rem; background: var(--green-600); color: #fff;
+            padding: 0.4rem 1rem; background: var(--green-800); color: #fff;
             border-radius: 50px; font-size: 0.7rem; font-weight: 600;
             letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 1.25rem;
             animation: fadeInUp 0.6s ease-out;
@@ -193,7 +225,7 @@
         .btn-primary-green {
             display: inline-flex; align-items: center; gap: 0.6rem;
             padding: 0.8rem 1.8rem;
-            background: linear-gradient(135deg, var(--green-600), var(--green-700));
+            background: linear-gradient(135deg, var(--green-700), var(--green-800));
             color: #fff !important; border: none; border-radius: 12px;
             font-size: 0.95rem; font-weight: 600; text-decoration: none;
             transition: all 0.3s ease;
@@ -202,7 +234,7 @@
         .btn-primary-green:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(5,150,105,.4);
-            background: linear-gradient(135deg, var(--green-700), var(--green-800));
+            background: linear-gradient(135deg, var(--green-800), #022c22);
         }
 
         .btn-secondary-link {
@@ -261,10 +293,10 @@
             width: 60px; height: 60px; margin: 0 auto 1.25rem;
             display: flex; align-items: center; justify-content: center;
             border-radius: 14px; background: var(--green-50);
-            color: var(--green-600); font-size: 1.4rem; transition: all 0.3s ease;
+            color: var(--green-700); font-size: 1.4rem; transition: all 0.3s ease;
         }
         .feature-card:hover .feature-icon {
-            background: var(--green-600); color: #fff; transform: scale(1.05);
+            background: var(--green-800); color: #fff; transform: scale(1.05);
         }
         .feature-title {
             font-size: 1.05rem; font-weight: 700;
@@ -409,7 +441,7 @@
         <div class="container">
             <div class="d-flex align-items-center justify-content-between w-100">
                 <a href="/" class="navbar-brand-custom" id="brand-logo">
-                    <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo">
+                    <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo" width="120" height="32">
                     <span>SAKTI</span>
                 </a>
 
@@ -528,7 +560,7 @@
                     <div class="hero-image">
                         <picture>
                             <source media="(max-width: 575.98px)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
-                            <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Financial Dashboard Illustration">
+                            <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Financial Dashboard Illustration" width="500" height="400" fetchpriority="high">
                         </picture>
                     </div>
                 </div>
@@ -591,7 +623,7 @@
                     {{-- Brand: full width on xs/sm, 4 cols on md, 4 cols on lg --}}
                     <div class="col-12 col-md-12 col-lg-4">
                         <div class="footer-brand-row">
-                            <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo">
+                            <img src="{{ asset('assets/img/SAKTI.svg') }}" alt="SAKTI Logo" width="112" height="30">
                             <span>SAKTI</span>
                         </div>
                         <p class="footer-desc">
