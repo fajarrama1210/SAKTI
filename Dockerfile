@@ -63,4 +63,4 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer dump-autoload --optimize --no-dev --ignore
 EXPOSE 8000
 
 # 14. RUNTIME COMMAND: Jalankan FrankenPHP via Octane
-CMD ["sh", "-c", "rm -f bootstrap/cache/*.php && php artisan config:clear && php artisan route:clear && (php artisan storage:link || true) && OCTANE_SERVER=frankenphp php artisan optimize && php artisan octane:start --workers=4 --server=frankenphp --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "rm -f bootstrap/cache/*.php && php artisan config:clear && php artisan route:clear && (php artisan storage:link || true) && OCTANE_SERVER=frankenphp php artisan optimize && php artisan octane:start --workers=8 --task-workers=4 --server=frankenphp --host=0.0.0.0 --port=8000"]
