@@ -130,7 +130,7 @@
                 {{-- Footer Legend & Action --}}
                 <div class="card-footer bg-white border-0 py-4 px-4">
                     <div class="row align-items-center">
-                        <div class="col-lg-9 mb-3 mb-lg-0">
+                        <div class="col-lg-12">
                             <h5 class="text-uppercase text-muted tracking-wide text-xs mb-3 font-weight-bold">Keterangan Status:</h5>
                             <div class="legend-wrapper">
 
@@ -160,11 +160,6 @@
                                 </div>
 
                             </div>
-                        </div>
-                        <div class="col-lg-3 text-lg-right">
-                            <button class="btn btn-sm btn-outline-success btn-block w-100 mt-5" onclick="window.print()" style="border-color: #07814e; color: #07814e;">
-                                <i class="fas fa-print mr-2"></i> Cetak Laporan
-                            </button>
                         </div>
                     </div>
                 </div>
