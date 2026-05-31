@@ -1,4 +1,4 @@
-@php
+    @php
     $routeName = request()->route() ? request()->route()->getName() : '';
     $routeParts = explode('.', $routeName);
     $routeBase = in_array($routeParts[0], ['admin', 'student', 'kepala-sekolah']) && isset($routeParts[1]) ? $routeParts[1] : $routeParts[0];
@@ -20,7 +20,7 @@
         'schedules' => 'Jadwal Pelajaran',
         'profile' => 'Profil Saya',
         'reports' => 'Laporan',
-        default => 'Dashboard',
+        default => 'Dashboard', 
     };
 
     $navAvatarUrl = null;
