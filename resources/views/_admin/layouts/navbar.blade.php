@@ -81,17 +81,32 @@
     .user-dropdown-trigger {
         background: rgba(255, 255, 255, 0.95);
         border: 1px solid rgba(255, 255, 255, 0.6);
-        padding: 5px 12px 5px 5px;
-        border-radius: 50px;
+        padding: 5px;
+        border-radius: 50%;
         transition: all 0.3s ease;
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .user-dropdown-trigger:hover {
         background: #ffffff;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    @media (min-width: 768px) {
+        .user-dropdown-trigger {
+            padding: 5px 12px 5px 5px;
+            border-radius: 50px;
+            width: auto;
+            height: auto;
+            display: inline-flex;
+        }
     }
 
     .user-dropdown-trigger .user-name {
@@ -113,8 +128,8 @@
     }
 
     .user-avatar {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -284,7 +299,7 @@
                             <div class="user-name text-truncate">{{ Auth::user()->name }}</div>
                             <div class="user-role">{{ ucfirst(Auth::user()->role) }}</div>
                         </div>
-                        <i class="fa fa-chevron-down chevron-icon d-none d-sm-inline"></i>
+                        <i class="fa fa-chevron-down chevron-icon d-none d-md-inline"></i>
                     </div>
                 </a>
 
@@ -317,13 +332,6 @@
                                 <i class="fas fa-user" style="font-size:13px;"></i>
                             </div>
                             <span>Profile Saya</span>
-                        </a>
-
-                        <a href="#" class="dropdown-item modern-dropdown-item">
-                            <div class="icon-container flex-shrink-0">
-                                <i class="fas fa-cog" style="font-size:13px;"></i>
-                            </div>
-                            <span>Pengaturan</span>
                         </a>
 
                         <hr class="my-2 opacity-10">

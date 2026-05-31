@@ -302,10 +302,20 @@
         /* xs + sm (<768px): hide left panel, show mobile brand, full-width form */
         @media (max-width: 767.98px) {
             .login-left { display: none !important; }
-            .login-mobile-brand { display: flex !important; }
+            .login-mobile-brand {
+                display: flex !important;
+                justify-content: center !important;
+                margin-bottom: 1.5rem !important;
+            }
             .login-right {
                 flex: 1; min-height: 100vh;
                 padding: 2rem 1.25rem;
+            }
+            .login-heading {
+                text-align: center;
+            }
+            .back-to-home {
+                justify-content: center !important;
             }
         }
 
