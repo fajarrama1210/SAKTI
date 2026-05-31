@@ -48,8 +48,10 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
 # 9. Hapus file statis yang berpotensi bentrok dengan route
 RUN rm -f /app/public/robots.txt /app/public/sitemap.xml
 
-# 10. Atur hak akses folder storage, cache, dan vendor
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor
+# 10. Atur hak akses folder storage, cache, vendor, DAN folder internal Caddy/FrankenPHP
+# Folder /data dan /config dibutuhkan oleh Caddy untuk menyimpan konfigurasi & sertifikat
+RUN mkdir -p /data/caddy /config/caddy \
+    && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/vendor /data /config
 
 # 11. Pindah ke user www-data
 USER www-data
