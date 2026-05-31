@@ -31,16 +31,36 @@
     <meta name="apple-mobile-web-app-title" content="SAKTI" />
     <link rel="manifest" href="{{ asset('assets/sakti favicon/site.webmanifest') }}" />
 
-    <!-- Fonts -->
+    <!-- Preconnect & DNS Prefetch to speed up third-party requests -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
-    <!-- Bootstrap 5 CSS -->
+    <!-- Preload Critical Stylesheets -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style">
+    
+    <!-- Preload LCP Image only for Desktop/Tablet (screen width >= 576px) -->
+    <link rel="preload" href="{{ asset('assets/img/elemen login.webp') }}" as="image" type="image/webp" media="(min-width: 576px)">
+
+    <!-- Google Fonts (Asynchronous to prevent render blocking) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </noscript>
+
+    <!-- Bootstrap 5 CSS (Critical Stylesheet) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome (Asynchronous to prevent render blocking) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </noscript>
 
     <style>
         :root {
@@ -55,9 +75,10 @@
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
+            --gray-400: #71717a; /* Improved accessibility contrast */
+            --gray-500: #475569; /* Improved accessibility contrast */
+            --gray-600: #374151; /* Improved accessibility contrast */
+            --gray-800: #1f2937; /* For high contrast social links */
             --gray-900: #111827;
         }
 
@@ -95,11 +116,11 @@
         }
 
         .sakti-navbar .navbar-toggler {
-            border: 1.5px solid var(--green-600);
+            border: 1.5px solid var(--green-700);
             border-radius: 8px; padding: 5px 10px;
         }
         .sakti-navbar .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23059669' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23047857' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
 
         .btn-portal {
@@ -259,29 +280,29 @@
         .footer-brand-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; }
         .footer-brand-row img { height: 30px; }
         .footer-brand-row span { font-size: 1.1rem; font-weight: 800; color: var(--gray-900); letter-spacing: 1px; }
-        .footer-desc { font-size: 0.85rem; color: var(--gray-500); line-height: 1.7; margin-bottom: 1.25rem; }
+        .footer-desc { font-size: 0.85rem; color: var(--gray-600); line-height: 1.7; margin-bottom: 1.25rem; }
         .footer-socials { display: flex; gap: 0.6rem; }
         .footer-socials a {
             width: 36px; height: 36px; border-radius: 10px;
             background: var(--gray-200); display: flex; align-items: center; justify-content: center;
-            color: var(--gray-600); text-decoration: none; transition: all 0.3s ease; font-size: 0.85rem;
+            color: var(--gray-800); text-decoration: none; transition: all 0.3s ease; font-size: 0.85rem;
         }
         .footer-socials a:hover { background: var(--green-600); color: #fff; transform: translateY(-2px); }
 
         .footer-col-title { font-size: 0.9rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1rem; }
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 0.6rem; }
-        .footer-links a { font-size: 0.85rem; color: var(--gray-500); text-decoration: none; transition: color 0.2s; }
+        .footer-links a { font-size: 0.85rem; color: var(--gray-600); text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--green-600); }
 
         .footer-contact-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.65rem; }
-        .footer-contact-item i { color: var(--green-600); font-size: 0.85rem; margin-top: 3px; flex-shrink: 0; }
-        .footer-contact-item span { font-size: 0.85rem; color: var(--gray-500); line-height: 1.5; }
+        .footer-contact-item i { color: var(--green-700); font-size: 0.85rem; margin-top: 3px; flex-shrink: 0; }
+        .footer-contact-item span { font-size: 0.85rem; color: var(--gray-600); line-height: 1.5; }
 
         .footer-bottom {
             border-top: 1px solid var(--gray-200); padding: 1.25rem 0; text-align: center;
         }
-        .footer-bottom p { font-size: 0.8rem; color: var(--gray-400); margin: 0; }
+        .footer-bottom p { font-size: 0.8rem; color: var(--gray-500); margin: 0; }
 
         /* ===== xs (<576px) tweaks ===== */
         @media (max-width: 575.98px) {
@@ -449,11 +470,11 @@
                             <i class="fas fa-chart-line text-white" style="font-size:1.1rem;"></i>
                         </div>
                         <div>
-                            <div style="font-size:0.72rem;color:#64748b;font-weight:600;letter-spacing:.5px;text-transform:uppercase;">Platform Keuangan</div>
+                            <div style="font-size:0.72rem;color:#475569;font-weight:600;letter-spacing:.5px;text-transform:uppercase;">Platform Keuangan</div>
                             <div style="font-size:1rem;font-weight:800;color:#111827;">Terintegrasi & Aman</div>
                         </div>
                         <span class="ms-auto badge rounded-pill px-2 py-1"
-                              style="background:#dcfce7;color:#16a34a;font-size:0.68rem;font-weight:700;">
+                              style="background:#dcfce7;color:#15803d;font-size:0.68rem;font-weight:700;">
                             <i class="fas fa-circle" style="font-size:0.4rem;vertical-align:middle;"></i> Live
                         </span>
                     </div>
@@ -474,13 +495,13 @@
                     <div class="d-flex gap-3 flex-wrap mb-3 d-none d-sm-flex">
                         <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3"
                              style="background:#f0fdf4;border:1px solid #bbf7d0;">
-                            <i class="fas fa-shield-halved text-success" style="font-size:.85rem;"></i>
-                            <span style="font-size:.78rem;font-weight:600;color:#16a34a;">Data Terenkripsi</span>
+                            <i class="fas fa-shield-halved" style="font-size:.85rem;color:#15803d;"></i>
+                            <span style="font-size:.78rem;font-weight:600;color:#15803d;">Data Terenkripsi</span>
                         </div>
                         <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-3"
                              style="background:#f0fdf4;border:1px solid #bbf7d0;">
-                            <i class="fas fa-bolt text-success" style="font-size:.85rem;"></i>
-                            <span style="font-size:.78rem;font-weight:600;color:#16a34a;">Real-Time Sync</span>
+                            <i class="fas fa-bolt" style="font-size:.85rem;color:#15803d;"></i>
+                            <span style="font-size:.78rem;font-weight:600;color:#15803d;">Real-Time Sync</span>
                         </div>
                     </div>
 
@@ -505,7 +526,10 @@
                 {{-- Hero Image: shows on sm+, hidden on xs (replaced by hero-mobile-visual) --}}
                 <div class="col-12 col-sm-8 col-md-7 col-lg-6 order-2 mx-auto mx-lg-0 hero-image-col">
                     <div class="hero-image">
-                        <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Financial Dashboard Illustration">
+                        <picture>
+                            <source media="(max-width: 575.98px)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
+                            <img src="{{ asset('assets/img/elemen login.webp') }}" alt="SAKTI Financial Dashboard Illustration">
+                        </picture>
                     </div>
                 </div>
 
@@ -518,14 +542,14 @@
         <div class="container">
             <div class="text-center mb-4 mb-md-5">
                 <span class="badge rounded-pill px-3 py-2 mb-3 d-inline-block"
-                      style="background:#f0fdf4;color:#059669;font-size:0.75rem;font-weight:700;letter-spacing:.8px;border:1px solid #bbf7d0;">
+                      style="background:#f0fdf4;color:#047857;font-size:0.75rem;font-weight:700;letter-spacing:.8px;border:1px solid #bbf7d0;">
                     FITUR UNGGULAN
                 </span>
                 <h2 style="font-size:clamp(1.4rem,4vw,2rem);font-weight:800;color:#111827;margin-bottom:.75rem;">
                     Semua yang Anda Butuhkan
                 </h2>
-                <p class="mx-auto" style="max-width:480px;color:#6b7280;font-size:.9rem;">
-                    Platform lengkap untuk mengelola keuangan sekolah secara efisien dan transparan.
+                <p class="mx-auto" style="max-width:480px;color:#4b5563;font-size:.9rem;">
+                    Platform lengkap untuk mengelola keuangan sekolah secara efisien and transparan.
                 </p>
             </div>
             <div class="row g-3 g-md-4 justify-content-center">
@@ -627,7 +651,7 @@
     </footer>
 
     <!-- Bootstrap 5 JS Bundle (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <script>
         // Navbar scroll effect
@@ -638,7 +662,7 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
-        });
+        }, { passive: true });
 
         // Intersection Observer for feature cards animation
         const observer = new IntersectionObserver((entries) => {
