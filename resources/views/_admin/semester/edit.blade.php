@@ -32,6 +32,17 @@
             @if(session('error'))
             <div class="sakti-warning-box"><i class="fas fa-exclamation-triangle"></i> {{ session('error') }}</div>
             @endif
+            @if ($errors->any())
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: "Silakan periksa kembali isian form yang ditandai merah."
+                        });
+                    });
+                </script>
+            @endif
 
             @php
             $bulan = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
@@ -44,39 +55,43 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Tahun Ajaran</label>
-                            <select name="academic_year_id" class="form-control" required>
+                            <select name="academic_year_id" class="form-control @error('academic_year_id') is-invalid @enderror" required>
                                 @foreach($academicYears as $ay)
                                 <option value="{{ $ay->id }}" {{ old('academic_year_id', $semester->academic_year_id) == $ay->id ? 'selected' : '' }}>
                                     {{ $ay->name }}
                                 </option>
                                 @endforeach
                             </select>
+                            @error('academic_year_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Nama Semester</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name', $semester->name) }}" required>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $semester->name) }}" required>
+                            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Bulan Mulai</label>
-                            <select name="start_month" class="form-control" required>
+                            <select name="start_month" class="form-control @error('start_month') is-invalid @enderror" required>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ old('start_month', $semester->start_month) == $num ? 'selected' : '' }}>{{ $nama }}</option>
                                 @endforeach
                             </select>
+                            @error('start_month') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Bulan Akhir</label>
-                            <select name="end_month" class="form-control" required>
+                            <select name="end_month" class="form-control @error('end_month') is-invalid @enderror" required>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ old('end_month', $semester->end_month) == $num ? 'selected' : '' }}>{{ $nama }}</option>
                                 @endforeach
                             </select>
+                            @error('end_month') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                 </div>

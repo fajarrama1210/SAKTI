@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SemesterStoreRequest extends FormRequest
 {
@@ -23,11 +24,33 @@ class SemesterStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('id');
         return [
             'academic_year_id' => 'required|exists:academic_years,id',
-            'name'             => 'required|string|max:255',
-            'start_month'      => 'required|integer|between:1,12',
-            'end_month'        => 'required|integer|between:1,12',
+            'name'             => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('semesters', 'name')
+                    ->where('academic_year_id', $this->academic_year_id)
+                    ->ignore($id),
+            ],
+            'start_month'      => [
+                'required',
+                'integer',
+                'between:1,12',
+                Rule::unique('semesters', 'start_month')
+                    ->where('academic_year_id', $this->academic_year_id)
+                    ->ignore($id),
+            ],
+            'end_month'        => [
+                'required',
+                'integer',
+                'between:1,12',
+                Rule::unique('semesters', 'end_month')
+                    ->where('academic_year_id', $this->academic_year_id)
+                    ->ignore($id),
+            ],
             'is_active'        => 'nullable|boolean',
         ];
     }
@@ -62,6 +85,7 @@ class SemesterStoreRequest extends FormRequest
             'integer'  => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
             'between'  => \App\Entities\ResponseEntity::MSG_VAL_BETWEEN,
             'boolean'  => \App\Entities\ResponseEntity::MSG_VAL_BOOLEAN,
+            'unique'   => \App\Entities\ResponseEntity::MSG_VAL_UNIQUE,
         ];
     }
 }

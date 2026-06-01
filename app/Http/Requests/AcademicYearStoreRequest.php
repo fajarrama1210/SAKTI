@@ -16,8 +16,8 @@ class AcademicYearStoreRequest extends FormRequest
         $id = $this->route('id');
         return [
             'name' => 'required|string|max:20|unique:academic_years,name,' . $id,
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
+            'start_date' => 'required|date|unique:academic_years,start_date,' . $id,
+            'end_date' => 'required|date|after:start_date|unique:academic_years,end_date,' . $id,
             'is_active' => 'nullable|boolean',
         ];
     }

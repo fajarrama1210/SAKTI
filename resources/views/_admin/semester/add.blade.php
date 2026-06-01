@@ -32,11 +32,16 @@
             @if(session('error'))
             <div class="sakti-warning-box"><i class="fas fa-exclamation-triangle"></i> {{ session('error') }}</div>
             @endif
-            @if($errors->any())
-            <div class="sakti-warning-box">
-                <i class="fas fa-exclamation-circle"></i>
-                <ul class="mb-0 mt-1">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-            </div>
+            @if ($errors->any())
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: "Silakan periksa kembali isian form yang ditandai merah."
+                        });
+                    });
+                </script>
             @endif
 
             @php
@@ -49,7 +54,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Tahun Ajaran</label>
-                            <select name="academic_year_id" class="form-control" required>
+                            <select name="academic_year_id" class="form-control @error('academic_year_id') is-invalid @enderror" required>
                                 <option value="">-- Pilih Tahun Ajaran --</option>
                                 @foreach($academicYears as $ay)
                                 <option value="{{ $ay->id }}" {{ old('academic_year_id', $ay->is_active ? $ay->id : null) == $ay->id ? 'selected' : '' }}>
@@ -57,32 +62,36 @@
                                 </option>
                                 @endforeach
                             </select>
+                            @error('academic_year_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Nama Semester</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Contoh: Semester Ganjil" required>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Contoh: Semester Ganjil" required>
+                            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Bulan Mulai</label>
-                            <select name="start_month" class="form-control" required>
+                            <select name="start_month" class="form-control @error('start_month') is-invalid @enderror" required>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ old('start_month') == $num ? 'selected' : '' }}>{{ $nama }}</option>
                                 @endforeach
                             </select>
+                            @error('start_month') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Bulan Akhir</label>
-                            <select name="end_month" class="form-control" required>
+                            <select name="end_month" class="form-control @error('end_month') is-invalid @enderror" required>
                                 @foreach($bulan as $num => $nama)
                                 <option value="{{ $num }}" {{ old('end_month') == $num ? 'selected' : '' }}>{{ $nama }}</option>
                                 @endforeach
                             </select>
+                            @error('end_month') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                 </div>
