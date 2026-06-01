@@ -32,11 +32,16 @@
             @if(session('error'))
             <div class="sakti-warning-box"><i class="fas fa-exclamation-triangle"></i> {{ session('error') }}</div>
             @endif
-            @if($errors->any())
-            <div class="sakti-warning-box">
-                <i class="fas fa-exclamation-circle"></i>
-                <ul class="mb-0 mt-1">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-            </div>
+            @if ($errors->any())
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: "Silakan periksa kembali isian form yang ditandai merah."
+                        });
+                    });
+                </script>
             @endif
 
             <form action="{{ route('admin.payment-types.store') }}" method="POST">

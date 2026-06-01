@@ -113,8 +113,8 @@
                             <tr>
                                 <td class="text-center align-middle">{{ $enrollments->firstItem() + $index }}</td>
                                 <td class="text-center align-middle"><b style="color: var(--dark-text);">{{ $row->nisn }}</b></td>
-                                <td class="text-start align-middle">
-                                    <div class="d-flex align-items-center px-2">
+                                <td class="text-center align-middle">
+                                    <div class="d-flex align-items-center justify-content-center px-2">
                                         <div class="trx-detail-icon icon-user me-3" style="width: 32px; height: 32px; font-size: .75rem;">
                                             <i class="fas fa-user-graduate"></i>
                                         </div>
@@ -170,75 +170,6 @@
                                         </ul>
                                     </div>
 
-                                    @if ($row->status == 'aktif')
-                                    <!-- Modal Pindah Kelas -->
-                                    <div class="modal fade" id="modalPindah{{ $row->id }}" tabindex="-1" aria-labelledby="modalPindahLabel{{ $row->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content text-start">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title font-weight-bold" id="modalPindahLabel{{ $row->id }}">Pindah Kelas</h5>
-                                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                                <form action="{{ route('admin.enrollments.change-classroom', $row->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="modal-body text-start" style="white-space: normal;">
-                                                        <p class="text-sm mb-3">Pindahkan siswa <strong>{{ $row->student_name }}</strong> ke kelas lain pada tahun ajaran yang sama.</p>
-                                                        <div class="form-group text-start mb-0">
-                                                            <label class="form-control-label">Pilih Kelas Baru</label>
-                                                            <select name="classroom_id" class="form-control" required>
-                                                                <option value="">-- Pilih Kelas --</option>
-                                                                @foreach ($classrooms as $room)
-                                                                    <option value="{{ $room->id }}" {{ $row->classroom_id == $room->id ? 'selected' : '' }}>
-                                                                        {{ $room->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary mb-0" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-success mb-0">Simpan Perubahan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal Set DO -->
-                                    <div class="modal fade" id="modalDO{{ $row->id }}" tabindex="-1" aria-labelledby="modalDOLabel{{ $row->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content text-start">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title font-weight-bold" id="modalDOLabel{{ $row->id }}">Set Keluar / DO</h5>
-                                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                                                        <i class="fas fa-times"></i>
-                                                    </button>
-                                                </div>
-                                                <form action="{{ route('admin.enrollments.dropout', $row->id) }}" method="POST">
-                                                    @csrf
-                                                    <div class="modal-body text-start" style="white-space: normal;">
-                                                        <p class="text-sm mb-3">Atur status siswa <strong>{{ $row->student_name }}</strong> menjadi Keluar / DO. Tagihan yang belum dibayar di bulan-bulan berikutnya akan dibatalkan otomatis.</p>
-                                                        <div class="form-group text-start mb-3">
-                                                            <label class="form-control-label">Tanggal Keluar</label>
-                                                            <input type="date" name="exit_date" class="form-control" value="{{ date('Y-m-d') }}" required>
-                                                        </div>
-                                                        <div class="form-group text-start mb-0">
-                                                            <label class="form-control-label">Alasan Keluar</label>
-                                                            <textarea name="exit_reason" class="form-control" rows="3" placeholder="Contoh: Pindah sekolah, Lulus dini, dll." required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary mb-0" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-danger mb-0">Set DO / Keluar</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif
                                 </td>
                             </tr>
                                 
@@ -255,4 +186,77 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals Section -->
+    @foreach($enrollments as $row)
+        @if ($row->status == 'aktif')
+            <!-- Modal Pindah Kelas -->
+            <div class="modal fade" id="modalPindah{{ $row->id }}" tabindex="-1" aria-labelledby="modalPindahLabel{{ $row->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-start">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold" id="modalPindahLabel{{ $row->id }}">Pindah Kelas</h5>
+                            <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <form action="{{ route('admin.enrollments.change-classroom', $row->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body text-start" style="white-space: normal;">
+                                <p class="text-sm mb-3">Pindahkan siswa <strong>{{ $row->student_name }}</strong> ke kelas lain pada tahun ajaran yang sama.</p>
+                                <div class="form-group text-start mb-0">
+                                    <label class="form-control-label">Pilih Kelas Baru</label>
+                                    <select name="classroom_id" class="form-control" required>
+                                        <option value="">-- Pilih Kelas --</option>
+                                        @foreach ($classrooms as $room)
+                                            <option value="{{ $room->id }}" {{ $row->classroom_id == $room->id ? 'selected' : '' }}>
+                                                {{ $room->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary mb-0" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success mb-0">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Set DO -->
+            <div class="modal fade" id="modalDO{{ $row->id }}" tabindex="-1" aria-labelledby="modalDOLabel{{ $row->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-start">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold" id="modalDOLabel{{ $row->id }}">Set Keluar / DO</h5>
+                            <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <form action="{{ route('admin.enrollments.dropout', $row->id) }}" method="POST">
+                            @csrf
+                            <div class="modal-body text-start" style="white-space: normal;">
+                                <p class="text-sm mb-3">Atur status siswa <strong>{{ $row->student_name }}</strong> menjadi Keluar / DO. Tagihan yang belum dibayar di bulan-bulan berikutnya akan dibatalkan otomatis.</p>
+                                <div class="form-group text-start mb-3">
+                                    <label class="form-control-label">Tanggal Keluar</label>
+                                    <input type="date" name="exit_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                </div>
+                                <div class="form-group text-start mb-0">
+                                    <label class="form-control-label">Alasan Keluar</label>
+                                    <textarea name="exit_reason" class="form-control" rows="3" placeholder="Contoh: Pindah sekolah, Lulus dini, dll." required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary mb-0" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-danger mb-0">Set DO / Keluar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
 @endsection
