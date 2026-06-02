@@ -312,7 +312,11 @@
                         {{-- Siswa --}}
                         <td>
                             <div class="student-cell">
-                                <div class="student-avatar" style="background:{{ $avatarColor }};">{{ $initials }}</div>
+                                @if(!empty($bill->avatar))
+                                    <img src="{{ asset('storage/' . $bill->avatar) }}" alt="{{ $bill->student_name }}" class="student-avatar" style="object-fit: cover;">
+                                @else
+                                    <div class="student-avatar" style="background:{{ $avatarColor }};">{{ $initials }}</div>
+                                @endif
                                 <div>
                                     <div class="student-name">{{ $bill->student_name }}</div>
                                     <div class="student-class">

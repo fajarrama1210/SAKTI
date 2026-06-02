@@ -308,7 +308,11 @@
                         {{-- Siswa --}}
                         <td>
                             <div class="stu-cell">
-                                <div class="stu-avatar" style="background:{{ $aColor }};">{{ $initials }}</div>
+                                @if(!empty($student->avatar))
+                                    <img src="{{ asset('storage/' . $student->avatar) }}" alt="{{ $student->name }}" class="stu-avatar" style="object-fit: cover;">
+                                @else
+                                    <div class="stu-avatar" style="background:{{ $aColor }};">{{ $initials }}</div>
+                                @endif
                                 <div>
                                     <div class="stu-name">{{ $student->name }}</div>
                                     <div class="stu-nisn">

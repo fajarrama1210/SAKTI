@@ -2,6 +2,132 @@
 
 @push('styles')
     @include('_admin.layouts.sakti-custom')
+    <style>
+        /* Modern Segmented Control Pills */
+        .fin-type-toggle {
+            background-color: #f1f5f9 !important;
+            border: 1px solid #e2e8f0;
+            padding: 3px !important;
+            border-radius: 50px;
+            display: inline-flex;
+            gap: 2px;
+        }
+        .btn-toggle-pill {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            border-radius: 50px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .btn-toggle-pill:hover {
+            color: #334155;
+        }
+        .btn-toggle-pill.active {
+            background-color: #fff;
+            color: #059669;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Custom Input Groups & Fields */
+        .input-group-custom {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-group-custom i {
+            position: absolute;
+            left: 16px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .st-select-premium {
+            padding-left: 36px !important;
+            padding-right: 16px !important;
+            height: 38px;
+            border-radius: 50px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            outline: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        /* Custom arrow for select fields */
+        select.st-select-premium {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 10px 10px;
+            padding-right: 32px !important;
+        }
+        .st-select-premium:hover {
+            border-color: #cbd5e1;
+            background: #fff;
+        }
+        .st-select-premium:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+            background: #fff;
+        }
+
+        /* Premium Buttons */
+        .btn-filter-premium {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: #fff !important;
+            border: none;
+            font-weight: 700;
+            font-size: 0.78rem;
+            border-radius: 50px;
+            height: 38px;
+            padding: 0 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-filter-premium:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.25);
+        }
+        .btn-filter-premium:active {
+            transform: translateY(0);
+        }
+        .btn-reset-premium {
+            background: #f1f5f9;
+            color: #475569 !important;
+            border: 1px solid #e2e8f0;
+            font-weight: 700;
+            font-size: 0.78rem;
+            border-radius: 50px;
+            height: 38px;
+            padding: 0 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-reset-premium:hover {
+            background: #e2e8f0;
+            color: #1e293b !important;
+            text-decoration: none;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -30,8 +156,10 @@
                 <div class="sc-icon"><i class="fas fa-user-graduate"></i></div>
                 <div class="sc-label">Total Siswa</div>
                 <div class="sc-value">{{ $totalStudents }} Siswa</div>
-                <div class="mt-2" style="font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);">
-                    {{ $totalClassrooms }} Kelas / {{ $totalMajors }} Jurusan
+                <div class="mt-2 pt-2 border-top border-light d-flex justify-content-between align-items-center" style="font-size: .72rem; font-weight: 500; color: rgba(255,255,255,.9);">
+                    <span><i class="fas fa-circle me-1" style="font-size: .5rem; opacity: .8;"></i> Aktif: <strong>{{ $activeStudentsCount }}</strong></span>
+                    <span><i class="fas fa-graduation-cap me-1" style="font-size: .65rem; opacity: .8;"></i> Lulus: <strong>{{ $graduatedStudentsCount }}</strong></span>
+                    <span><i class="fas fa-sign-out-alt me-1" style="font-size: .65rem; opacity: .8;"></i> Keluar: <strong>{{ $leftStudentsCount }}</strong></span>
                 </div>
             </div>
         </div>
@@ -56,6 +184,127 @@
                 <div class="sc-value">Rp {{ number_format($totalOutstanding, 0, ',', '.') }}</div>
                 <div class="mt-2" style="font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);">
                     Harus ditagihkan ke siswa
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DYNAMIC FINANCIAL SUMMARY SECTION -->
+    <div class="card dashboard-card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                <div>
+                    <h5 class="section-title mb-0">
+                        <i class="fas fa-wallet me-2" style="color: var(--primary-green); opacity: .8;"></i>
+                        Ringkasan Finansial Sekolah
+                    </h5>
+                    <p class="text-sm text-muted mb-0">Laporan pemasukan, pengeluaran, dan sisa kas berdasarkan filter waktu.</p>
+                </div>
+                
+                <!-- Filter Form -->
+                <form action="{{ route('kepala-sekolah.dashboard') }}" method="GET" id="finFilterForm" class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
+                    <!-- Segmented Toggle Control -->
+                    <div class="fin-type-toggle">
+                        <button type="button" class="btn-toggle-pill {{ $filterType === 'month' ? 'active' : '' }}" data-val="month">Bulan</button>
+                        <button type="button" class="btn-toggle-pill {{ $filterType === 'semester' ? 'active' : '' }}" data-val="semester">Semester</button>
+                        <button type="button" class="btn-toggle-pill {{ $filterType === 'year' ? 'active' : '' }}" data-val="year">Tahun</button>
+                    </div>
+                    <input type="hidden" name="fin_filter_type" id="finFilterType" value="{{ $filterType }}">
+
+                    <!-- Month Input Group -->
+                    <div id="finMonthWrapper" class="filter-input-wrapper input-group-custom">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="month" name="fin_month" class="st-select-premium" style="width: 170px;" value="{{ $selectedMonth }}">
+                    </div>
+
+                    <!-- Semester Select Group -->
+                    <div id="finSemesterWrapper" class="filter-input-wrapper input-group-custom" style="display: none;">
+                        <i class="fas fa-graduation-cap"></i>
+                        <select name="fin_semester_id" class="st-select-premium" style="width: 250px;">
+                            @foreach($semestersList as $sem)
+                                <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
+                                    {{ $sem->academic_year_name }} - {{ $sem->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Year Select Group -->
+                    <div id="finYearWrapper" class="filter-input-wrapper input-group-custom" style="display: none;">
+                        <i class="fas fa-clock"></i>
+                        <select name="fin_year" class="st-select-premium" style="width: 160px;">
+                            @foreach($yearsList as $yr)
+                                <option value="{{ $yr }}" {{ $selectedYear == $yr ? 'selected' : '' }}>
+                                    Tahun {{ $yr }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn-filter-premium">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        
+                        <a href="{{ route('kepala-sekolah.dashboard') }}" class="btn-reset-premium">
+                            <i class="fas fa-undo"></i> Reset
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Financial Metrics Results -->
+            <div class="row">
+                <!-- TOTAL PEMASUKAN -->
+                <div class="col-xl-4 col-md-6 mb-3 mb-xl-0">
+                    <div class="summary-card sc-green h-100" style="min-height: 120px;">
+                        <div class="sc-icon"><i class="fas fa-arrow-down"></i></div>
+                        <div class="sc-label">Jumlah Pemasukan</div>
+                        <div class="sc-value">Rp {{ number_format($filteredIncome, 0, ',', '.') }}</div>
+                        <div class="mt-2" style="font-size: .75rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                            @if($filterType === 'month')
+                                Bulan {{ \Carbon\Carbon::parse($selectedMonth)->translatedFormat('F Y') }}
+                            @elseif($filterType === 'semester')
+                                Semester: {{ $semestersList->firstWhere('id', $selectedSemesterId)->academic_year_name ?? '' }} - {{ $semestersList->firstWhere('id', $selectedSemesterId)->name ?? '' }}
+                            @elseif($filterType === 'year')
+                                Tahun {{ $selectedYear }}
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOTAL PENGELUARAN -->
+                <div class="col-xl-4 col-md-6 mb-3 mb-xl-0">
+                    <div class="summary-card sc-red h-100" style="min-height: 120px;">
+                        <div class="sc-icon"><i class="fas fa-arrow-up"></i></div>
+                        <div class="sc-label">Jumlah Pengeluaran</div>
+                        <div class="sc-value">Rp {{ number_format($filteredExpense, 0, ',', '.') }}</div>
+                        <div class="mt-2" style="font-size: .75rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                            @if($filterType === 'month')
+                                Bulan {{ \Carbon\Carbon::parse($selectedMonth)->translatedFormat('F Y') }}
+                            @elseif($filterType === 'semester')
+                                Semester: {{ $semestersList->firstWhere('id', $selectedSemesterId)->academic_year_name ?? '' }} - {{ $semestersList->firstWhere('id', $selectedSemesterId)->name ?? '' }}
+                            @elseif($filterType === 'year')
+                                Tahun {{ $selectedYear }}
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SELISIH (SISA) -->
+                <div class="col-xl-4 col-md-12">
+                    <div class="summary-card {{ $filteredDifference >= 0 ? 'sc-purple' : 'sc-orange' }} h-100" style="min-height: 120px;">
+                        <div class="sc-icon">
+                            <i class="fas {{ $filteredDifference >= 0 ? 'fa-balance-scale-right' : 'fa-balance-scale-left' }}"></i>
+                        </div>
+                        <div class="sc-label">Selisih (Sisa)</div>
+                        <div class="sc-value">
+                            {{ $filteredDifference < 0 ? '-' : '' }} Rp {{ number_format(abs($filteredDifference), 0, ',', '.') }}
+                        </div>
+                        <div class="mt-2" style="font-size: .75rem; font-weight: 500; color: rgba(255,255,255,.8);">
+                            Status: <strong>{{ $filteredDifference >= 0 ? 'Surplus' : 'Defisit' }}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,6 +474,43 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // --- Financial filter toggle & button interaction ---
+        const finFilterType = document.getElementById('finFilterType');
+        const finMonthWrapper = document.getElementById('finMonthWrapper');
+        const finSemesterWrapper = document.getElementById('finSemesterWrapper');
+        const finYearWrapper = document.getElementById('finYearWrapper');
+        const toggleButtons = document.querySelectorAll('.btn-toggle-pill');
+
+        function toggleFinFilters() {
+            if (!finFilterType) return;
+            const val = finFilterType.value;
+            if (finMonthWrapper) finMonthWrapper.style.display = 'none';
+            if (finSemesterWrapper) finSemesterWrapper.style.display = 'none';
+            if (finYearWrapper) finYearWrapper.style.display = 'none';
+
+            if (val === 'month') {
+                if (finMonthWrapper) finMonthWrapper.style.display = 'flex';
+            } else if (val === 'semester') {
+                if (finSemesterWrapper) finSemesterWrapper.style.display = 'flex';
+            } else if (val === 'year') {
+                if (finYearWrapper) finYearWrapper.style.display = 'flex';
+            }
+        }
+
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                toggleButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (finFilterType) {
+                    finFilterType.value = this.getAttribute('data-val');
+                    toggleFinFilters();
+                }
+            });
+        });
+
+        // Initialize state
+        toggleFinFilters();
         // --- 1. Financial Chart (Income vs Expense) ---
         const financialCtx = document.getElementById('financialChart').getContext('2d');
         new Chart(financialCtx, {

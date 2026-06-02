@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class PrincipalController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         // 1. Card Stats
         $totalStudents = DB::table('students')->count();
@@ -20,7 +20,108 @@ class PrincipalController extends Controller
         $totalPaid = DB::table('payments')->sum('amount');
         $totalOutstanding = max(0, $totalBilled - $totalPaid);
 
-        // 2. Chart 1: Financial Performance (Last 6 Months)
+        // Student status stats
+        $statusStats = DB::table('students')
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+        $activeStudentsCount = $statusStats->get('aktif')->total ?? 0;
+        $graduatedStudentsCount = $statusStats->get('lulus')->total ?? 0;
+        $leftStudentsCount = $statusStats->get('keluar')->total ?? 0;
+
+        // 2. Financial Filter Logic
+        $filterType = $request->input('fin_filter_type', 'month');
+        $selectedMonth = $request->input('fin_month', date('Y-m'));
+        $selectedSemesterId = $request->input('fin_semester_id');
+        $selectedYear = $request->input('fin_year', date('Y'));
+
+        $filteredIncome = 0;
+        $filteredExpense = 0;
+
+        // Fetch semesters and years for select dropdowns
+        $semestersList = DB::table('semesters as s')
+            ->join('academic_years as ay', 's.academic_year_id', '=', 'ay.id')
+            ->select('s.id', 's.name', 'ay.name as academic_year_name')
+            ->orderBy('ay.start_date', 'desc')
+            ->orderBy('s.start_month', 'asc')
+            ->get();
+
+        $yearsList = DB::table('transactions')
+            ->selectRaw('YEAR(date) as year')
+            ->groupBy('year')
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+        
+        if ($yearsList->isEmpty()) {
+            $yearsList = collect([date('Y')]);
+        }
+
+        if ($filterType === 'month') {
+            $filteredIncome = DB::table('transactions')
+                ->where('type', 'income')
+                ->whereRaw('DATE_FORMAT(date, "%Y-%m") = ?', [$selectedMonth])
+                ->sum('amount');
+
+            $filteredExpense = DB::table('transactions')
+                ->where('type', 'expense')
+                ->whereRaw('DATE_FORMAT(date, "%Y-%m") = ?', [$selectedMonth])
+                ->sum('amount');
+        } elseif ($filterType === 'semester') {
+            if (!$selectedSemesterId && $semestersList->isNotEmpty()) {
+                $selectedSemesterId = $semestersList->first()->id;
+            }
+
+            if ($selectedSemesterId) {
+                $semester = DB::table('semesters')->where('id', $selectedSemesterId)->first();
+                if ($semester) {
+                    $academicYear = DB::table('academic_years')->where('id', $semester->academic_year_id)->first();
+                    if ($academicYear) {
+                        $start = $semester->start_month;
+                        $end = $semester->end_month;
+
+                        $queryIncome = DB::table('transactions')
+                            ->where('type', 'income')
+                            ->whereBetween('date', [$academicYear->start_date, $academicYear->end_date]);
+
+                        $queryExpense = DB::table('transactions')
+                            ->where('type', 'expense')
+                            ->whereBetween('date', [$academicYear->start_date, $academicYear->end_date]);
+
+                        if ($start <= $end) {
+                            $queryIncome->whereRaw('MONTH(date) BETWEEN ? AND ?', [$start, $end]);
+                            $queryExpense->whereRaw('MONTH(date) BETWEEN ? AND ?', [$start, $end]);
+                        } else {
+                            $queryIncome->where(function($q) use ($start, $end) {
+                                $q->whereRaw('MONTH(date) >= ?', [$start])
+                                  ->orWhereRaw('MONTH(date) <= ?', [$end]);
+                            });
+                            $queryExpense->where(function($q) use ($start, $end) {
+                                $q->whereRaw('MONTH(date) >= ?', [$start])
+                                  ->orWhereRaw('MONTH(date) <= ?', [$end]);
+                            });
+                        }
+
+                        $filteredIncome = $queryIncome->sum('amount');
+                        $filteredExpense = $queryExpense->sum('amount');
+                    }
+                }
+            }
+        } elseif ($filterType === 'year') {
+            $filteredIncome = DB::table('transactions')
+                ->where('type', 'income')
+                ->whereYear('date', $selectedYear)
+                ->sum('amount');
+
+            $filteredExpense = DB::table('transactions')
+                ->where('type', 'expense')
+                ->whereYear('date', $selectedYear)
+                ->sum('amount');
+        }
+
+        $filteredDifference = $filteredIncome - $filteredExpense;
+
+        // 3. Chart 1: Financial Performance (Last 6 Months)
         $chartLabels = [];
         $chartIncome = [];
         $chartExpense = [];
@@ -48,11 +149,11 @@ class PrincipalController extends Controller
             $chartExpense[] = $expense;
         }
 
-        // 3. Chart 2: SPP Bills Status (Paid vs Unpaid)
+        // 4. Chart 2: SPP Bills Status (Paid vs Unpaid)
         $paidBillsCount = DB::table('bills')->where('status', 'paid')->count();
         $unpaidBillsCount = DB::table('bills')->whereIn('status', ['unpaid', 'partial'])->count();
 
-        // 4. Chart 3: Student Distribution per Class
+        // 5. Chart 3: Student Distribution per Class
         $classroomStats = DB::table('students as s')
             ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
             ->select('c.name', DB::raw('count(s.id) as total'))
@@ -61,7 +162,7 @@ class PrincipalController extends Controller
         $classroomNames = $classroomStats->pluck('name')->toArray();
         $classroomStudentCounts = $classroomStats->pluck('total')->toArray();
 
-        // 5. Chart 4: Payment Methods Distribution
+        // 6. Chart 4: Payment Methods Distribution
         $methodStats = DB::table('payments')
             ->select('payment_method', DB::raw('count(*) as total'))
             ->groupBy('payment_method')
@@ -69,7 +170,7 @@ class PrincipalController extends Controller
         $paymentMethods = $methodStats->pluck('payment_method')->toArray();
         $paymentMethodCounts = $methodStats->pluck('total')->toArray();
 
-        // 6. Recent Payments (Last 5)
+        // 7. Recent Payments (Last 5)
         $recentPayments = DB::table('payments as p')
             ->join('bills as b', 'p.bill_id', '=', 'b.id')
             ->join('students as s', 'b.student_id', '=', 's.id')
@@ -78,7 +179,7 @@ class PrincipalController extends Controller
             ->limit(5)
             ->get();
 
-        // 7. Pending Letters (Last 5)
+        // 8. Pending Letters (Last 5)
         $pendingLetters = DB::table('letters as l')
             ->join('students as s', 'l.student_id', '=', 's.id')
             ->select('l.*', 's.name as student_name')
@@ -95,6 +196,18 @@ class PrincipalController extends Controller
             'totalBilled',
             'totalPaid',
             'totalOutstanding',
+            'activeStudentsCount',
+            'graduatedStudentsCount',
+            'leftStudentsCount',
+            'filterType',
+            'selectedMonth',
+            'selectedSemesterId',
+            'selectedYear',
+            'filteredIncome',
+            'filteredExpense',
+            'filteredDifference',
+            'semestersList',
+            'yearsList',
             'chartLabels',
             'chartIncome',
             'chartExpense',
@@ -144,7 +257,8 @@ class PrincipalController extends Controller
         $query = DB::table('students as s')
             ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
             ->join('majors as m', 'c.major_id', '=', 'm.id')
-            ->select('s.*', 'c.name as classroom_name', 'm.name as major_name', 'c.grade_level');
+            ->leftJoin('users as u', 'u.student_id', '=', 's.id')
+            ->select('s.*', 'c.name as classroom_name', 'm.name as major_name', 'c.grade_level', 'u.avatar');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -244,11 +358,13 @@ class PrincipalController extends Controller
         $query = DB::table('bills as b')
             ->join('students as s', 'b.student_id', '=', 's.id')
             ->join('classrooms as c', 's.classroom_id', '=', 'c.id')
+            ->leftJoin('users as u', 'u.student_id', '=', 's.id')
             ->select(
                 'b.*',
                 's.name as student_name',
                 's.nisn',
                 'c.name as classroom_name',
+                'u.avatar',
                 DB::raw('COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.bill_id = b.id), 0) as paid_amount')
             );
 
