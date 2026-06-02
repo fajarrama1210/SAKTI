@@ -23,6 +23,44 @@
         </div>
     </div>
 
+    <!-- FILTER -->
+    <div class="card dashboard-card mb-4 border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form method="GET" action="{{ route('admin.schedules.index') }}" class="row align-items-end">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Filter Jurusan</label>
+                    <select name="major_id" id="filter_major" class="form-control select2">
+                        <option value="">-- Semua Jurusan --</option>
+                        @foreach ($majors as $m)
+                            <option value="{{ $m->id }}"
+                                {{ ($filters['major_id'] ?? '') == $m->id ? 'selected' : '' }}>
+                                {{ $m->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="form-control-label text-xs font-weight-bold text-sakti-green text-uppercase opacity-8">Filter Kelas</label>
+                    <select name="classroom_id" id="filter_classroom" class="form-control select2">
+                        <option value="">-- Semua Kelas --</option>
+                        @foreach ($classrooms as $c)
+                            <option value="{{ $c->id }}" data-major-id="{{ $c->major_id }}"
+                                {{ ($filters['classroom_id'] ?? '') == $c->id ? 'selected' : '' }}>
+                                {{ $c->grade_level }} – {{ $c->name }} ({{ $c->major_name }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-sakti-primary w-100 mb-0">
+                        <i class="fas fa-filter me-1"></i> Filter
+                    </button>
+                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-light w-100 mb-0">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card dashboard-card">
@@ -142,3 +180,70 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function () {
+    const $majorSelect = $('#filter_major');
+    const $classroomSelect = $('#filter_classroom');
+
+    if ($majorSelect.length && $classroomSelect.length) {
+        // Store all original classroom options
+        const allClassrooms = [];
+        $classroomSelect.find('option').each(function () {
+            const $opt = $(this);
+            allClassrooms.push({
+                value: $opt.val(),
+                text: $opt.text(),
+                majorId: $opt.attr('data-major-id')
+            });
+        });
+
+        function updateClassrooms() {
+            const selectedMajorId = $majorSelect.val();
+            const currentSelectedValue = $classroomSelect.val();
+
+            $classroomSelect.empty();
+            
+            // Add default option
+            $classroomSelect.append('<option value="">-- Semua Kelas --</option>');
+
+            allClassrooms.forEach(classroom => {
+                if (!classroom.value) return; // skip placeholder
+                if (!selectedMajorId || classroom.majorId == selectedMajorId) {
+                    const $opt = $('<option></option>')
+                        .val(classroom.value)
+                        .text(classroom.text)
+                        .attr('data-major-id', classroom.majorId);
+                    if (classroom.value == currentSelectedValue) {
+                        $opt.attr('selected', 'selected');
+                    }
+                    $classroomSelect.append($opt);
+                }
+            });
+
+            // Trigger change for select2 update
+            if ($classroomSelect.hasClass('select2')) {
+                $classroomSelect.trigger('change.select2');
+            }
+        }
+
+        $majorSelect.on('change', function () {
+            // Reset classroom selection if it doesn't match selected major
+            const selectedMajorId = $(this).val();
+            const $selectedOpt = $classroomSelect.find('option:selected');
+            if (selectedMajorId && $selectedOpt.length && $selectedOpt.attr('data-major-id') !== selectedMajorId) {
+                $classroomSelect.val('');
+            }
+            updateClassrooms();
+            if ($classroomSelect.hasClass('select2')) {
+                $classroomSelect.trigger('change.select2');
+            }
+        });
+
+        // Initialize options on load
+        updateClassrooms();
+    }
+});
+</script>
+@endpush

@@ -10,9 +10,9 @@ use Carbon\Carbon;
 
 class ScheduleUseCase
 {
-    public function getPaginated($perPage = 10)
+    public function getPaginated($perPage = 10, array $filters = [])
     {
-        return DB::table(DatabaseEntity::TBL_SCHEDULES . ' as s')
+        $query = DB::table(DatabaseEntity::TBL_SCHEDULES . ' as s')
             ->join(DatabaseEntity::TBL_CLASSROOMS . ' as c', 's.classroom_id', '=', 'c.id')
             ->select(
                 's.id',
@@ -25,10 +25,20 @@ class ScheduleUseCase
                 's.room',
                 's.teacher_name',
                 'c.name as classroom_name'
-            )
-            ->orderByRaw("FIELD(s.day, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday') ASC")
+            );
+
+        if (!empty($filters['major_id'])) {
+            $query->where('c.major_id', $filters['major_id']);
+        }
+
+        if (!empty($filters['classroom_id'])) {
+            $query->where('s.classroom_id', $filters['classroom_id']);
+        }
+
+        return $query->orderByRaw("FIELD(s.day, 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday') ASC")
             ->orderBy('s.start_time', 'asc')
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function getAll()

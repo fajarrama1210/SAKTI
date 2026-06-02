@@ -8,22 +8,31 @@ use App\UseCases\ClassroomUseCase;
 use App\Http\Requests\ScheduleStoreRequest;
 use App\Http\Requests\ScheduleUpdateRequest;
 use App\Entities\ResponseEntity;
+use App\UseCases\MajorUseCase;
+use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     protected $scheduleUseCase;
     protected $classroomUseCase;
+    protected $majorUseCase;
 
-    public function __construct(ScheduleUseCase $scheduleUseCase, ClassroomUseCase $classroomUseCase)
+    public function __construct(ScheduleUseCase $scheduleUseCase, ClassroomUseCase $classroomUseCase, MajorUseCase $majorUseCase)
     {
         $this->scheduleUseCase = $scheduleUseCase;
         $this->classroomUseCase = $classroomUseCase;
+        $this->majorUseCase = $majorUseCase;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $schedules = $this->scheduleUseCase->getPaginated();
-        return view('_admin.schedule.list', compact('schedules'));
+        $filters = $request->only(['major_id', 'classroom_id']);
+        $schedules = $this->scheduleUseCase->getPaginated(10, $filters);
+        
+        $majors = $this->majorUseCase->getAll();
+        $classrooms = $this->classroomUseCase->getAll();
+
+        return view('_admin.schedule.list', compact('schedules', 'majors', 'classrooms', 'filters'));
     }
 
     public function create()

@@ -23,7 +23,7 @@ class ClassroomUseCase
     {
         return DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
             ->join(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
-            ->select('c.id', 'c.name', 'c.grade_level', 'm.name as major_name')
+            ->select('c.id', 'c.name', 'c.grade_level', 'c.major_id', 'm.name as major_name')
             ->orderBy('c.grade_level', 'asc')
             ->orderBy('c.name', 'asc')
             ->get();
