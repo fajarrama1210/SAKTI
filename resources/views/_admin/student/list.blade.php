@@ -43,17 +43,16 @@
                         Data Seluruh Siswa
                     </h3>
                     
-                    {{-- Search Form --}}
-                    <form action="{{ route('admin.students.index') }}" method="GET" class="d-flex align-items-center gap-2">
+                    <form action="{{ route('admin.students.index') }}" method="GET" class="d-flex align-items-center gap-2 m-0">
                         <div class="position-relative" style="width: 250px;">
-                            <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nama, NISN, NIK..." value="{{ request('search') }}" style="border-radius: 50px; padding-left: 30px; height: 35px; border: 1.5px solid #e2e8f0; font-size: 0.8rem;">
+                            <input type="text" name="search" class="form-control form-control-sm m-0" placeholder="Cari nama, NISN, NIK..." value="{{ request('search') }}" style="border-radius: 50px; padding-left: 30px; height: 35px; border: 1.5px solid #e2e8f0; font-size: 0.8rem; margin: 0;">
                             <i class="fas fa-search position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.8rem;"></i>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-success" style="border-radius: 50px; height: 35px; padding: 0 15px; font-size: 0.78rem; font-weight: 700; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border: none; margin-bottom: 0;">
+                        <button type="submit" class="btn btn-sm btn-success d-inline-flex align-items-center justify-content-center" style="border-radius: 50px; height: 35px; padding: 0 15px; font-size: 0.78rem; font-weight: 700; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border: none; margin: 0 !important; line-height: 1; vertical-align: middle;">
                             Cari
                         </button>
                         @if(request('search'))
-                            <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center justify-content-center" style="border-radius: 50px; height: 35px; padding: 0 15px; font-size: 0.78rem; font-weight: 700; border: 1.5px solid #e2e8f0; color: #475569;">
+                            <a href="{{ route('admin.students.index') }}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center justify-content-center" style="border-radius: 50px; height: 35px; padding: 0 15px; font-size: 0.78rem; font-weight: 700; border: 1.5px solid #e2e8f0; color: #475569; margin: 0 !important; line-height: 1; vertical-align: middle;">
                                 Reset
                             </a>
                         @endif
