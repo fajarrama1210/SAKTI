@@ -368,7 +368,7 @@ function openQris(billId, amount, label) {
     showState('loading');
     bsModal.show();
 
-    fetch("{{ url('student/bills') }}/" + billId + "/pay-qris", {
+    fetch("/student/bills/" + billId + "/pay-qris", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -475,7 +475,7 @@ function stopTimer() {
 function startPolling(billId) {
     stopPolling();
     pollInterval = setInterval(() => {
-        fetch("{{ url('student/bills') }}/" + billId + "/payment-status", {
+        fetch("/student/bills/" + billId + "/payment-status", {
             headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
         })
         .then(res => res.json())
