@@ -40,7 +40,9 @@ class StudentUseCase
             ->get();
     }
 
-    public function store(array $data): array
+    private $activeAcademicYear = null;
+
+    public function store(array $data, bool $syncBills = true): array
     {
         DB::beginTransaction();
         try {
@@ -62,7 +64,10 @@ class StudentUseCase
             $studentId = DB::getPdo()->lastInsertId();
 
             // OTOMATISASI PENEMPATAN: Masukkan ke Tahun Ajaran Aktif
-            $activeAY = DB::table(DatabaseEntity::TBL_ACADEMIC_YEARS)->where('is_active', true)->first();
+            if ($this->activeAcademicYear === null) {
+                $this->activeAcademicYear = DB::table(DatabaseEntity::TBL_ACADEMIC_YEARS)->where('is_active', true)->first();
+            }
+            $activeAY = $this->activeAcademicYear;
             if ($activeAY) {
                 DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)->insert([
                     'student_id' => $studentId,
@@ -75,8 +80,10 @@ class StudentUseCase
                 ]);
 
                 // GENERATE BILLS UNTUK SISWA BARU DI TAHUN AJARAN AKTIF
-                $billUseCase = app(\App\UseCases\BillUseCase::class);
-                $billUseCase->syncBillsForStudent($studentId, $activeAY->id);
+                if ($syncBills) {
+                    $billUseCase = app(\App\UseCases\BillUseCase::class);
+                    $billUseCase->syncBillsForStudent($studentId, $activeAY->id);
+                }
             }
 
             // BUAT AKUN USER UNTUK SISWA SECARA OTOMATIS
@@ -89,7 +96,7 @@ class StudentUseCase
             DB::table('users')->insert([
                 'name' => $data['name'],
                 'email' => $email,
-                'password' => bcrypt($data['nisn']), // Password default adalah NISN
+                'password' => password_hash($data['nisn'], PASSWORD_BCRYPT, ['cost' => 4]), // Password default adalah NISN
                 'role' => 'student',
                 'student_id' => $studentId,
                 'created_at' => now(),
@@ -98,7 +105,7 @@ class StudentUseCase
 
             DB::commit();
 
-            return ['status' => true];
+            return ['status' => true, 'student_id' => $studentId];
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('StudentStore Error: '.$e->getMessage());

@@ -276,6 +276,71 @@ class BillUseCase
     }
 
     /**
+     * Sinkronisasi tagihan untuk banyak siswa sekaligus (optimal untuk import massal Excel)
+     */
+    public function syncBillsForStudents(array $studentIds, $academicYearId): array
+    {
+        if (empty($studentIds)) {
+            return ['status' => true, 'count' => 0];
+        }
+
+        DB::beginTransaction();
+        try {
+            $semesters = DB::table(DatabaseEntity::TBL_SEMESTERS . ' as sm')
+                ->join(DatabaseEntity::TBL_ACADEMIC_YEARS . ' as ay', 'sm.academic_year_id', '=', 'ay.id')
+                ->select('sm.*', 'ay.start_date', 'ay.end_date')
+                ->where('sm.academic_year_id', $academicYearId)
+                ->get();
+            if ($semesters->isEmpty()) {
+                DB::rollBack();
+                return ['status' => true, 'count' => 0];
+            }
+
+            $students = DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS . ' as e')
+                ->join(DatabaseEntity::TBL_STUDENTS . ' as s', 'e.student_id', '=', 's.id')
+                ->join(DatabaseEntity::TBL_CLASSROOMS . ' as c', 'e.classroom_id', '=', 'c.id')
+                ->select('s.id as student_id', 's.family_card_number', 'c.grade_level', 'c.major_id')
+                ->whereIn('e.student_id', $studentIds)
+                ->where('e.academic_year_id', $academicYearId)
+                ->where('e.status', 'aktif')
+                ->get();
+
+            if ($students->isEmpty()) {
+                DB::rollBack();
+                return ['status' => true, 'count' => 0];
+            }
+
+            $paymentTypes = DB::table(DatabaseEntity::TBL_PAYMENT_TYPES)->get();
+            $allRates = DB::table(DatabaseEntity::TBL_PAYMENT_RATES)->where('academic_year_id', $academicYearId)->get();
+
+            // Pre-load all existing bills for these students to prevent N+1 queries
+            $existingBills = DB::table(DatabaseEntity::TBL_BILLS)
+                ->whereIn('student_id', $studentIds)
+                ->where('academic_year_id', $academicYearId)
+                ->select('student_id', 'month', 'year')
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    return [$item->student_id . '-' . $item->month . '-' . $item->year => true];
+                })->toArray();
+
+            $generatedCount = 0;
+            foreach ($students as $student) {
+                foreach ($semesters as $semester) {
+                    $monthsWithYear = $this->getMonthsWithYear($semester);
+                    $generatedCount += $this->generateMissingBills($student, $semester, $monthsWithYear, $paymentTypes, $allRates, $existingBills);
+                }
+            }
+
+            DB::commit();
+            return ['status' => true, 'count' => $generatedCount];
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('SyncBillsForStudents Error: ' . $e->getMessage());
+            return ['status' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
      * Helper privat untuk membuat tagihan yang belum ada (Dry Logic)
      * Bug #1 Fix: is_monthly=false hanya di-generate pada bulan PERTAMA semester.
      */

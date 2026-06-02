@@ -109,6 +109,10 @@ class StudentController extends Controller
 
     public function importExcel(Request $request)
     {
+        // Set limit yang aman untuk import data besar
+        ini_set('memory_limit', '512M');
+        set_time_limit(180);
+
         $request->validate([
             'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
         ], [

@@ -19,9 +19,12 @@ class StudentImport implements ToCollection, WithHeadingRow
         $this->studentUseCase = $studentUseCase;
     }
 
+    private $classroomCache = [];
+
     public function collection(Collection $rows)
     {
         $rowNumber = 1; // Baris 1 adalah header
+        $importedStudentIds = [];
 
         DB::beginTransaction();
 
@@ -63,11 +66,25 @@ class StudentImport implements ToCollection, WithHeadingRow
                     'classroom_id'       => $classroomId,
                 ];
 
-                $result = $this->studentUseCase->store($data);
+                $result = $this->studentUseCase->store($data, false);
 
                 if (!$result['status']) {
                     $friendlyMessage = $this->translateErrorMessage($result['message'] ?? 'Gagal disimpan');
                     $this->addError($rowNumber, $friendlyMessage . " (NISN: {$data['nisn']})");
+                } else {
+                    $importedStudentIds[] = $result['student_id'];
+                }
+            }
+
+            // Jalankan sinkronisasi tagihan secara massal untuk semua siswa yang diimport
+            if (!empty($importedStudentIds) && empty($this->importErrors)) {
+                $activeAY = DB::table(DatabaseEntity::TBL_ACADEMIC_YEARS)->where('is_active', true)->first();
+                if ($activeAY) {
+                    $billUseCase = app(\App\UseCases\BillUseCase::class);
+                    $syncResult = $billUseCase->syncBillsForStudents($importedStudentIds, $activeAY->id);
+                    if (!$syncResult['status']) {
+                        $this->addError("Sistem", "Gagal sinkronisasi tagihan siswa: " . ($syncResult['message'] ?? 'Unknown error'));
+                    }
                 }
             }
 
@@ -113,10 +130,19 @@ class StudentImport implements ToCollection, WithHeadingRow
     {
         if (!$grade || !$majorName) return null;
 
-        return DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
+        $key = "{$grade}-{$majorName}";
+        if (array_key_exists($key, $this->classroomCache)) {
+            return $this->classroomCache[$key];
+        }
+
+        $id = DB::table(DatabaseEntity::TBL_CLASSROOMS . ' as c')
             ->join(DatabaseEntity::TBL_MAJORS . ' as m', 'c.major_id', '=', 'm.id')
             ->where('c.grade_level', $grade)
             ->where('m.name', $majorName)
             ->value('c.id');
+
+        $this->classroomCache[$key] = $id;
+
+        return $id;
     }
 }
