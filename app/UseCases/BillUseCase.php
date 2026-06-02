@@ -580,12 +580,23 @@ class BillUseCase
 
             $refNumber = $data['reference_number'] ?? null;
 
+            $rawDate = $data['payment_date'] ?? null;
+            if ($rawDate) {
+                if (strlen($rawDate) === 10) {
+                    $payDate = \Carbon\Carbon::parse($rawDate)->setTimeFrom(now())->toDateTimeString();
+                } else {
+                    $payDate = \Carbon\Carbon::parse($rawDate)->toDateTimeString();
+                }
+            } else {
+                $payDate = now()->toDateTimeString();
+            }
+
             // 3. Insert payment record
             $paymentId = DB::table(DatabaseEntity::TBL_PAYMENTS)->insertGetId([
                 'bill_id'          => $billId,
                 'amount'           => $payAmount,
                 'payment_method'   => $data['payment_method'],
-                'payment_date'     => $data['payment_date'] ?? now()->toDateString(),
+                'payment_date'     => $payDate,
                 'reference_number' => $refNumber,
                 'verified_by'      => $data['verified_by'] ?? null,
                 'notes'            => $data['notes'] ?? null,
@@ -595,7 +606,6 @@ class BillUseCase
 
             // Jika nomor referensi dikosongkan, generate otomatis oleh sistem
             if (empty($refNumber)) {
-                $payDate = $data['payment_date'] ?? now()->toDateString();
                 $datePrefix = date('Ymd', strtotime($payDate));
                 $paddedId = str_pad($paymentId, 5, '0', STR_PAD_LEFT);
 
@@ -674,7 +684,7 @@ class BillUseCase
             }
             
             DB::table(DatabaseEntity::TBL_TRANSACTIONS)->insert([
-                'date'        => $data['payment_date'] ?? now()->toDateString(),
+                'date'        => $payDate,
                 'type'        => 'income',
                 'category'    => 'Pembayaran',
                 'description' => 'Pembayaran ' . $monthName . $paymentTypeDesc . ' - ' . $studentInfo,
@@ -735,7 +745,7 @@ class BillUseCase
                     'bill_id'          => $sibBill->id,
                     'amount'           => $sibRemaining,
                     'payment_method'   => 'other',
-                    'payment_date'     => $data['payment_date'] ?? now()->toDateString(),
+                    'payment_date'     => $payDate,
                     'reference_number' => 'REF-' . $mainPaymentId,
                     'verified_by'      => $data['verified_by'] ?? null,
                     'notes'            => 'Digratiskan (Diskon Saudara se-KK dari Bill ID: ' . $mainBill->id . ')',

@@ -533,7 +533,7 @@
                     </div>
                     <div class="info-block" style="margin-top:18px;">
                         <label>Tanggal Pembayaran</label>
-                        <div class="value">{{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d F Y') }}</div>
+                        <div class="value">{{ \Carbon\Carbon::parse($payment->payment_date)->translatedFormat('d F Y, H:i') }} WIB</div>
                     </div>
                     <div class="info-block" style="margin-top:18px;">
                         <label>Metode Pembayaran</label>
@@ -623,7 +623,7 @@
         {{-- ===== FOOTER ===== --}}
         <div class="invoice-footer">
             <div class="footer-note">
-                Dicetak pada: <strong>{{ now()->translatedFormat('d F Y, H:i') }}</strong><br>
+                Dicetak pada: <strong>{{ now()->translatedFormat('d F Y, H:i') }} WIB</strong><br>
                 Dokumen ini sah sebagai bukti pembayaran resmi SAKTI.
             </div>
             <div class="stamp-area">

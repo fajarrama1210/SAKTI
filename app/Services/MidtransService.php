@@ -291,7 +291,7 @@ class MidtransService
                 'bill_id'          => $bill->id,
                 'amount'           => $payAmount,
                 'payment_method'   => 'qris',
-                'payment_date'     => now()->toDateString(),
+                'payment_date'     => now()->toDateTimeString(),
                 'reference_number' => $transactionId,
                 'verified_by'      => null,
                 'notes'            => 'Pembayaran QRIS via Midtrans. Order: ' . $order->order_id,
@@ -330,7 +330,7 @@ class MidtransService
 
             $bulan = \Carbon\Carbon::create()->month($bill->month)->translatedFormat('F');
             DB::table(DatabaseEntity::TBL_TRANSACTIONS)->insert([
-                'date'        => now()->toDateString(),
+                'date'        => now()->toDateTimeString(),
                 'type'        => 'income',
                 'category'    => 'SPP',
                 'description' => 'QRIS: SPP ' . $bulan . ' ' . $bill->year . ' - ' . $bill->student_name,
