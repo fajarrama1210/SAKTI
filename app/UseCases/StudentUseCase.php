@@ -10,14 +10,24 @@ use Illuminate\Support\Str;
 
 class StudentUseCase
 {
-    public function getPaginated($perPage = 10)
+    public function getPaginated($perPage = 10, $search = null)
     {
-        return DB::table(DatabaseEntity::TBL_STUDENTS.' as s')
+        $query = DB::table(DatabaseEntity::TBL_STUDENTS.' as s')
             ->join(DatabaseEntity::TBL_CLASSROOMS.' as c', 's.classroom_id', '=', 'c.id')
             ->join(DatabaseEntity::TBL_MAJORS.' as m', 'c.major_id', '=', 'm.id')
             ->select('s.id', 's.nisn', 's.id_number', 's.name', 's.family_card_number', 's.status', 'c.grade_level', 'c.name as classroom_name', 'm.name as major_name')
-            ->orderBy('s.id', 'desc')
-            ->paginate($perPage);
+            ->orderBy('s.id', 'desc');
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('s.name', 'LIKE', "%{$search}%")
+                    ->orWhere('s.nisn', 'LIKE', "%{$search}%")
+                    ->orWhere('s.id_number', 'LIKE', "%{$search}%")
+                    ->orWhere('s.family_card_number', 'LIKE', "%{$search}%");
+            });
+        }
+
+        return $query->paginate($perPage);
     }
 
     /**

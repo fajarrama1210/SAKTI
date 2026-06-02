@@ -24,9 +24,10 @@ class StudentController extends Controller
         $this->classroomUseCase = $classroomUseCase;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $students = $this->studentUseCase->getPaginated();
+        $search = $request->input('search');
+        $students = $this->studentUseCase->getPaginated(10, $search)->withQueryString();
         return view('_admin.student.list', compact('students'));
     }
 
