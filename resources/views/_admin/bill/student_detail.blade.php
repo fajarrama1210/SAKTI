@@ -249,7 +249,7 @@
                 style="z-index: 1;">
                 <div>
                     <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
-                        <i class="fas fa-user-circle me-2"></i> Detail Pembayaran SPP
+                        <i class="fas fa-user-circle me-2"></i> Detail Pembayaran
                     </h3>
                     <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
                         Kelola tagihan dan catat pembayaran untuk siswa ini.
@@ -325,161 +325,168 @@
                         class="card-header bg-white border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="section-title mb-0">
                             <i class="fas fa-calendar-alt me-2" style="color: var(--primary-green); opacity: .7;"></i>
-                            Kalender SPP
+                            Riwayat Tagihan &amp; Pembayaran
                         </h3>
                         <span class="badge"
                             style="background: rgba(45,206,137,.15); color: #2dce89; font-weight: 600; padding: 6px 12px; font-size: 0.8rem;">{{ $bills->first()->academic_year_name ?? '-' }}</span>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table class="table letters-table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Periode</th>
-                                        <th class="text-center">Tagihan</th>
-                                        <th class="text-center">Progres</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $currentMonth = now()->month;
-                                        $currentYear = now()->year;
-                                    @endphp
-                                    @forelse($bills as $bill)
-                                        @php
-                                            $isCurrentMonth =
-                                                $bill->month == $currentMonth && $bill->year == $currentYear;
-                                            $isPastDue =
-                                                $bill->status !== 'paid' &&
-                                                \Carbon\Carbon::parse($bill->due_date)->isPast();
-                                            $paidAmt = $bill->paid_amount ?? 0;
-                                            $remaining = $bill->total_amount - $paidAmt;
-                                            $pct =
-                                                $bill->total_amount > 0
-                                                    ? min(100, round(($paidAmt / $bill->total_amount) * 100))
-                                                    : 0;
-                                        @endphp
-                                        <tr class="bill-row {{ $isCurrentMonth ? 'bg-light' : '' }}">
-                                            <td class="text-center align-middle">
-                                                <span class="text-sm font-weight-bold text-dark">
-                                                    {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
-                                                </span>
-                                                @if ($isCurrentMonth)
-                                                    <span class="badge"
-                                                        style="background: rgba(94, 114, 228, 0.1); color: #5e72e4; font-weight: 600; font-size: 0.65rem; margin-left: 6px;">Bulan
-                                                        Ini</span>
-                                                @endif
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span class="text-dark font-weight-bold">Rp
-                                                    {{ number_format($bill->total_amount, 0, ',', '.') }}</span>
-                                            </td>
-                                            <td class="align-middle text-center" style="min-width:130px;">
-                                                @if ($bill->status === 'paid')
-                                                    <div class="progress-cicilan">
-                                                        <div class="fill bg-success" style="width:100%"></div>
-                                                    </div>
-                                                    <small class="text-success font-weight-bold">Lunas</small>
-                                                @elseif($bill->status === 'partial')
-                                                    <div class="progress-cicilan">
-                                                        <div class="fill"
-                                                            style="width:{{ $pct }}%;background:linear-gradient(90deg,#f7931e,#2dce89)">
-                                                        </div>
-                                                    </div>
-                                                    <small class="text-warning font-weight-bold">{{ $pct }}% —
-                                                        Sisa Rp {{ number_format($remaining, 0, ',', '.') }}</small>
-                                                @else
-                                                    <div class="progress-cicilan">
-                                                        <div class="fill bg-danger" style="width:0%"></div>
-                                                    </div>
-                                                    <small class="text-muted">Belum ada cicilan</small>
-                                                @endif
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                @if ($bill->status === 'paid')
-                                                    <span class="badge badge-paid px-2 py-1"><i
-                                                            class="fas fa-check me-1"></i>Lunas</span>
-                                                @elseif($bill->status === 'partial')
-                                                    <span class="badge badge-partial px-2 py-1"><i
-                                                            class="fas fa-clock me-1"></i>Dicicil</span>
-                                                @elseif($bill->status === 'cancelled')
-                                                    <span class="badge bg-secondary px-2 py-1"><i
-                                                            class="fas fa-ban me-1"></i>Batal</span>
-                                                @elseif($isPastDue)
-                                                    <span class="badge badge-late px-2 py-1"><i
-                                                            class="fas fa-exclamation-triangle me-1"></i>Terlambat</span>
-                                                @else
-                                                    <span class="badge badge-unpaid px-2 py-1"><i
-                                                            class="fas fa-times me-1"></i>Belum Bayar</span>
-                                                @endif
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                @if ($bill->status === 'paid')
-                                                    @php
-                                                        $lastPayment = \Illuminate\Support\Facades\DB::table('payments')
-                                                            ->where('bill_id', $bill->id)
-                                                            ->orderByDesc('payment_date')
-                                                            ->first();
-                                                    @endphp
-                                                    <div class="d-flex gap-1 justify-content-center">
-                                                        <span class="text-success text-sm"><i
-                                                                class="fas fa-check-double me-1"></i>Verified</span>
-                                                        @if ($lastPayment)
-                                                            <a href="{{ route('admin.spp.invoice', $lastPayment->id) }}"
-                                                                class="btn btn-sm btn-outline-info mb-0" target="_blank"
-                                                                title="Lihat Invoice">
-                                                                <i class="fas fa-file-invoice"></i>
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                @elseif($bill->status === 'cancelled')
-                                                    <span class="text-secondary text-sm"><i
-                                                            class="fas fa-minus-circle me-1"></i>Cancelled</span>
-                                                @elseif($bill->status === 'partial')
-                                                    @php
-                                                        $lastPayment = \Illuminate\Support\Facades\DB::table('payments')
-                                                            ->where('bill_id', $bill->id)
-                                                            ->orderByDesc('payment_date')
-                                                            ->first();
-                                                    @endphp
-                                                    <div class="d-flex gap-1 justify-content-center flex-wrap">
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-sakti-primary btn-pay mb-0"
-                                                            data-id="{{ $bill->id }}"
-                                                            data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
-                                                            data-total="{{ $bill->total_amount }}"
-                                                            data-paid="{{ $paidAmt }}"
-                                                            data-remaining="{{ $remaining }}">
-                                                            <i class="fas fa-money-bill-wave me-1"></i>Lanjut Cicil
-                                                        </button>
-                                                        @if ($lastPayment)
-                                                            <a href="{{ route('admin.spp.invoice', $lastPayment->id) }}"
-                                                                class="btn btn-sm btn-outline-info mb-0" target="_blank"
-                                                                title="Lihat Invoice">
-                                                                <i class="fas fa-file-invoice"></i>
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                @else
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-sakti-primary btn-pay mb-0"
-                                                        data-id="{{ $bill->id }}"
-                                                        data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
-                                                        data-total="{{ $bill->total_amount }}"
-                                                        data-paid="{{ $paidAmt }}"
-                                                        data-remaining="{{ $remaining }}">
-                                                        <i class="fas fa-money-bill-wave me-1"></i>Bayar
-                                                    </button>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <x-empty-state />
-                                    @endforelse
-                                </tbody>
-                            </table>
+                             <table class="table letters-table align-items-center mb-0">
+                                 <thead>
+                                     <tr>
+                                         <th class="text-center">Periode</th>
+                                         <th class="text-center">Jenis Pembayaran</th>
+                                         <th class="text-center">Tagihan</th>
+                                         <th class="text-center">Progres</th>
+                                         <th class="text-center">Status</th>
+                                         <th class="text-center">Aksi</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     @php
+                                         $currentMonth = now()->month;
+                                         $currentYear = now()->year;
+                                         $hasItems = false;
+                                     @endphp
+                                     @foreach($bills as $bill)
+                                         @php
+                                             $isCurrentMonth =
+                                                 $bill->month == $currentMonth && $bill->year == $currentYear;
+                                             $isPastDue =
+                                                 $bill->status !== 'paid' &&
+                                                 \Carbon\Carbon::parse($bill->due_date)->isPast();
+                                             
+                                             $billItems = \Illuminate\Support\Facades\DB::table('bill_items as bi')
+                                                 ->join('payment_types as pt', 'bi.payment_type_id', '=', 'pt.id')
+                                                 ->select('bi.*', 'pt.name as pt_name', 'pt.is_monthly')
+                                                 ->where('bi.bill_id', $bill->id)
+                                                 ->get()
+                                                 ->map(function($item) {
+                                                     $item->paid = (int) \Illuminate\Support\Facades\DB::table('payment_allocations')
+                                                         ->where('bill_item_id', $item->id)->sum('amount');
+                                                     $item->remaining = $item->amount - $item->paid;
+                                                     return $item;
+                                                 });
+                                         @endphp
+                                         @foreach($billItems as $item)
+                                             @php
+                                                 $hasItems = true;
+                                                 $itemTotal = $item->amount;
+                                                 $itemPaid = $item->paid;
+                                                 $itemRemaining = $item->remaining;
+                                                 
+                                                 $itemStatus = 'unpaid';
+                                                 if ($itemRemaining <= 0) {
+                                                     $itemStatus = 'paid';
+                                                 } elseif ($itemPaid > 0) {
+                                                     $itemStatus = 'partial';
+                                                 } elseif ($isPastDue) {
+                                                     $itemStatus = 'late';
+                                                 }
+                                                 
+                                                 $pct = $itemTotal > 0 ? min(100, round(($itemPaid / $itemTotal) * 100)) : 0;
+                                                 
+                                                 $itemPayments = \Illuminate\Support\Facades\DB::table('payment_allocations as pa')
+                                                     ->join('payments as p', 'pa.payment_id', '=', 'p.id')
+                                                     ->select('p.*', 'pa.amount as allocated_amount')
+                                                     ->where('pa.bill_item_id', $item->id)
+                                                     ->orderBy('p.payment_date', 'desc')
+                                                     ->get();
+                                             @endphp
+                                             <tr class="bill-row {{ $isCurrentMonth ? 'bg-light' : '' }}">
+                                                 <td class="text-center align-middle">
+                                                     <span class="text-sm font-weight-bold text-dark">
+                                                         {{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}
+                                                     </span>
+                                                     @if ($isCurrentMonth)
+                                                         <span class="badge"
+                                                             style="background: rgba(94, 114, 228, 0.1); color: #5e72e4; font-weight: 600; font-size: 0.65rem; margin-left: 6px;">Bulan
+                                                             Ini</span>
+                                                     @endif
+                                                 </td>
+                                                 <td class="align-middle text-center text-sm">
+                                                     <span class="text-dark font-weight-bold">{{ $item->pt_name }}</span>
+                                                     @if(!$item->is_monthly)
+                                                         <span class="badge" style="background:rgba(94,114,228,0.12);color:#5e72e4;font-size:0.6rem;padding:2px 6px;margin-left:4px;">1x</span>
+                                                     @endif
+                                                 </td>
+                                                 <td class="align-middle text-center text-sm">
+                                                     <span class="text-dark font-weight-bold">Rp
+                                                         {{ number_format($itemTotal, 0, ',', '.') }}</span>
+                                                 </td>
+                                                 <td class="align-middle text-center" style="min-width:130px;">
+                                                     @if ($itemStatus === 'paid')
+                                                         <div class="progress-cicilan">
+                                                             <div class="fill bg-success" style="width:100%"></div>
+                                                         </div>
+                                                         <small class="text-success font-weight-bold">Lunas</small>
+                                                     @elseif($itemStatus === 'partial')
+                                                         <div class="progress-cicilan">
+                                                             <div class="fill"
+                                                                 style="width:{{ $pct }}%;background:linear-gradient(90deg,#f7931e,#2dce89)">
+                                                             </div>
+                                                         </div>
+                                                         <small class="text-warning font-weight-bold">{{ $pct }}% —
+                                                             Sisa Rp {{ number_format($itemRemaining, 0, ',', '.') }}</small>
+                                                     @else
+                                                         <div class="progress-cicilan">
+                                                             <div class="fill bg-danger" style="width:0%"></div>
+                                                         </div>
+                                                         <small class="text-muted">Belum ada cicilan</small>
+                                                     @endif
+                                                 </td>
+                                                 <td class="align-middle text-center text-sm">
+                                                     @if ($itemStatus === 'paid')
+                                                         <span class="badge badge-paid px-2 py-1"><i
+                                                                 class="fas fa-check me-1"></i>Lunas</span>
+                                                     @elseif($itemStatus === 'partial')
+                                                         <span class="badge badge-partial px-2 py-1"><i
+                                                                 class="fas fa-clock me-1"></i>Dicicil</span>
+                                                     @elseif($itemStatus === 'late')
+                                                         <span class="badge badge-late px-2 py-1"><i
+                                                                 class="fas fa-exclamation-triangle me-1"></i>Terlambat</span>
+                                                     @else
+                                                         <span class="badge badge-unpaid px-2 py-1"><i
+                                                                 class="fas fa-times me-1"></i>Belum Bayar</span>
+                                                     @endif
+                                                 </td>
+                                                 <td class="align-middle text-center">
+                                                     <div class="d-flex gap-1 justify-content-center align-items-center flex-wrap">
+                                                         @if ($itemStatus !== 'paid' && $bill->status !== 'cancelled')
+                                                             <button type="button"
+                                                                 class="btn btn-sm btn-sakti-primary btn-pay mb-0"
+                                                                 data-id="{{ $bill->id }}"
+                                                                 data-item-id="{{ $item->id }}"
+                                                                 data-item-name="{{ $item->pt_name }}"
+                                                                 data-period="{{ \Carbon\Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y') }}"
+                                                                 data-total="{{ $itemTotal }}"
+                                                                 data-paid="{{ $itemPaid }}"
+                                                                 data-remaining="{{ $itemRemaining }}">
+                                                                 <i class="fas fa-money-bill-wave me-1"></i>{{ $itemStatus === 'partial' ? 'Cicil' : 'Bayar' }}
+                                                             </button>
+                                                         @endif
+                                                         @foreach($itemPayments as $paymentRecord)
+                                                             <a href="{{ route('admin.spp.invoice', $paymentRecord->id) }}"
+                                                                 class="btn btn-sm btn-outline-info mb-0" target="_blank"
+                                                                 title="Invoice (Rp {{ number_format($paymentRecord->allocated_amount, 0, ',', '.') }})">
+                                                                 <i class="fas fa-file-invoice"></i>
+                                                             </a>
+                                                         @endforeach
+                                                         @if ($bill->status === 'cancelled')
+                                                             <span class="text-secondary text-sm"><i
+                                                                     class="fas fa-minus-circle me-1"></i>Batal</span>
+                                                         @endif
+                                                     </div>
+                                                 </td>
+                                             </tr>
+                                         @endforeach
+                                     @endforeach
+                                     @if(!$hasItems)
+                                         <x-empty-state />
+                                     @endif
+                                 </tbody>
+                             </table>
                         </div>
                     </div>
                 </div>
@@ -497,9 +504,10 @@
                     <div>
                         <h5 class="modal-title font-weight-bold mb-0 text-white" id="modalBayarLabel"
                             style="font-size:1rem; color: #ffffff;">
-                            Catat Pembayaran SPP
+                            Catat Pembayaran
                         </h5>
                         <small id="modal-period-label" style="opacity:.8; font-size:.8rem;"></small>
+                        <span class="badge bg-white text-success mt-1" id="modal-item-badge" style="font-size:0.75rem; font-weight:700; display:inline-block;"></span>
                     </div>
                     <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
                 </div>
@@ -530,7 +538,7 @@
                     </div>
 
                     {{-- Pilihan Tipe Pembayaran --}}
-                    <span class="modal-section-label">Jenis Pembayaran</span>
+                    <span class="modal-section-label">Opsi Pembayaran</span>
                     <div class="row g-2 mb-3">
                         <div class="col-6">
                             <div class="pay-type-btn active" id="btn-full" onclick="setPayType('full')">
@@ -553,6 +561,7 @@
                         @csrf
                         <input type="hidden" name="payment_type" id="input-payment-type" value="full">
                         <input type="hidden" name="amount" id="input-amount-hidden" value="">
+                        <input type="hidden" name="bill_item_id" id="input-bill-item-id" value="">
 
                         {{-- Jumlah Cicilan (hanya muncul saat cicil) --}}
                         <div id="amount-section" style="display:none;" class="mb-3">
@@ -728,6 +737,8 @@
         document.querySelectorAll('.btn-pay').forEach(btn => {
             btn.addEventListener('click', function() {
                 const billId = this.dataset.id;
+                const itemId = this.dataset.itemId;
+                const itemName = this.dataset.itemName;
                 const period = this.dataset.period;
                 const total = parseInt(this.dataset.total);
                 const paid = parseInt(this.dataset.paid);
@@ -735,6 +746,8 @@
                 currentRemaining = remaining;
 
                 document.getElementById('modal-period-label').textContent = 'Periode: ' + period;
+                document.getElementById('modal-item-badge').textContent = itemName;
+
                 document.getElementById('info-total').textContent = formatRp(total);
                 document.getElementById('info-paid').textContent = formatRp(paid);
                 document.getElementById('info-remaining').textContent = formatRp(remaining);
@@ -749,6 +762,9 @@
                 counterEl.classList.remove('warn', 'danger');
                 document.getElementById('input-amount-display').classList.remove('is-invalid', 'is-valid');
                 document.getElementById('amount-error').style.display = 'none';
+
+                // Set inputs
+                document.getElementById('input-bill-item-id').value = itemId;
                 setPayType('full');
 
                 new bootstrap.Modal(document.getElementById('modalBayar')).show();

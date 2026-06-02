@@ -273,42 +273,64 @@ class BillUseCase
 
     /**
      * Helper privat untuk membuat tagihan yang belum ada (Dry Logic)
+     * Bug #1 Fix: is_monthly=false hanya di-generate pada bulan PERTAMA semester.
      */
     private function generateMissingBills($student, $semester, $monthsWithYear, $paymentTypes, $allRates, $existingBills): int
     {
         $count = 0;
-        
-        // Hitung tarif template untuk siswa ini
-        $totalAmount = 0;
-        $billItemsTemplate = [];
 
-        foreach ($paymentTypes as $pt) {
-            $rate = $allRates->first(function ($r) use ($semester, $pt, $student) {
-                return $r->payment_type_id == $pt->id
-                    && $r->grade_level == $student->grade_level
-                    && ($r->major_id == $student->major_id || $r->major_id === null);
-            });
+        // Pisahkan payment type bulanan dan sekali bayar
+        $monthlyTypes = $paymentTypes->filter(fn($pt) => $pt->is_monthly)->values();
+        $oneTimeTypes = $paymentTypes->filter(fn($pt) => !$pt->is_monthly)->values();
 
-            if ($rate) {
-                $totalAmount += $rate->amount;
-                $billItemsTemplate[] = [
-                    'payment_type_id' => $pt->id,
-                    'amount'          => $rate->amount,
-                ];
-            }
+        // Cek payment type sekali bayar yang sudah pernah di-bill siswa ini (di semua tahun ajaran)
+        $existingOneTimePtIds = [];
+        if ($oneTimeTypes->isNotEmpty()) {
+            $existingOneTimePtIds = DB::table('bill_items as bi')
+                ->join('bills as b', 'bi.bill_id', '=', 'b.id')
+                ->where('b.student_id', $student->student_id)
+                ->whereIn('bi.payment_type_id', $oneTimeTypes->pluck('id'))
+                ->pluck('bi.payment_type_id')
+                ->unique()
+                ->toArray();
         }
 
-        if (empty($billItemsTemplate)) return 0;
-
-        foreach ($monthsWithYear as $my) {
+        foreach ($monthsWithYear as $idx => $my) {
             $m = $my['month'];
             $y = $my['year'];
             $billKey = $student->student_id . '-' . $m . '-' . $y;
 
             if (isset($existingBills[$billKey])) continue;
 
+            $totalAmount       = 0;
+            $billItemsTemplate = [];
+
+            // Tarif BULANAN — muncul di setiap bulan
+            foreach ($monthlyTypes as $pt) {
+                $rate = $this->findRateForStudent($allRates, $pt->id, $student->grade_level, $student->major_id);
+                if ($rate) {
+                    $totalAmount         += $rate->amount;
+                    $billItemsTemplate[]  = ['payment_type_id' => $pt->id, 'amount' => $rate->amount];
+                }
+            }
+
+            // Tarif SEKALI BAYAR — hanya di bulan PERTAMA semester ini
+            if ($idx === 0) {
+                foreach ($oneTimeTypes as $pt) {
+                    if (in_array($pt->id, $existingOneTimePtIds)) continue;
+                    $rate = $this->findRateForStudent($allRates, $pt->id, $student->grade_level, $student->major_id);
+                    if ($rate) {
+                        $totalAmount         += $rate->amount;
+                        $billItemsTemplate[]  = ['payment_type_id' => $pt->id, 'amount' => $rate->amount];
+                        $existingOneTimePtIds[] = $pt->id; // Cegah duplikat dalam loop
+                    }
+                }
+            }
+
+            if (empty($billItemsTemplate)) continue;
+
             $dueDate = Carbon::createFromDate($y, $m, 1)->endOfMonth()->toDateString();
-            $billId = DB::table(DatabaseEntity::TBL_BILLS)->insertGetId([
+            $billId  = DB::table(DatabaseEntity::TBL_BILLS)->insertGetId([
                 'student_id'         => $student->student_id,
                 'family_card_number' => $student->family_card_number,
                 'academic_year_id'   => $semester->academic_year_id,
@@ -341,6 +363,75 @@ class BillUseCase
     }
 
     /**
+     * Bug #2b Fix: Cari tarif — spesifik jurusan dulu, fallback ke null (semua jurusan).
+     */
+    private function findRateForStudent($allRates, $paymentTypeId, $gradeLevel, $majorId)
+    {
+        $rate = $allRates->first(fn($r) =>
+            $r->payment_type_id == $paymentTypeId && $r->grade_level == $gradeLevel && $r->major_id == $majorId
+        );
+        if (!$rate) {
+            $rate = $allRates->first(fn($r) =>
+                $r->payment_type_id == $paymentTypeId && $r->grade_level == $gradeLevel && $r->major_id === null
+            );
+        }
+        return $rate;
+    }
+
+    /**
+     * Bug #4 Fix: Update nominal bill_items dan total_amount untuk bill UNPAID
+     * saat tarif berubah. Dipanggil saat sinkronisasi.
+     */
+    public function syncUnpaidBillAmounts($semesterId): array
+    {
+        DB::beginTransaction();
+        try {
+            $semester = DB::table(DatabaseEntity::TBL_SEMESTERS)->where('id', $semesterId)->first();
+            if (!$semester) return ['status' => false, 'count' => 0];
+
+            $allRates = DB::table(DatabaseEntity::TBL_PAYMENT_RATES)
+                ->where('academic_year_id', $semester->academic_year_id)
+                ->get();
+
+            $unpaidBills = DB::table(DatabaseEntity::TBL_BILLS . ' as b')
+                ->join(DatabaseEntity::TBL_STUDENT_ENROLLMENTS . ' as e', function ($j) use ($semester) {
+                    $j->on('e.student_id', '=', 'b.student_id')
+                      ->where('e.academic_year_id', '=', $semester->academic_year_id);
+                })
+                ->join(DatabaseEntity::TBL_CLASSROOMS . ' as c', 'e.classroom_id', '=', 'c.id')
+                ->select('b.id as bill_id', 'c.grade_level', 'c.major_id')
+                ->where('b.semester_id', $semesterId)
+                ->where('b.status', 'unpaid')
+                ->get();
+
+            $updatedCount = 0;
+            foreach ($unpaidBills as $bill) {
+                $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('bill_id', $bill->bill_id)->get();
+                $newTotal  = 0;
+                foreach ($billItems as $item) {
+                    $rate = $this->findRateForStudent($allRates, $item->payment_type_id, $bill->grade_level, $bill->major_id);
+                    $newAmt = $rate ? $rate->amount : $item->amount;
+                    DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('id', $item->id)
+                        ->update(['amount' => $newAmt, 'updated_at' => now()]);
+                    $newTotal += $newAmt;
+                }
+                if ($newTotal > 0) {
+                    DB::table(DatabaseEntity::TBL_BILLS)->where('id', $bill->bill_id)
+                        ->update(['total_amount' => $newTotal, 'updated_at' => now()]);
+                    $updatedCount++;
+                }
+            }
+
+            DB::commit();
+            return ['status' => true, 'count' => $updatedCount];
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('SyncUnpaidBillAmounts Error: ' . $e->getMessage());
+            return ['status' => false, 'count' => 0];
+        }
+    }
+
+    /**
      * Bayar tagihan. Jika ada saudara (KK sama), otomatis tandai lunas juga.
      */
     public function recordPayment($billId, array $data): array
@@ -359,12 +450,24 @@ class BillUseCase
                 return ['status' => false, 'message' => 'Tagihan tidak ditemukan.'];
             }
 
-            // 1. Hitung nominal yang sudah dibayar dan sisa tagihan
-            $currentPaidAmount = DB::table(DatabaseEntity::TBL_PAYMENTS)
-                ->where('bill_id', $billId)
-                ->sum('amount');
-                
-            $remainingAmount = $bill->total_amount - $currentPaidAmount;
+            // 1. Hitung nominal yang sudah dibayar dan sisa tagihan (atau sisa per item jika ada bill_item_id)
+            $billItemId = $data['bill_item_id'] ?? null;
+            if ($billItemId) {
+                $item = DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('id', $billItemId)->first();
+                if (!$item) {
+                    DB::rollBack();
+                    return ['status' => false, 'message' => 'Rincian tagihan tidak ditemukan.'];
+                }
+                $itemPaid = DB::table('payment_allocations')
+                    ->where('bill_item_id', $billItemId)
+                    ->sum('amount');
+                $remainingAmount = $item->amount - $itemPaid;
+            } else {
+                $currentPaidAmount = DB::table(DatabaseEntity::TBL_PAYMENTS)
+                    ->where('bill_id', $billId)
+                    ->sum('amount');
+                $remainingAmount = $bill->total_amount - $currentPaidAmount;
+            }
 
             // Jika $data['amount'] tidak di-set, asumsikan lunas (bayar sisa)
             $payAmount = isset($data['amount']) ? (int) $data['amount'] : $remainingAmount;
@@ -415,32 +518,44 @@ class BillUseCase
             }
 
             // 4. Alokasi pembayaran ke rincian tagihan (bill_items)
-            $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('bill_id', $billId)->get();
-            $amountToAllocate = $payAmount;
+            if ($billItemId) {
+                DB::table('payment_allocations')->insert([
+                    'payment_id' => $paymentId,
+                    'bill_item_id' => $billItemId,
+                    'amount' => $payAmount,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } else {
+                $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS)->where('bill_id', $billId)->get();
+                $amountToAllocate = $payAmount;
 
-            foreach ($billItems as $item) {
-                if ($amountToAllocate <= 0) break;
+                foreach ($billItems as $item) {
+                    if ($amountToAllocate <= 0) break;
 
-                $itemPaid = DB::table('payment_allocations')->where('bill_item_id', $item->id)->sum('amount');
-                $itemRemaining = $item->amount - $itemPaid;
+                    $itemPaid = DB::table('payment_allocations')->where('bill_item_id', $item->id)->sum('amount');
+                    $itemRemaining = $item->amount - $itemPaid;
 
-                if ($itemRemaining > 0) {
-                    $allocate = min($amountToAllocate, $itemRemaining);
-                    
-                    DB::table('payment_allocations')->insert([
-                        'payment_id' => $paymentId,
-                        'bill_item_id' => $item->id,
-                        'amount' => $allocate,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                    
-                    $amountToAllocate -= $allocate;
+                    if ($itemRemaining > 0) {
+                        $allocate = min($amountToAllocate, $itemRemaining);
+                        
+                        DB::table('payment_allocations')->insert([
+                            'payment_id' => $paymentId,
+                            'bill_item_id' => $item->id,
+                            'amount' => $allocate,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                        
+                        $amountToAllocate -= $allocate;
+                    }
                 }
             }
 
             // 5. Update status tagihan (partial atau paid)
-            $newTotalPaid = $currentPaidAmount + $payAmount;
+            $newTotalPaid = DB::table(DatabaseEntity::TBL_PAYMENTS)
+                ->where('bill_id', $billId)
+                ->sum('amount');
             $newStatus = ($newTotalPaid >= $bill->total_amount) ? 'paid' : 'partial';
 
             DB::table(DatabaseEntity::TBL_BILLS)->where('id', $billId)->update([
@@ -452,11 +567,22 @@ class BillUseCase
             $studentInfo = $bill->student_name . ' (' . ($bill->classroom_name ?? 'Tanpa Kelas') . ')';
             $monthName = Carbon::createFromDate($bill->year, $bill->month, 1)->translatedFormat('F Y');
             
+            $paymentTypeDesc = '';
+            if ($billItemId) {
+                $ptName = DB::table('bill_items as bi')
+                    ->join('payment_types as pt', 'bi.payment_type_id', '=', 'pt.id')
+                    ->where('bi.id', $billItemId)
+                    ->value('pt.name');
+                if ($ptName) {
+                    $paymentTypeDesc = ' (' . $ptName . ')';
+                }
+            }
+            
             DB::table(DatabaseEntity::TBL_TRANSACTIONS)->insert([
                 'date'        => $data['payment_date'] ?? now()->toDateString(),
                 'type'        => 'income',
-                'category'    => 'SPP',
-                'description' => 'Pembayaran SPP ' . $monthName . ' - ' . $studentInfo,
+                'category'    => 'Pembayaran',
+                'description' => 'Pembayaran ' . $monthName . $paymentTypeDesc . ' - ' . $studentInfo,
                 'amount'      => $payAmount,
                 'payment_id'  => $paymentId,
                 'recorded_by' => $data['verified_by'] ?? null,

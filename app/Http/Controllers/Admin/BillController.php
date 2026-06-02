@@ -90,6 +90,7 @@ class BillController extends Controller
     public function pay(Request $request, $billId)
     {
         $request->validate([
+            'bill_item_id'   => 'required|exists:bill_items,id',
             'payment_type'   => 'required|in:full,partial',
             'payment_method' => 'required|in:cash,qris,transfer,other',
             'amount'         => 'nullable|numeric|min:1',
@@ -107,6 +108,7 @@ class BillController extends Controller
         }
 
         $data = [
+            'bill_item_id'     => $request->bill_item_id,
             'amount'           => $amount,
             'payment_method'   => $request->payment_method,
             'payment_date'     => $request->payment_date,
@@ -180,32 +182,40 @@ class BillController extends Controller
      */
     public function sync(Request $request)
     {
-        // Cari tahun ajaran yang sedang aktif
         $activeAY = \Illuminate\Support\Facades\DB::table(\App\Entities\DatabaseEntity::TBL_ACADEMIC_YEARS)
-            ->where('is_active', true)
-            ->first();
+            ->where('is_active', true)->first();
 
         if (!$activeAY) {
             return redirect()->back()->with('error', 'Gagal Sinkronisasi: Belum ada Tahun Ajaran yang aktif.');
         }
 
-        // Cari semua semester untuk tahun ajaran aktif tersebut
         $semesters = \Illuminate\Support\Facades\DB::table(\App\Entities\DatabaseEntity::TBL_SEMESTERS)
-            ->where('academic_year_id', $activeAY->id)
-            ->get();
+            ->where('academic_year_id', $activeAY->id)->get();
 
         if ($semesters->isEmpty()) {
             return redirect()->back()->with('error', 'Gagal Sinkronisasi: Belum ada data Semester untuk Tahun Ajaran yang aktif.');
         }
 
         $totalGenerated = 0;
+        $totalUpdated   = 0;
         foreach ($semesters as $semester) {
+            // 1. Buat tagihan baru yang belum ada
             $result = $this->billUseCase->autoGenerateBillsForSemester($semester->id);
             if ($result['status']) {
                 $totalGenerated += $result['count'];
             }
+            // 2. Update nominal bill UNPAID yang sudah ada (Bug #4 Fix)
+            $updateResult = $this->billUseCase->syncUnpaidBillAmounts($semester->id);
+            if ($updateResult['status']) {
+                $totalUpdated += $updateResult['count'];
+            }
         }
 
-        return redirect()->back()->with('success', 'Sinkronisasi berhasil! ' . $totalGenerated . ' tagihan baru telah ditambahkan.');
+        $msg = 'Sinkronisasi berhasil!';
+        if ($totalGenerated > 0) $msg .= ' ' . $totalGenerated . ' tagihan baru ditambahkan.';
+        if ($totalUpdated > 0)   $msg .= ' ' . $totalUpdated . ' tagihan belum bayar diperbarui nominalnya.';
+        if ($totalGenerated === 0 && $totalUpdated === 0) $msg .= ' Semua tagihan sudah sinkron.';
+
+        return redirect()->back()->with('success', $msg);
     }
 }

@@ -194,7 +194,7 @@
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
                         @include('icon.invoice')
                     </div>
-                    <span class="nav-link-text ms-1">Pembayaran SPP</span>
+                    <span class="nav-link-text ms-1">Pembayaran</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -301,7 +301,7 @@
                     <div class="icon icon-shape border-radius-md me-2 d-flex align-items-center justify-content-center">
                         @include('icon.invoice')
                     </div>
-                    <span class="nav-link-text ms-1">Tagihan SPP</span>
+                    <span class="nav-link-text ms-1">Tagihan Pembayaran</span>
                 </a>
             </li>
             <li class="nav-item">

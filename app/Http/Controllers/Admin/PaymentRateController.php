@@ -71,7 +71,8 @@ class PaymentRateController extends Controller
         $result = $this->paymentRateUseCase->update($id, $request->validated());
 
         if (!$result['status']) {
-            return redirect()->back()->withInput()->with('error', ResponseEntity::MSG_ERROR_SERVER);
+            $errorMessage = $result['message'] ?? ResponseEntity::MSG_ERROR_SERVER;
+            return redirect()->back()->withInput()->with('error', $errorMessage);
         }
 
         return redirect()->route('admin.payment-rates.index')->with('success', ResponseEntity::MSG_SUCCESS_UPDATE);

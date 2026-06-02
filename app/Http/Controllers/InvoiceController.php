@@ -61,12 +61,22 @@ class InvoiceController extends Controller
             }
         }
 
-        // Ambil detail item tagihan
-        $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS . ' as bi')
+        // Ambil detail item tagihan yang dibayar pada payment ini (menggunakan alokasi)
+        $billItems = DB::table('payment_allocations as pa')
+            ->join(DatabaseEntity::TBL_BILL_ITEMS . ' as bi', 'pa.bill_item_id', '=', 'bi.id')
             ->join('payment_types as pt', 'bi.payment_type_id', '=', 'pt.id')
-            ->select('bi.amount', 'pt.name as type_name')
-            ->where('bi.bill_id', $payment->bill_id)
+            ->select('pa.amount', 'pt.name as type_name')
+            ->where('pa.payment_id', $paymentId)
             ->get();
+
+        if ($billItems->isEmpty()) {
+            // Fallback ke seluruh item tagihan jika alokasi tidak ditemukan (untuk data lama)
+            $billItems = DB::table(DatabaseEntity::TBL_BILL_ITEMS . ' as bi')
+                ->join('payment_types as pt', 'bi.payment_type_id', '=', 'pt.id')
+                ->select('bi.amount', 'pt.name as type_name')
+                ->where('bi.bill_id', $payment->bill_id)
+                ->get();
+        }
 
         // Hitung total yang sudah dibayar untuk tagihan ini (untuk cek lunas/sebagian)
         $totalPaidForBill = DB::table(DatabaseEntity::TBL_PAYMENTS)

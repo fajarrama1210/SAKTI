@@ -149,9 +149,7 @@ class StressTest extends TestCase
             'updated_at'         => now(),
         ]);
 
-        // Siswa kedua dengan KK yang sama → HARUS GAGAL karena UNIQUE constraint
-        $this->expectException(\Illuminate\Database\QueryException::class);
-
+        // Siswa kedua dengan KK yang sama → HARUS BERHASIL karena UNIQUE constraint sudah diubah ke INDEX
         DB::table('students')->insert([
             'nisn'               => '9900000002',
             'id_number'          => 'BUG002',
@@ -164,8 +162,7 @@ class StressTest extends TestCase
             'updated_at'         => now(),
         ]);
 
-        // Jika test ini PASS, itu artinya BUG TERKONFIRMASI:
-        // family_card_number UNIQUE mencegah saudara seKK.
+        $this->assertEquals(2, DB::table('students')->where('family_card_number', $familyCard)->count());
     }
 
     // =================================================================
@@ -563,6 +560,7 @@ class StressTest extends TestCase
         $this->adminUser = \App\Models\User::factory()->create([
             'name'  => 'Admin Tester',
             'email' => 'admin@test.com',
+            'role'  => 'admin',
         ]);
 
         // Jurusan

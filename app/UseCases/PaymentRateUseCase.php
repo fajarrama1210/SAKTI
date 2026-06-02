@@ -37,14 +37,28 @@ class PaymentRateUseCase
     {
         DB::beginTransaction();
         try {
+            // Bug #2c Fix: MySQL UNIQUE tidak menganggap NULL=NULL, cek manual duplikat
+            $majorId = $data['major_id'] ?? null;
+            $duplicate = DB::table(DatabaseEntity::TBL_PAYMENT_RATES)
+                ->where('academic_year_id', $data['academic_year_id'])
+                ->where('payment_type_id', $data['payment_type_id'])
+                ->where('grade_level', $data['grade_level'])
+                ->when(is_null($majorId), fn($q) => $q->whereNull('major_id'), fn($q) => $q->where('major_id', $majorId))
+                ->exists();
+
+            if ($duplicate) {
+                DB::rollBack();
+                return ['status' => false, 'message' => 'Tarif untuk kombinasi Tahun Ajaran, Jenis Pembayaran, Kelas, dan Jurusan ini sudah ada.'];
+            }
+
             DB::table(DatabaseEntity::TBL_PAYMENT_RATES)->insert([
                 'academic_year_id' => $data['academic_year_id'],
-                'payment_type_id' => $data['payment_type_id'],
-                'grade_level' => $data['grade_level'],
-                'major_id' => $data['major_id'] ?? null,
-                'amount' => $data['amount'],
-                'created_at' => now(),
-                'updated_at' => now(),
+                'payment_type_id'  => $data['payment_type_id'],
+                'grade_level'      => $data['grade_level'],
+                'major_id'         => $majorId,
+                'amount'           => $data['amount'],
+                'created_at'       => now(),
+                'updated_at'       => now(),
             ]);
 
             DB::commit();
@@ -52,7 +66,7 @@ class PaymentRateUseCase
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("PaymentRateStore Error: " . $e->getMessage());
-            return ['status' => false, 'message' => $e->getMessage()];
+            return ['status' => false, 'message' => 'Terjadi kesalahan. Silakan coba lagi.'];
         }
     }
 
@@ -60,11 +74,26 @@ class PaymentRateUseCase
     {
         DB::beginTransaction();
         try {
+            // Bug #2c Fix: MySQL UNIQUE tidak menganggap NULL=NULL, cek manual duplikat
+            $majorId = $data['major_id'] ?? null;
+            $duplicate = DB::table(DatabaseEntity::TBL_PAYMENT_RATES)
+                ->where('academic_year_id', $data['academic_year_id'])
+                ->where('payment_type_id', $data['payment_type_id'])
+                ->where('grade_level', $data['grade_level'])
+                ->where('id', '!=', $id)
+                ->when(is_null($majorId), fn($q) => $q->whereNull('major_id'), fn($q) => $q->where('major_id', $majorId))
+                ->exists();
+
+            if ($duplicate) {
+                DB::rollBack();
+                return ['status' => false, 'message' => 'Tarif untuk kombinasi Tahun Ajaran, Jenis Pembayaran, Kelas, dan Jurusan ini sudah ada.'];
+            }
+
             DB::table(DatabaseEntity::TBL_PAYMENT_RATES)->where('id', $id)->update([
                 'academic_year_id' => $data['academic_year_id'],
                 'payment_type_id' => $data['payment_type_id'],
                 'grade_level' => $data['grade_level'],
-                'major_id' => $data['major_id'] ?? null,
+                'major_id' => $majorId,
                 'amount' => $data['amount'],
                 'updated_at' => now(),
             ]);

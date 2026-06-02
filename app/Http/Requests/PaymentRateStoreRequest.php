@@ -27,7 +27,7 @@ class PaymentRateStoreRequest extends FormRequest
             'payment_type_id' => 'required|integer|exists:payment_types,id',
             'grade_level' => 'required|integer|in:10,11,12,13',
             'major_id' => 'nullable|integer|exists:majors,id',
-            'amount' => 'required|integer|min:0',
+            'amount' => 'required|integer|min:1000|max:999999999',
         ];
     }
 
@@ -35,10 +35,12 @@ class PaymentRateStoreRequest extends FormRequest
     {
         return [
             'required' => \App\Entities\ResponseEntity::MSG_VAL_REQUIRED,
-            'integer' => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
-            'exists' => \App\Entities\ResponseEntity::MSG_VAL_EXISTS,
-            'in' => \App\Entities\ResponseEntity::MSG_VAL_IN,
-            'min' => \App\Entities\ResponseEntity::MSG_VAL_MIN,
+            'integer'  => \App\Entities\ResponseEntity::MSG_VAL_INTEGER,
+            'exists'   => \App\Entities\ResponseEntity::MSG_VAL_EXISTS,
+            'in'       => \App\Entities\ResponseEntity::MSG_VAL_IN,
+            'min'      => \App\Entities\ResponseEntity::MSG_VAL_MIN,
+            'amount.min' => 'Nominal tarif minimal adalah Rp 1.000.',
+            'amount.max' => 'Nominal tarif terlalu besar. Maksimum yang diperbolehkan adalah Rp 999.999.999 (999 juta).',
         ];
     }
 

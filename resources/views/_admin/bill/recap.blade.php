@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
             <div>
                 <h3 class="text-white font-weight-bold mb-1" style="font-size: 1.3rem; letter-spacing: -0.02em;">
-                    <i class="fas fa-list-alt me-2"></i> Rekap Tagihan SPP
+                    <i class="fas fa-list-alt me-2"></i> Rekap Tagihan
                 </h3>
                 <p class="text-white mb-0" style="opacity: .7; font-size: 0.88rem;">
                     Laporan daftar tagihan siswa berdasarkan bulan dan status pembayaran.
@@ -191,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             Swal.fire({
                 icon: 'warning',
-                title: 'Hapus Tagihan SPP?',
-                html: `Tagihan SPP siswa <strong>${name}</strong> untuk periode <strong>${period}</strong> akan dihapus permanen.`,
+                title: 'Hapus Tagihan?',
+                html: `Tagihan siswa <strong>${name}</strong> untuk periode <strong>${period}</strong> akan dihapus permanen.`,
                 showCancelButton: true,
                 confirmButtonColor: '#ef4444',
                 cancelButtonColor: '#64748b',
