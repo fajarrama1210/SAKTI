@@ -313,7 +313,7 @@
                         <td>
                             <div class="student-cell">
                                 @if(!empty($bill->avatar))
-                                    <img src="{{ asset('storage/' . $bill->avatar) }}" alt="{{ $bill->student_name }}" class="student-avatar" style="object-fit: cover;">
+                                    <img src="{{ route('avatar.serve', ['filename' => basename($bill->avatar)]) }}" alt="{{ $bill->student_name }}" class="student-avatar" style="object-fit: cover;">
                                 @else
                                     <div class="student-avatar" style="background:{{ $avatarColor }};">{{ $initials }}</div>
                                 @endif
