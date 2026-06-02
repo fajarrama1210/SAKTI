@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'remember_token' => \Illuminate\Support\Str::random(10),
         ]);
-        \App\Models\User::factory()->create([
+        \App\Models\User::forceCreate([
             'name' => 'mulyono',
             'email' => 'E3125mulyono@ac.id',
             'password' => bcrypt('mulyono'),
