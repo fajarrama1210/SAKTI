@@ -23,6 +23,7 @@ class PaymentTypeStoreRequest extends FormRequest
                 Rule::unique('payment_types', 'name')->ignore($id),
             ],
             'is_monthly' => 'nullable|boolean',
+            'semester_id' => 'nullable|integer|exists:semesters,id',
         ];
     }
 

@@ -24,7 +24,14 @@ class PaymentTypeController extends Controller
 
     public function create()
     {
-        return view('_admin.payment_type.add');
+        $semesters = \Illuminate\Support\Facades\DB::table('semesters as s')
+            ->join('academic_years as ay', 's.academic_year_id', '=', 'ay.id')
+            ->select('s.id', 's.name as semester_name', 'ay.name as academic_year_name')
+            ->orderBy('ay.name', 'desc')
+            ->orderBy('s.name', 'asc')
+            ->get();
+
+        return view('_admin.payment_type.add', compact('semesters'));
     }
 
     public function store(PaymentTypeStoreRequest $request)
@@ -43,7 +50,14 @@ class PaymentTypeController extends Controller
         $paymentType = $this->paymentTypeUseCase->getById($id);
         if (!$paymentType) abort(404);
 
-        return view('_admin.payment_type.edit', compact('paymentType'));
+        $semesters = \Illuminate\Support\Facades\DB::table('semesters as s')
+            ->join('academic_years as ay', 's.academic_year_id', '=', 'ay.id')
+            ->select('s.id', 's.name as semester_name', 'ay.name as academic_year_name')
+            ->orderBy('ay.name', 'desc')
+            ->orderBy('s.name', 'asc')
+            ->get();
+
+        return view('_admin.payment_type.edit', compact('paymentType', 'semesters'));
     }
 
     public function update(PaymentTypeStoreRequest $request, $id)

@@ -50,6 +50,11 @@ class EnrollmentUseCase
             $query->where('e.status', $filters['status']);
         }
 
+        // Filter grade_level
+        if (!empty($filters['grade_level'])) {
+            $query->where('c.grade_level', $filters['grade_level']);
+        }
+
         // Filter kelas
         if (!empty($filters['classroom_id'])) {
             $query->where('e.classroom_id', $filters['classroom_id']);
@@ -283,35 +288,56 @@ class EnrollmentUseCase
         DB::beginTransaction();
         try {
             $gradDate = $graduationDate ?? now()->toDateString();
-
-            // Cek tunggakan per siswa
-            $studentsWithDebt = [];
             $graduatedCount = 0;
 
             foreach ($studentIds as $studentId) {
-                $unpaidCount = DB::table(DatabaseEntity::TBL_BILLS)
-                    ->where('student_id', $studentId)
-                    ->where('academic_year_id', $academicYearId)
-                    ->where('status', 'unpaid')
-                    ->count();
+                // 1. Validasi Kelas 12
+                $enrollment = DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS . ' as e')
+                    ->join(DatabaseEntity::TBL_CLASSROOMS . ' as c', 'e.classroom_id', '=', 'c.id')
+                    ->join(DatabaseEntity::TBL_STUDENTS . ' as s', 'e.student_id', '=', 's.id')
+                    ->select('s.name as student_name', 'c.grade_level')
+                    ->where('e.student_id', $studentId)
+                    ->where('e.academic_year_id', $academicYearId)
+                    ->first();
 
-                if ($unpaidCount > 0) {
-                    $student = DB::table(DatabaseEntity::TBL_STUDENTS)->where('id', $studentId)->first();
-                    $studentsWithDebt[] = [
-                        'id' => $studentId,
-                        'name' => $student->name ?? 'Unknown',
-                        'unpaid_count' => $unpaidCount,
+                if (!$enrollment) {
+                    DB::rollBack();
+                    return [
+                        'status' => false,
+                        'message' => "Data penempatan untuk siswa ID {$studentId} tidak ditemukan."
                     ];
                 }
 
-                // Tetap luluskan, tapi catat peringatan
+                if ((int)$enrollment->grade_level !== 12) {
+                    DB::rollBack();
+                    return [
+                        'status' => false,
+                        'message' => "Gagal meluluskan: Siswa {$enrollment->student_name} saat ini berada di kelas tingkat {$enrollment->grade_level}. Hanya siswa kelas 12 yang dapat diluluskan."
+                    ];
+                }
+
+                // 2. Validasi Tunggakan Tagihan (Semua tagihan harus lunas, status bukan unpaid / partial)
+                $unpaidBillCount = DB::table(DatabaseEntity::TBL_BILLS)
+                    ->where('student_id', $studentId)
+                    ->whereIn('status', ['unpaid', 'partial'])
+                    ->count();
+
+                if ($unpaidBillCount > 0) {
+                    DB::rollBack();
+                    return [
+                        'status' => false,
+                        'message' => "Gagal meluluskan: Siswa {$enrollment->student_name} tidak dapat diluluskan karena masih memiliki {$unpaidBillCount} tagihan yang belum dilunasi."
+                    ];
+                }
+
+                // Luluskan siswa
                 DB::table(DatabaseEntity::TBL_STUDENT_ENROLLMENTS)
                     ->where('student_id', $studentId)
                     ->where('academic_year_id', $academicYearId)
                     ->update([
                         'status' => 'lulus',
                         'exited_at' => $gradDate,
-                        'exit_reason' => $unpaidCount > 0 ? 'Lulus dengan tunggakan' : 'Lulus',
+                        'exit_reason' => 'Lulus',
                         'updated_at' => now(),
                     ]);
 
@@ -326,7 +352,7 @@ class EnrollmentUseCase
             return [
                 'status' => true,
                 'graduated_count' => $graduatedCount,
-                'students_with_debt' => $studentsWithDebt,
+                'students_with_debt' => [],
             ];
         } catch (Exception $e) {
             DB::rollBack();

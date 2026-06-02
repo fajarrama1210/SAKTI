@@ -59,6 +59,19 @@
                         <label class="custom-control-label" for="is_monthly">Tagihan Bulanan</label>
                     </div>
                 </div>
+                <div class="form-group" id="semester-select-container" style="display: none;">
+                    <label class="form-control-label">Semester (Opsional)</label>
+                    <select name="semester_id" class="form-control @error('semester_id') is-invalid @enderror">
+                        <option value="">Semua Semester (Global)</option>
+                        @foreach($semesters as $sem)
+                            <option value="{{ $sem->id }}" {{ old('semester_id', $paymentType->semester_id) == $sem->id ? 'selected' : '' }}>
+                                {{ $sem->semester_name }} ({{ $sem->academic_year_name }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('semester_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <small class="text-muted">Pilih semester jika tagihan bulanan ini hanya ditagihkan di semester tertentu. Kosongkan untuk menagih di semua semester.</small>
+                </div>
                 <div class="form-action-bar">
                     <button type="submit" class="btn btn-sakti-primary"><i class="fas fa-save me-1"></i> Update</button>
                     <a href="{{ route('admin.payment-types.index') }}" class="btn btn-secondary">Batal</a>
@@ -68,3 +81,24 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const isMonthlyCheckbox = document.getElementById('is_monthly');
+        const semesterContainer = document.getElementById('semester-select-container');
+
+        function toggleSemesterSelect() {
+            if (isMonthlyCheckbox.checked) {
+                semesterContainer.style.display = 'block';
+            } else {
+                semesterContainer.style.display = 'none';
+                semesterContainer.querySelector('select').value = '';
+            }
+        }
+
+        isMonthlyCheckbox.addEventListener('change', toggleSemesterSelect);
+        toggleSemesterSelect();
+    });
+</script>
+@endpush

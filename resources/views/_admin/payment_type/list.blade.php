@@ -54,6 +54,19 @@
                         <td class="text-center align-middle">
                             @if($pt->is_monthly)
                             <span class="badge badge-sm bg-gradient-info">Bulanan</span>
+                            @if($pt->semester_name)
+                                <div class="mt-1">
+                                    <small class="text-xs text-muted" style="font-size: 0.75rem;">
+                                        <i class="fas fa-calendar-alt me-1"></i>{{ $pt->semester_name }} ({{ $pt->academic_year_name }})
+                                    </small>
+                                </div>
+                            @else
+                                <div class="mt-1">
+                                    <small class="text-xs text-success" style="font-size: 0.75rem;">
+                                        <i class="fas fa-globe me-1"></i>Semua Semester
+                                    </small>
+                                </div>
+                            @endif
                             @else
                             <span class="badge badge-sm bg-gradient-warning">Sekali Bayar</span>
                             @endif

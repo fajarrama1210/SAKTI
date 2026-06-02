@@ -152,6 +152,7 @@ class EnrollmentController extends Controller
             // Ambil siswa kelas XII (grade_level = 12) yang aktif di TA ini
             $students = $this->enrollmentUseCase->getByAcademicYear($selectedAY, 999, [
                 'status' => 'aktif',
+                'grade_level' => 12,
             ]);
         }
 
