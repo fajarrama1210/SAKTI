@@ -256,6 +256,43 @@
                 }
             });
         }
+
+        // ── File input validation (Size and Format) ──
+        const fileInput = document.getElementById('file');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    // Check file size (max 2MB)
+                    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ukuran File Terlalu Besar',
+                            text: 'Ukuran file maksimal adalah 2MB.',
+                            confirmButtonColor: '#059669'
+                        });
+                        this.value = ''; // Reset file input
+                        return;
+                    }
+
+                    // Check file format/extension (pdf, png, jpg, jpeg)
+                    const allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg'];
+                    const fileName = file.name;
+                    const fileExtension = fileName.split('.').pop().toLowerCase();
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Format File Tidak Sesuai',
+                            text: 'Format file harus berupa PDF, PNG, JPG, atau JPEG.',
+                            confirmButtonColor: '#059669'
+                        });
+                        this.value = ''; // Reset file input
+                        return;
+                    }
+                }
+            });
+        }
     });
 </script>
 @endpush
