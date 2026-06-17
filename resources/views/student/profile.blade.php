@@ -65,12 +65,25 @@
                         <button type="button" class="btn btn-dark rounded-circle position-absolute bottom-0 end-0 m-0 d-flex align-items-center justify-content-center" style="width: 32px !important; height: 32px !important; min-width: 32px !important; min-height: 32px !important; padding: 0 !important; border: 2px solid #fff; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,.1);" onclick="document.getElementById('avatarInput').click();">
                             <i class="fas fa-camera text-white" style="font-size: 0.75rem; margin: 0; line-height: 1;"></i>
                         </button>
+                        @if ($avatarUrl)
+                        <!-- Delete Avatar Button Overlay -->
+                        <button type="button" id="btnDeleteAvatar" class="btn btn-danger rounded-circle position-absolute top-0 end-0 m-0 d-flex align-items-center justify-content-center" style="width: 28px !important; height: 28px !important; min-width: 28px !important; min-height: 28px !important; padding: 0 !important; border: 2px solid #fff; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,.15);" title="Hapus foto profil">
+                            <i class="fas fa-trash-alt text-white" style="font-size: 0.65rem; margin: 0; line-height: 1;"></i>
+                        </button>
+                        @endif
                     </div>
 
                     <form id="avatarForm" action="{{ route('student.profile.avatar') }}" method="POST" enctype="multipart/form-data" class="d-none">
                         @csrf
                         <input type="file" name="avatar" id="avatarInput" accept=".jpg,.jpeg,.png" onchange="document.getElementById('avatarForm').submit();">
                     </form>
+
+                    @if ($avatarUrl)
+                    <form id="deleteAvatarForm" action="{{ route('student.profile.avatar.delete') }}" method="POST" class="d-none">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                    @endif
 
                     <h5 class="font-weight-bold mb-1" style="color: var(--dark-text);">{{ $student->name }}</h5>
                     <p class="text-xs mb-3" style="color: var(--muted-text);">Siswa Terdaftar ({{ $student->status }})</p>
@@ -244,6 +257,28 @@
                 }
             });
         });
+
+        // Tombol hapus foto profil
+        const btnDelete = document.getElementById('btnDeleteAvatar');
+        if (btnDelete) {
+            btnDelete.addEventListener('click', function () {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hapus Foto Profil?',
+                    text: 'Foto profil Anda akan dihapus dan diganti dengan inisial nama. Lanjutkan?',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-trash-alt me-1"></i> Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('deleteAvatarForm').submit();
+                    }
+                });
+            });
+        }
     });
 </script>
 @if (session('success'))

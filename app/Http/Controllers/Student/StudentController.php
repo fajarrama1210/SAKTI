@@ -282,6 +282,42 @@ class StudentController extends Controller
     }
 
     /**
+     * Hapus foto profil siswa dan kembali ke tampilan inisial nama.
+     */
+    public function deleteAvatar(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user->avatar || $user->avatar === '0') {
+            return redirect()->route('student.profile')->with('error', 'Tidak ada foto profil untuk dihapus.');
+        }
+
+        $configDisk = config('filesystems.default', 'local');
+        $disk = ($configDisk === 's3') ? 's3' : 'public';
+
+        // Hapus file dari storage (coba kedua disk)
+        try {
+            Storage::disk($disk)->delete($user->avatar);
+        } catch (\Exception $e) {}
+
+        if ($disk !== 'public') {
+            try {
+                Storage::disk('public')->delete($user->avatar);
+            } catch (\Exception $e) {}
+        }
+
+        // Reset avatar di database
+        DB::table('users')
+            ->where('id', $user->id)
+            ->update([
+                'avatar'     => null,
+                'updated_at' => now(),
+            ]);
+
+        return redirect()->route('student.profile')->with('success', 'Foto profil berhasil dihapus. Tampilan akan menggunakan inisial nama Anda.');
+    }
+
+    /**
      * Mengubah dimensi gambar menjadi maksimal 300x300 px dan melakukan kompresi ke format WebP (jika didukung) atau JPEG.
      */
     private function resizeAndCompressAvatar($file, $maxWidth = 300, $maxHeight = 300)

@@ -520,7 +520,7 @@
                         Kelola <span class="highlight">Keuangan<br>Sekolah.</span>
                     </h1>
                     <p class="hero-desc">
-                        SAKTI (Sistem Keuangan Terintegrasi) hadir sebagai solusi universal bagi berbagai institusi pendidikan guna menyatukan seluruh aliran data keuangan dalam satu platform pusat yang efisien, transparan, dan akuntabel.
+                        SAKTI (Sistem Keuangan dan Akuntansi Terintegrasi) hadir sebagai solusi universal bagi berbagai institusi pendidikan guna menyatukan seluruh aliran data keuangan dalam satu platform pusat yang efisien, transparan, dan akuntabel.
                     </p>
 
                     {{-- Stats pills — compact info before CTA --}}

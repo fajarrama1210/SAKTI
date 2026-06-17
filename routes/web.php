@@ -33,9 +33,22 @@ Route::get('/avatar/{filename}', function (string $filename) {
     // Keamanan: hapus path traversal dan karakter berbahaya
     $filename = basename($filename);
 
-    $path = storage_path('app/public/avatars/' . $filename);
+    // Cari file di beberapa lokasi yang mungkin (basename saja, atau dengan subfolder avatars/)
+    $candidatePaths = [
+        storage_path('app/public/avatars/' . $filename),
+        storage_path('app/avatars/' . $filename),
+        public_path('storage/avatars/' . $filename),
+    ];
 
-    if (!file_exists($path) || !is_file($path)) {
+    $path = null;
+    foreach ($candidatePaths as $candidate) {
+        if (file_exists($candidate) && is_file($candidate)) {
+            $path = $candidate;
+            break;
+        }
+    }
+
+    if (!$path) {
         abort(404);
     }
 
@@ -46,10 +59,26 @@ Route::get('/avatar/{filename}', function (string $filename) {
         abort(403);
     }
 
+    $lastModified = filemtime($path);
+    $etag = md5($path . $lastModified);
+
+    // Validasi cache kondisional — mencegah gambar "stuck" di device lain
+    $ifNoneMatch   = request()->header('If-None-Match');
+    $ifModifiedSince = request()->header('If-Modified-Since');
+    if ($ifNoneMatch === $etag || ($ifModifiedSince && strtotime($ifModifiedSince) >= $lastModified)) {
+        return response('', 304, [
+            'ETag'          => $etag,
+            'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
+            'Cache-Control' => 'public, max-age=86400, must-revalidate',
+        ]);
+    }
+
     return response()->file($path, [
         'Content-Type'  => $mime,
-        // Cache 30 hari di browser (gambar profil jarang berubah)
-        'Cache-Control' => 'public, max-age=2592000, immutable',
+        // Cache 1 hari, wajib re-validasi (tidak immutable) agar gambar baru selalu ter-refresh
+        'Cache-Control' => 'public, max-age=86400, must-revalidate',
+        'ETag'          => $etag,
+        'Last-Modified' => gmdate('D, d M Y H:i:s', $lastModified) . ' GMT',
     ]);
 })->name('avatar.serve')->where('filename', '[^/]+');
 
@@ -206,6 +235,7 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
     Route::get('/profile', [App\Http\Controllers\Student\StudentController::class, 'profile'])->name('profile');
     Route::put('/profile/password', [App\Http\Controllers\Student\StudentController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile/avatar', [App\Http\Controllers\Student\StudentController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::delete('/profile/avatar', [App\Http\Controllers\Student\StudentController::class, 'deleteAvatar'])->name('profile.avatar.delete');
     Route::get('/letters', [App\Http\Controllers\Student\LetterController::class, 'index'])->name('letters.index');
     Route::post('/letters', [App\Http\Controllers\Student\LetterController::class, 'store'])->name('letters.store');
 
